@@ -1,0 +1,33 @@
+{
+  "extends": ["airbnb", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "mocha": true,
+    "es6": true
+  },
+  "rules": {
+    "requireForBlockBody": "off",
+    "space-before-function-paren": "off",
+    "linebreak-style": "off",
+    "global-require": "off",
+    "semi": "off",
+    "arrow-body-style": "off",
+    "prettier/prettier": "off",
+    "import/no-cycle": "off",
+    "no-underscore-dangle": "off",
+    "no-async-promise-executor": "off",
+    "max-classes-per-file": "off",
+    "no-console": "off",
+    "lines-between-class-members": "off"
+  },
+  "plugins": ["prettier"],
+  "settings": {
+    "import/resolver": {
+      "node": { "paths": ["./src"] }
+    }
+  }
+}
