@@ -2,33 +2,58 @@ import { model, Schema, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 
 export interface IUser extends Document {
+  name: string;
+  role: string;
+  phone: Number;
   email: string;
+  image: string;
+  terms: boolean;
+  state: boolean;
+  aboutUs: string;
+  dateCreate: Date;
+  lastname: string;
+  username: string;
   password: string;
+  location: object;
+  firstname: string;
+  textAddress: string;
+  requirementsToAdopt: string;
   comparePassword: (password: any) => Promise<boolean>;
 }
 
 const userSchema = new Schema({
-  email: {
-    type: String,
-    unique: true,
-    required: true,
-    lowercase: true,
-    trim: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
+  location: { type: Object },
+  password: { type: String },
+  role: { type: String, required: true },
+  state: { type: Boolean, default: true },
+  terms: { type: Boolean, default: true },
+  name: { type: String, lowercase: true },
+  image: { type: String, required: false },
+  phone: { type: Number, required: false },
+  aboutUs: { type: String, required: false },
+  canTransit: { type: Boolean, default: false },
+  dateCreate: { type: Date, default: Date.now },
+  textAddress: { type: String, required: false },
+  requirementsToAdopt: { type: String, required: false },
+  lastname: { type: String, lowercase: true, required: true, trim: true },
+  firstname: { type: String, lowercase: true, required: true, trim: true },
+  username: { type: String, lowercase: true, required: false, trim: true },
+  email: { type: String, unique: true, required: true, lowercase: true, trim: true },
 });
 
 userSchema.pre<IUser>('save', async function (next) {
   const user = this;
 
-  if (!user.isModified('password')) return next();
+  if (user.password !== undefined && user.password !== '') {
+    if (!user.isModified('password')) return next();
 
-  const salt = await bcrypt.genSalt(10);
-  const hash = await bcrypt.hash(user.password, salt);
-  user.password = hash;
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(user.password, salt);
+    user.password = hash;
+  }
+
+  user.name = `${user.firstname} ${user.lastname}`;
+
   next();
 });
 
