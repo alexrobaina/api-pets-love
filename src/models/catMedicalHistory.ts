@@ -2,7 +2,7 @@ import { model, Schema, Document } from 'mongoose';
 
 export interface ICatMedicalHistory extends Document {
   notes: string;
-  lastVisitVet: string;
+  lastVisitVet: any;
   distemperVaccine: boolean;
   felineFluVaccine: boolean;
   felineLeukemiaVaccine: boolean;
@@ -11,7 +11,7 @@ export interface ICatMedicalHistory extends Document {
 
 const catMedicalHistorySchema = new Schema({
   notes: { type: String },
-  lastVisitVet: { type: String },
+  lastVisitVet: { type: Date },
   rabiesVaccine: { type: Boolean, default: false },
   distemperVaccine: { type: Boolean, default: false },
   felineFluVaccine: { type: Boolean, default: false },

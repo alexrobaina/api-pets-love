@@ -32,7 +32,7 @@ const petSchema = new Schema({
   history: { type: String },
   adopted: { type: Boolean },
   category: { type: String },
-  birthday: { type: String },
+  birthday: { type: Date },
   activityLevel: { type: String },
   lost: { type: Boolean, default: false },
   terms: { type: Boolean, default: true },
