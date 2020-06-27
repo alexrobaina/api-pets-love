@@ -1,7 +1,7 @@
 import { model, Schema, Document } from 'mongoose';
 
 export interface IImage extends Document {
-  filenames: any;
+  filenames: Array<String>;
 }
 
 const imageSchema = new Schema({

@@ -2,7 +2,7 @@ import { model, Schema, Document } from 'mongoose';
 
 export interface IDogMedicalHistory extends Document {
   notes: string;
-  lastVisitVet: string;
+  lastVisitVet: any;
   rabiesVaccine: boolean;
   hepatitisVaccine: boolean;
   parvovirusVaccine: boolean;
@@ -13,7 +13,7 @@ export interface IDogMedicalHistory extends Document {
 
 const dogMedicalHistorySchema = new Schema({
   notes: { type: String },
-  lastVisitVet: { type: String },
+  lastVisitVet: { type: Date },
   rabiesVaccine: { type: Boolean, default: false },
   hepatitisVaccine: { type: Boolean, default: false },
   parvovirusVaccine: { type: Boolean, default: false },

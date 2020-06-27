@@ -32,6 +32,22 @@ export const add = async (req: Request, res: Response) => {
   }
 };
 
+export const updatePet = async (req: Request, res: Response) => {
+  console.log(req.body)
+  // try {
+  //   const register = await Pet.create(req.body);
+  //
+  //   await register.save();
+  //
+  //   res.status(200).json(register);
+  // } catch (e) {
+  //   console.log(e);
+  //   res.status(500).send({
+  //     message: 'Error occurred in create pet',
+  //   });
+  // }
+};
+
 export const listPets = async (req: Request, res: Response) => {
   try {
     const register: IPet[] = await Pet.find()
@@ -49,6 +65,27 @@ export const listPets = async (req: Request, res: Response) => {
     console.log(e);
     res.status(500).send({
       message: 'An error occurred on List pets',
+    });
+  }
+};
+
+export const getOnePet = async (req: Request, res: Response) => {
+  try {
+    const register = await Pet.findOne(req.body.id)
+      .populate('userCreator', { name: 1, email: 1, phone: 1, role: 1 })
+      .populate('userAdopter', { name: 1, email: 1, phone: 1 })
+      .populate('userTransit', { name: 1, email: 1, phone: 1 })
+      .populate('dogMedicalHistory')
+      .populate('catMedicalHistory')
+      .populate('image')
+      .sort({ name: 1 })
+      .exec();
+
+    res.status(200).json(register);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send({
+      message: 'An error occurred on get one pet',
     });
   }
 };
