@@ -3,7 +3,8 @@ import Pet, { IPet } from '../models/pet';
 import DogMedicalHistory, { IDogMedicalHistory } from '../models/dogMedicalHistory';
 import CatMedicalHistory, { ICatMedicalHistory } from '../models/catMedicalHistory';
 
-export const add = async (req: Request, res: Response) => {
+export let add: (req: Request, res: Response) => Promise<void>;
+add = async (req: Request, res: Response) => {
   try {
     const register = await Pet.create(req.body);
 
@@ -33,7 +34,7 @@ export const add = async (req: Request, res: Response) => {
 };
 
 export const updatePet = async (req: Request, res: Response) => {
-  console.log(req.body)
+  console.log(req.body);
   // try {
   //   const register = await Pet.create(req.body);
   //
