@@ -1,7 +1,7 @@
 import { model, Schema, Document } from 'mongoose';
 
 export interface IPet extends Document {
-  image: any;
+  image: Array<String>;
   update: any;
   name: string;
   lost: boolean;

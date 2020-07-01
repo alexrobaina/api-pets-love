@@ -52,8 +52,8 @@ export const updateImages = async (req: Request, res: Response) => {
         });
       }
     }
-    
-    const register = await Image.findOneAndUpdate({ _id: req.body._id }, {filenames: data});
+
+    const register = await Image.findOneAndUpdate({ _id: req.body._id }, { filenames: data });
 
     res.status(200).json(register);
   } catch (e) {
