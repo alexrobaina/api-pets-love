@@ -116,20 +116,17 @@ export const userId = async (req: Request, res: Response) => {
 
 export const listUsersRole = async (req: Request, res: Response) => {
   try {
-    const users = await User.find().sort({
+    // @ts-ignore
+    const users: IUser[] = await User.find({ role: req.query.role }).sort({
       name: 1,
     });
 
-    let register: any = users.filter(user => {
-      return user.role === req.query.role;
-    });
-
-    if (!register) {
+    if (!users) {
       res.status(404).send({
         message: 'Not found users',
       });
     } else {
-      res.status(200).json(register);
+      res.status(200).json(users);
     }
   } catch (e) {
     console.log(e);

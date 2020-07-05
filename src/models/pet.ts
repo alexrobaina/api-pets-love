@@ -39,12 +39,12 @@ const petSchema = new Schema({
   state: { type: Boolean, default: true },
   update: { type: Date, default: Date.now },
   urgent: { type: Boolean, default: false },
-  image: { type: Schema.Types.ObjectId, ref: 'Image' },
-  userCreator: { type: Schema.Types.ObjectId, ref: 'User' },
-  userAdopter: { type: Schema.Types.ObjectId, ref: 'User' },
-  userTransit: { type: Schema.Types.ObjectId, ref: 'User' },
-  dogMedicalHistory: { type: Schema.Types.ObjectId, ref: 'DogMedicalHistory' },
-  catMedicalHistory: { type: Schema.Types.ObjectId, ref: 'CatMedicalHistory' },
+  image: { type: Schema.Types.ObjectId, ref: 'Image', default: null },
+  userCreator: { type: Schema.Types.ObjectId, ref: 'User', default: null },
+  userAdopter: { type: Schema.Types.ObjectId, ref: 'User', default: null },
+  userTransit: { type: Schema.Types.ObjectId, ref: 'User', default: null },
+  dogMedicalHistory: { type: Schema.Types.ObjectId, ref: 'DogMedicalHistory', default: null },
+  catMedicalHistory: { type: Schema.Types.ObjectId, ref: 'CatMedicalHistory', default: null },
 });
 
 export default model<IPet>('Pet', petSchema);
