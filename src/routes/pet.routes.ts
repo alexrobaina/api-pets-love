@@ -7,6 +7,7 @@ import {
   listPets,
   updatePet,
   getOnePet,
+  queryList,
   petsAdopted,
   getPetForUser,
   petsForAdoption,
@@ -17,6 +18,7 @@ router.post('/api/pet/create', add);
 router.get('/api/pet/listPets', listPets);
 router.put('/api/pet/updatePet', updatePet);
 router.get('/api/pet/getOnePet', getOnePet);
+router.get('/api/pet/queryList', queryList);
 router.get('/api/pet/petsAdopted', petsAdopted);
 router.get('/api/pet/listPetsForUser', getPetForUser);
 router.get('/api/pet/petsForAdoption', petsForAdoption);

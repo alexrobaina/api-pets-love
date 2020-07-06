@@ -13,6 +13,7 @@ export interface IPet extends Document {
   adopted: boolean;
   category: string;
   birthday: string;
+  textAddress: string;
   userCreator: object;
   userAdopter: object;
   userTransit: object;
@@ -33,6 +34,7 @@ const petSchema = new Schema({
   adopted: { type: Boolean },
   category: { type: String },
   birthday: { type: Date },
+  textAddress: { type: String },
   activityLevel: { type: String },
   lost: { type: Boolean, default: false },
   terms: { type: Boolean, default: true },

@@ -223,7 +223,7 @@ export const petsAdopted = async (req: Request, res: Response) => {
 
 export const getPetForUser = async (req: Request, res: Response) => {
   try {
-    const register = await Pet.find()
+    const register: IPet[] = await Pet.find()
       .populate('userCreator', { name: 1, email: 1, phone: 1 })
       .populate('userAdopter', { name: 1, email: 1, phone: 1 })
       .populate('userTransit', { name: 1, email: 1, phone: 1 })
@@ -244,6 +244,53 @@ export const getPetForUser = async (req: Request, res: Response) => {
     res.status(200).json(pets);
   } catch (e) {
     console.log(e);
+    res.status(500).send({
+      message: 'An error occurred',
+    });
+  }
+};
+
+export const queryList = async (req: Request, res: Response) => {
+  let query = {};
+
+  Object.entries(req.query).forEach(([key, value]) => {
+    if (value !== '' && value !== undefined) {
+      if (key === 'city') {
+        // @ts-ignore
+        query.textAddress = new RegExp(value, 'i');
+      }
+      if (key === 'gender') {
+        // @ts-ignore
+        query.gender = value;
+      }
+      if (key === 'category') {
+        // @ts-ignore
+        query.category = value;
+      }
+    }
+  });
+
+  try {
+    if (req.query) {
+      const register: IPet[] = await Pet.find({
+        $and: [query],
+      })
+        .populate('userCreator', { name: 1, email: 1, phone: 1 })
+        .populate('image')
+        .sort({ name: 1 })
+        .exec();
+
+      res.status(200).json(register);
+    } else {
+      const register: IPet[] = await Pet.find()
+        .populate('userCreator', { name: 1, email: 1, phone: 1 })
+        .populate('image')
+        .sort({ name: 1 })
+        .exec();
+
+      res.status(200).json(register);
+    }
+  } catch (e) {
     res.status(500).send({
       message: 'An error occurred',
     });
