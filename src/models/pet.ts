@@ -21,6 +21,7 @@ export interface IPet extends Document {
   foundLocation: object;
   dogMedicalHistory: object;
   catMedicalHistory: object;
+  requirementsToAdopt: string;
 }
 
 const petSchema = new Schema({
@@ -41,6 +42,7 @@ const petSchema = new Schema({
   state: { type: Boolean, default: true },
   update: { type: Date, default: Date.now },
   urgent: { type: Boolean, default: false },
+  requirementsToAdopt: { type: String, default: '' },
   image: { type: Schema.Types.ObjectId, ref: 'Image', default: null },
   userCreator: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   userAdopter: { type: Schema.Types.ObjectId, ref: 'User', default: null },

@@ -64,6 +64,8 @@ export const update = async (req: Request, res: Response) => {
   try {
     let data: any = {};
 
+    console.log(req.body);
+
     const pass = req.body.password;
 
     if (pass !== undefined) {

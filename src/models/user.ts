@@ -22,7 +22,10 @@ export interface IUser extends Document {
 }
 
 const userSchema = new Schema({
-  location: { type: Object },
+  location: {
+    lat: { type: Number },
+    lng: { type: Number },
+  },
   password: { type: String },
   role: { type: String, required: true },
   state: { type: Boolean, default: true },
