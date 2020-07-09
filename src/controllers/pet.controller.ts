@@ -215,6 +215,7 @@ export const petsAdopted = async (req: Request, res: Response) => {
 
     res.status(200).json(pets);
   } catch (e) {
+    console.error(e);
     res.status(500).send({
       message: 'An error occurred on petsAdopted',
     });
