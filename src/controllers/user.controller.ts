@@ -122,9 +122,20 @@ export const userId = async (req: Request, res: Response) => {
 export const listUsersRole = async (req: Request, res: Response) => {
   try {
     // @ts-ignore
-    const users: IUser[] = await User.find({ role: req.query.role }).sort({
-      name: 1,
-    });
+    const users: IUser[] = await User.find({ role: req.query.role })
+      .select({
+        _id: 1,
+        name: 1,
+        role: 1,
+        phone: 1,
+        email: 1,
+        location: 1,
+        username: 1,
+        textAddress: 1,
+      })
+      .sort({
+        name: 1,
+      });
 
     if (!users) {
       res.status(404).send({
