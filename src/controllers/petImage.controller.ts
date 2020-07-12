@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import Image from '../models/image';
+import PetImage from '../models/petImage';
 
-export const addImages = async (req: Request, res: Response) => {
+export const addPetImages = async (req: Request, res: Response) => {
   try {
     let url: any = [];
 
@@ -13,7 +13,7 @@ export const addImages = async (req: Request, res: Response) => {
         });
       }
     }
-    const register = await Image.create({ filenames: url });
+    const register = await PetImage.create({ filenames: url });
 
     res.status(200).json(register);
   } catch (e) {
@@ -24,7 +24,7 @@ export const addImages = async (req: Request, res: Response) => {
   }
 };
 
-export const updateImages = async (req: Request, res: Response) => {
+export const updatePetImages = async (req: Request, res: Response) => {
   try {
     let data: Array<String> = [];
 
@@ -53,7 +53,7 @@ export const updateImages = async (req: Request, res: Response) => {
       }
     }
 
-    const register = await Image.findOneAndUpdate({ _id: req.body._id }, { filenames: data });
+    const register = await PetImage.findOneAndUpdate({ _id: req.body._id }, { filenames: data });
 
     res.status(200).json(register);
   } catch (e) {
@@ -64,9 +64,9 @@ export const updateImages = async (req: Request, res: Response) => {
   }
 };
 
-export const listImage = async (req: Request, res: Response) => {
+export const listPetImage = async (req: Request, res: Response) => {
   try {
-    const register = await Image.find().exec();
+    const register = await PetImage.find().exec();
 
     res.status(200).json(register);
   } catch (e) {
