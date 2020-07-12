@@ -6,7 +6,6 @@ export interface IUser extends Document {
   role: string;
   phone: Number;
   email: string;
-  image: string;
   terms: boolean;
   state: boolean;
   aboutUs: string;
@@ -17,6 +16,7 @@ export interface IUser extends Document {
   location: object;
   firstname: string;
   textAddress: string;
+  image: Array<String>;
   requirementsToAdopt: string;
   comparePassword: (password: any) => Promise<boolean>;
 }
@@ -31,13 +31,13 @@ const userSchema = new Schema({
   state: { type: Boolean, default: true },
   terms: { type: Boolean, default: true },
   name: { type: String, lowercase: true },
-  image: { type: String, required: false },
   phone: { type: Number, required: false },
   aboutUs: { type: String, required: false },
   canTransit: { type: Boolean, default: false },
   dateCreate: { type: Date, default: Date.now },
   textAddress: { type: String, required: false },
   requirementsToAdopt: { type: String, required: false },
+  image: { type: Schema.Types.ObjectId, ref: 'UserImage', default: null },
   lastname: { type: String, lowercase: true, required: true, trim: true },
   firstname: { type: String, lowercase: true, required: true, trim: true },
   username: { type: String, lowercase: true, required: false, trim: true },

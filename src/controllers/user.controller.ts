@@ -76,12 +76,6 @@ export const update = async (req: Request, res: Response) => {
       data.password = password;
     }
 
-    // @ts-ignore
-    if (req.files[0] !== undefined) {
-      // @ts-ignore
-      data.image = req.files[0].filename;
-    }
-
     Object.entries(req.body).forEach(([key, value]) => {
       if (key !== 'password') {
         // @ts-ignore
@@ -90,7 +84,7 @@ export const update = async (req: Request, res: Response) => {
     });
 
     // @ts-ignore
-    const register = await User.findByIdAndUpdate({ _id: req.body._id }, data);
+    const register = await User.findByIdAndUpdate({ _id: req.body._id }, data).populate('image');
     res.status(200).json(register);
   } catch (e) {
     console.log(e);
@@ -102,7 +96,7 @@ export const update = async (req: Request, res: Response) => {
 
 export const userId = async (req: Request, res: Response) => {
   try {
-    const user = await User.findOne({ _id: req.query._id });
+    const user = await User.findOne({ _id: req.query._id }).populate('userImage').populate('image');
 
     if (!user) {
       res.status(404).send({
@@ -133,6 +127,7 @@ export const listUsersRole = async (req: Request, res: Response) => {
         username: 1,
         textAddress: 1,
       })
+      .populate('image')
       .sort({
         name: 1,
       });

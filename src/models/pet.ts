@@ -41,7 +41,7 @@ const petSchema = new Schema({
   state: { type: Boolean, default: true },
   update: { type: Date, default: Date.now },
   urgent: { type: Boolean, default: false },
-  image: { type: Schema.Types.ObjectId, ref: 'Image', default: null },
+  image: { type: Schema.Types.ObjectId, ref: 'PetImage', default: null },
   userCreator: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   userAdopter: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   userTransit: { type: Schema.Types.ObjectId, ref: 'User', default: null },
