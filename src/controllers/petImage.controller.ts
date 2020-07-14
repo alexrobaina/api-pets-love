@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import AWS from 'aws-sdk';
 import PetImage from '../models/petImage';
 
 export const addPetImages = async (req: Request, res: Response) => {
