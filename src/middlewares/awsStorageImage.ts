@@ -9,7 +9,7 @@ const awsStorageImage = (req: Request, res: Response, next: Function) => {
     const saveImage = new Promise((resolve, reject) => {
       singleUpload(req, res, function (err: any) {
         // @ts-ignore
-        url.push(req.file.location);
+        url.push(req.file.key);
         // @ts-ignore
         req.imageUrl = url;
         // @ts-ignore

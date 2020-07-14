@@ -10,7 +10,6 @@ router.get('/api/pet/listImages', listPetImage);
 router.post('/api/pet/updateImage', updatePetImages);
 
 import { addUserImages, listUserImage, updateUserImages } from '../controllers/userImage.controller';
-import upload from "../services/file-upload";
 
 router.post('/api/user/addUserImages', singleUpload, addUserImages);
 router.get('/api/user/listUserImage', listUserImage);

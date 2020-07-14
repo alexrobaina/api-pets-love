@@ -32,6 +32,7 @@ const upload = multer({
     s3: s3,
     bucket: BUCKET,
     acl: 'public-read',
+    contentType: multerS3.AUTO_CONTENT_TYPE,
     metadata: function (req: Request, file: any, cb) {
       cb(null, { fieldName: `_petsLove_${uuidv4()}_${path.extname(file.originalname)}` });
     },
