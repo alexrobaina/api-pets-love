@@ -17,7 +17,7 @@ aws.config.update({
 });
 
 const s3 = new aws.S3();
-//
+
 //  const fileFilter = (req: any, file: any, cb: any) => {
 //    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg' || file.mimetype === 'image/png') {
 //      cb(null, true)

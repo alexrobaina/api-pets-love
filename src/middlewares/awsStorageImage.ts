@@ -1,19 +1,16 @@
-import { Request, Response } from 'express';
 import upload from '../services/file-upload';
-const singleUpload = upload.single('image');
+const singleUpload = upload.array('image');
 
-const awsStorageImage = (req: Request, res: Response, next: Function) => {
+const awsStorageImage = (req: any, res: any, next: Function) => {
   try {
-    let url: any = [];
-
     const saveImage = new Promise((resolve, reject) => {
+      let url;
       singleUpload(req, res, function (err: any) {
-        // @ts-ignore
-        url.push(req.file.key);
-        // @ts-ignore
-        req.imageUrl = url;
-        // @ts-ignore
-        resolve(url);
+        if (req.files !== []) {
+          req.imageUrl = req.files;
+        }
+
+        resolve(req.files);
 
         if (err) {
           reject('File upload image');
