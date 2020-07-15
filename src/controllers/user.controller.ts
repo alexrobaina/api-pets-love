@@ -66,6 +66,7 @@ export const signIn = async (req: Request, res: Response) => {
 };
 
 export const update = async (req: Request, res: Response) => {
+
   try {
     let data: any = {};
 

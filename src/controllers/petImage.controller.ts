@@ -1,19 +1,18 @@
 import { Request, Response } from 'express';
 import PetImage from '../models/petImage';
 
-export const addPetImages = async (req: Request, res: Response) => {
+export const addPetImages = async (req: any, res: any) => {
+  let data: Array<String> = [];
+  
   try {
-    let url: any = [];
-
-    if (req.files) {
-      if (req.files.length > 0) {
-        // @ts-ignore
-        req.files.forEach(image => {
-          url.push(image.filename);
-        });
-      }
+    // process new image
+    if (req.imageUrl) {
+      req.imageUrl.forEach((image: any) => {
+        data.push(image.key);
+      });
     }
-    const register = await PetImage.create({ filenames: url });
+    
+    const register = await PetImage.create({ filenames: data });
 
     res.status(200).json(register);
   } catch (e) {
@@ -24,33 +23,26 @@ export const addPetImages = async (req: Request, res: Response) => {
   }
 };
 
-export const updatePetImages = async (req: Request, res: Response) => {
+export const updatePetImages = async (req: any, res: any) => {
   try {
     let data: Array<String> = [];
 
-    if (typeof req.body.image === 'string') {
-      // @ts-ignore
-      data.push(req.body.image);
-    }
-
-    if (
-      req.body.image !== 'string' &&
-      req.body.image !== undefined &&
-      typeof req.body.image !== 'string'
-    ) {
-      req.body.image.forEach((image: any) => {
-        // @ts-ignore
-        data.push(image);
-      });
-    }
-
-    if (req.files) {
-      if (req.files.length > 0) {
-        // @ts-ignore
-        req.files.forEach(image => {
-          data.push(image.filename);
+    // process old image
+    if (req.body.image) {
+      if (typeof req.body.image === 'string') {
+        data.push(req.body.image);
+      } else {
+        req.body.image.forEach((image: any) => {
+          data.push(req.body.image);
         });
       }
+    }
+
+    // process new image
+    if (req.imageUrl) {
+      req.imageUrl.forEach((image: any) => {
+        data.push(image.key);
+      });
     }
 
     const register = await PetImage.findOneAndUpdate({ _id: req.body._id }, { filenames: data });
