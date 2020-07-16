@@ -1,17 +1,16 @@
 import upload from '../services/file-upload';
-const singleUpload = upload.array('image');
+const uploadImages = upload.array('image');
 
 const awsStorageImage = (req: any, res: any, next: Function) => {
   try {
     const saveImage = new Promise((resolve, reject) => {
-      let url;
-      singleUpload(req, res, function (err: any) {
-        if (req.files !== []) {
+      uploadImages(req, res, function (err: any) {
+        if (req.files.length > 0) {
+          
           req.imageUrl = req.files;
+
+          resolve(req.files);
         }
-
-        resolve(req.files);
-
         if (err) {
           reject('File upload image');
           return res.status(422).send({ errors: [{ title: 'File upload Error' }] });

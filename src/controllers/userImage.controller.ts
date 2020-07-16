@@ -4,7 +4,7 @@ import UserImage from '../models/userImage';
 export const addUserImages = async (req: any, res: any) => {
   try {
 
-    const register = await UserImage.create({ filenames: req.imageUrl });
+    const register = await UserImage.create({ filenames: req.imageUrl[0].key });
 
     res.status(200).json(register);
   } catch (e) {
@@ -23,7 +23,7 @@ export const updateUserImages = async (req: any, res: any) => {
       if (req.imageUrl[0].length > 0) {
         const register = await UserImage.findOneAndUpdate(
           { _id: req.body._id },
-          { filenames: req.imageUrl }
+          { filenames: req.imageUrl[0].key }
         );
 
         res.status(200).json(register);
