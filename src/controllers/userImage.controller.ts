@@ -28,11 +28,10 @@ export const updateUserImages = async (req: any, res: any) => {
           data.push(image.key);
         });
       }
+
+      const register = await UserImage.findOneAndUpdate({ _id: req.body._id }, { filenames: data });
+      res.status(200).json(register);
     }
-
-    const register = await UserImage.findOneAndUpdate({ _id: req.body._id }, { filenames: data });
-
-    res.status(200).json(register);
 
     res.status(200).send({
       message: 'the user did not update the image and everything is fine.',
