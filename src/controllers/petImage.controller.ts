@@ -1,18 +1,16 @@
 import { Request, Response } from 'express';
 import PetImage from '../models/petImage';
 
-export const addPetImages = async (req: Request, res: Response) => {
+export const addPetImages = async (req: any, res: any) => {
   try {
-    let url: any = [];
+    let url: Array<String> = [];
 
-    if (req.files) {
-      if (req.files.length > 0) {
-        // @ts-ignore
-        req.files.forEach(image => {
-          url.push(image.filename);
-        });
-      }
+    if (req.imageUrl) {
+      req.imageUrl.forEach((image: any) => {
+        url.push(image.key);
+      });
     }
+
     const register = await PetImage.create({ filenames: url });
 
     res.status(200).json(register);
@@ -27,8 +25,8 @@ export const addPetImages = async (req: Request, res: Response) => {
 export const updatePetImages = async (req: any, res: any) => {
   try {
     let data: Array<String> = [];
-
-    if (req.files) {
+    if (req.imageUrl) {
+      console.log(1, req.imageUrl);
       if (typeof req.body.image === 'string') {
         data.push(req.body.image);
       }
@@ -42,16 +40,14 @@ export const updatePetImages = async (req: any, res: any) => {
           data.push(image);
         });
       }
-
-      if (req.files.length > 0) {
-        req.files.forEach((image: any) => {
-          data.push(image.filename);
-        });
-      }
+      req.imageUrl.forEach((image: any) => {
+        console.log(2, image.key)
+        data.push(image.key);
+      });
     } else {
-      data.push(req.body._id);
+      data.push(req.body.image);
     }
-
+    console.log(3, req.body);
     const register = await PetImage.findOneAndUpdate({ _id: req.body._id }, { filenames: data });
 
     res.status(200).json(register);

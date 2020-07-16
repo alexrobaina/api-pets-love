@@ -66,7 +66,6 @@ export const signIn = async (req: Request, res: Response) => {
 };
 
 export const update = async (req: Request, res: Response) => {
-
   try {
     let data: any = {};
 
@@ -114,9 +113,8 @@ export const userId = async (req: Request, res: Response) => {
   }
 };
 
-export const listUsersRole = async (req: Request, res: Response) => {
+export const listUsersRole = async (req: any, res: any) => {
   try {
-    // @ts-ignore
     const users: IUser[] = await User.find({ role: req.query.role })
       .select({
         _id: 1,

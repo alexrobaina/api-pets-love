@@ -6,10 +6,11 @@ const awsStorageImage = (req: any, res: any, next: Function) => {
     const saveImage = new Promise((resolve, reject) => {
       uploadImages(req, res, function (err: any) {
         if (req.files.length > 0) {
-          
           req.imageUrl = req.files;
 
           resolve(req.files);
+        } else {
+          resolve('ok');
         }
         if (err) {
           reject('File upload image');
