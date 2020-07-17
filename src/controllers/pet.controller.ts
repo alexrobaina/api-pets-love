@@ -252,6 +252,29 @@ export const getPetForUser = async (req: Request, res: Response) => {
   }
 };
 
+export const getPetForUserAdopted = async (req: Request, res: Response) => {
+  try {
+    // @ts-ignore
+    const register: IPet[] = await Pet.find({ userAdopter: req.query._id })
+      .populate('userCreator', { name: 1, email: 1, phone: 1 })
+      .populate('userAdopter', { name: 1, email: 1, phone: 1 })
+      .populate('userTransit', { name: 1, email: 1, phone: 1 })
+      .populate('vet', { name: 1, email: 1, phone: 1 })
+      .populate('dogMedicalHistory')
+      .populate('catMedicalHistory')
+      .populate('image')
+      .sort({ name: 1 })
+      .exec();
+
+    res.status(200).json(register);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send({
+      message: 'An error occurred',
+    });
+  }
+};
+
 export const queryList = async (req: Request, res: Response) => {
   let query = {};
 
