@@ -25,8 +25,8 @@ export const addPetImages = async (req: any, res: any) => {
 export const updatePetImages = async (req: any, res: any) => {
   try {
     let data: Array<String> = [];
+
     if (req.imageUrl) {
-      console.log(1, req.imageUrl);
       if (typeof req.body.image === 'string') {
         data.push(req.body.image);
       }
@@ -40,14 +40,15 @@ export const updatePetImages = async (req: any, res: any) => {
           data.push(image);
         });
       }
+
       req.imageUrl.forEach((image: any) => {
-        console.log(2, image.key)
         data.push(image.key);
       });
     } else {
-      data.push(req.body.image);
+      req.body.image.forEach((image: any) => {
+        data.push(image);
+      });
     }
-    console.log(3, req.body);
     const register = await PetImage.findOneAndUpdate({ _id: req.body._id }, { filenames: data });
 
     res.status(200).json(register);
