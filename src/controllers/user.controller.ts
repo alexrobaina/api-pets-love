@@ -45,7 +45,7 @@ export const signIn = async (req: Request, res: Response) => {
     });
   }
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).populate('image');
 
   if (!user) {
     return res.status(400).json({ message: 'the user does not exist' });
