@@ -11,7 +11,7 @@ import {
   petsAdopted,
   getPetForUser,
   petsForAdoption,
-  getPetForUserVet,
+  getPetsForUserVet,
   getPetForUserAdopted,
 } from '../controllers/pet.controller';
 
@@ -24,7 +24,7 @@ router.get('/api/pet/queryList', queryList);
 router.get('/api/pet/petsAdopted', petsAdopted);
 router.get('/api/pet/listPetsForUser', getPetForUser);
 router.get('/api/pet/petsForAdoption', petsForAdoption);
-router.get('/api/pet/listPetForUserVet', getPetForUserVet);
+router.get('/api/pet/listPetForUserVet', getPetsForUserVet);
 router.get('/api/pet/listPetForUserAdopted', getPetForUserAdopted);
 
 export default router;
