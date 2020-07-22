@@ -3,7 +3,7 @@ import Pet, { IPet } from '../models/pet';
 import DogMedicalHistory, { IDogMedicalHistory } from '../models/dogMedicalHistory';
 import CatMedicalHistory, { ICatMedicalHistory } from '../models/catMedicalHistory';
 
-export const add = async (req: Request, res: Response) => {
+export const create = async (req: Request, res: Response) => {
   try {
     const register = await Pet.create(req.body);
 
@@ -111,6 +111,7 @@ export const listPets = async (req: Request, res: Response) => {
       .populate('userCreator', { name: 1, email: 1, phone: 1, role: 1 })
       .populate('userAdopter', { name: 1, email: 1, phone: 1 })
       .populate('userTransit', { name: 1, email: 1, phone: 1 })
+      .populate('userVet', { name: 1, email: 1, phone: 1 })
       .populate('dogMedicalHistory')
       .populate('catMedicalHistory')
       .populate('image')
@@ -132,6 +133,7 @@ export const getOnePet = async (req: Request, res: Response) => {
       .populate('userCreator', { name: 1, email: 1, phone: 1, role: 1 })
       .populate('userAdopter', { name: 1, email: 1, phone: 1 })
       .populate('userTransit', { name: 1, email: 1, phone: 1 })
+      .populate('userVet', { name: 1, email: 1, phone: 1 })
       .populate('dogMedicalHistory')
       .populate('catMedicalHistory')
       .populate('image')
@@ -153,6 +155,7 @@ export const pet = async (req: Request, res: Response) => {
       .populate('userCreator', { name: 1, email: 1, phone: 1, role: 1 })
       .populate('userAdopter', { name: 1, email: 1, phone: 1 })
       .populate('userTransit', { name: 1, email: 1, phone: 1 })
+      .populate('userVet', { name: 1, email: 1, phone: 1 })
       .populate('dogMedicalHistory')
       .populate('catMedicalHistory')
       .populate('image')
@@ -214,32 +217,25 @@ export const petsForAdoption = async (req: Request, res: Response) => {
   }
 };
 
-export const petsAdopted = async (req: Request, res: Response) => {
-  // @ts-ignore
+export const petsAdopted = async (req: any, res: any) => {
   const { _id } = req.query;
-  // @ts-ignore
   const limit = parseInt(req.query.limit);
-  // @ts-ignore
   const page = parseInt(req.query.page);
-  // @ts-ignore
   const startIndex = (page - 1) * limit;
+  
   try {
     const registers: IPet[] = await Pet.find({
       adopted: true,
-      // @ts-ignore
       userCreator: _id,
     })
       .populate('image')
-      // @ts-ignore
       .skip(startIndex)
-      // @ts-ignore
       .limit(limit)
       .sort({ name: 1 })
       .exec();
 
     const totalRegisters: IPet[] = await Pet.find({
       adopted: true,
-      // @ts-ignore
       userCreator: _id,
     });
 
@@ -255,9 +251,9 @@ export const petsAdopted = async (req: Request, res: Response) => {
   }
 };
 
-export const getPetForUser = async (req: Request, res: Response) => {
+export const getPetForUser = async (req: any, res: any) => {
   try {
-    const register: IPet[] = await Pet.find()
+    const pets: IPet[] = await Pet.find({ userCreator: req.query._id })
       .populate('userCreator', { name: 1, email: 1, phone: 1 })
       .populate('userAdopter', { name: 1, email: 1, phone: 1 })
       .populate('userTransit', { name: 1, email: 1, phone: 1 })
@@ -267,13 +263,6 @@ export const getPetForUser = async (req: Request, res: Response) => {
       .populate('image')
       .sort({ name: 1 })
       .exec();
-
-    const pets = register.filter(pet => {
-      if (pet.userCreator) {
-        // @ts-ignore
-        return pet.userCreator._id == req.query._id;
-      }
-    });
 
     res.status(200).json(pets);
   } catch (e) {
@@ -286,8 +275,6 @@ export const getPetForUser = async (req: Request, res: Response) => {
 
 export const getPetForUserAdopted = async (req: Request, res: Response) => {
   const { _id, perPage, page } = req.query;
-  // @ts-ignore
-  console.log(_id, perPage, page);
   try {
     // @ts-ignore
     const register: IPet[] = await Pet.find({ userAdopter: _id })
@@ -311,6 +298,38 @@ export const getPetForUserAdopted = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getPetForUserVet = async (req: any, res: any) => {
+    const { _id } = req.query;
+    const limit = parseInt(req.query.limit);
+    const page = parseInt(req.query.page);
+    const startIndex = (page - 1) * limit;
+
+    try {
+      const pets: IPet[] = await Pet.find({
+        userVet: _id,
+      })
+        .populate('image')
+        .skip(startIndex)
+        .limit(limit)
+        .sort({ name: 1 })
+        .exec();
+
+      const totalRegisters: IPet[] = await Pet.find({
+        userVet: _id,
+      });
+
+      res.status(200).json({
+        pets,
+        totalPets: totalRegisters.length,
+      });
+    } catch (e) {
+      console.error(e);
+      res.status(500).send({
+        message: 'An error occurred on petsAdopted',
+      });
+    }
+  };
 
 export const queryList = async (req: Request, res: Response) => {
   let query = {};

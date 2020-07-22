@@ -1,7 +1,6 @@
 import { model, Schema, Document } from 'mongoose';
 
 export interface IDogMedicalHistory extends Document {
-  vet: object;
   notes: string;
   lastVisitVet: any;
   isCastrated: boolean;
@@ -19,7 +18,6 @@ const dogMedicalHistorySchema = new Schema({
   lastVisitVet: { type: Date },
   isCastrated: { type: Boolean, default: false },
   rabiesVaccine: { type: Boolean, default: false },
-  vet: { type: Schema.Types.ObjectId, ref: 'User' },
   distemperVaccine: { type: Boolean, default: false },
   hepatitisVaccine: { type: Boolean, default: false },
   parvovirusVaccine: { type: Boolean, default: false },
