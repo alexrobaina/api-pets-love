@@ -1,19 +1,17 @@
 import { Request } from 'express';
+import * as dotenv from 'dotenv';
 import aws from 'aws-sdk';
 import multer from 'multer';
 import multerS3 from 'multer-s3';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
-
-const SECRET_ACCESS_KEY = '9tVC4PAL6yamlQuJ/4t67P4KwWCEGV8l6+ASWjXo';
-const ACCESS_KEY_ID = 'AKIA4T4676B7SGPAR4SC';
-const REGION = 'us-west-1';
-const BUCKET = 'elasticbeanstalk-us-west-1-867379966079';
+dotenv.config();
+import config from '../config/config'
 
 aws.config.update({
-  secretAccessKey: SECRET_ACCESS_KEY,
-  accessKeyId: ACCESS_KEY_ID,
-  region: REGION,
+  secretAccessKey: config.awsConfig.SECRET_ACCESS_KEY,
+  accessKeyId: config.awsConfig.ACCESS_KEY_ID,
+  region: config.awsConfig.REGION,
 });
 
 const s3 = new aws.S3();
@@ -30,7 +28,7 @@ const upload = multer({
   storage: multerS3({
     // fileFilter,
     s3: s3,
-    bucket: BUCKET,
+    bucket: config.awsConfig.BUCKET,
     acl: 'public-read',
     contentType: multerS3.AUTO_CONTENT_TYPE,
     metadata: function (req: Request, file: any, cb) {
