@@ -13,6 +13,7 @@ export interface IPet extends Document {
   adopted: boolean;
   category: string;
   birthday: string;
+  userVet: object;
   textAddress: string;
   userCreator: object;
   userAdopter: object;
@@ -41,6 +42,7 @@ const petSchema = new Schema({
   state: { type: Boolean, default: true },
   update: { type: Date, default: Date.now },
   urgent: { type: Boolean, default: false },
+  userVet: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   image: { type: Schema.Types.ObjectId, ref: 'PetImage', default: null },
   userCreator: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   userAdopter: { type: Schema.Types.ObjectId, ref: 'User', default: null },
