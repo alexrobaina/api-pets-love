@@ -379,10 +379,15 @@ export const getPetsForUserTransit = async (req: any, res: any) => {
 };
 
 export const queryList = async (req: any, res: any) => {
+  const limit = parseInt(req.query.limit);
+  const page = parseInt(req.query.page);
+  const startIndex = (page - 1) * limit;
+
   let query = {};
 
   Object.entries(req.query).forEach(([key, value]) => {
     if (value !== '' && value !== undefined) {
+      // @ts-ignore
       if (key === 'city') {
         // @ts-ignore
         query.textAddress = new RegExp(value, 'i');
@@ -399,24 +404,41 @@ export const queryList = async (req: any, res: any) => {
   });
 
   try {
-    if (req.query) {
+    if (req.query.city !== '' || req.query.category !== '' || req.query.gender !== '') {
       const register: IPet[] = await Pet.find({
         $and: [query],
       })
-        .populate('userCreator', {name: 1, email: 1, phone: 1})
         .populate('image')
-        .sort({name: 1})
+        .skip(startIndex)
+        .limit(limit)
+        .sort({adopted: 1})
         .exec();
 
-      res.status(200).json(register);
+
+      const totalRegisters: IPet[] = await Pet.find({
+        $and: [query],
+      });
+
+      res.status(200).json({
+        pets: register,
+        totalPets: totalRegisters.length,
+      });
     } else {
       const register: IPet[] = await Pet.find()
-        .populate('userCreator', {name: 1, email: 1, phone: 1})
         .populate('image')
-        .sort({name: 1})
+        .skip(startIndex)
+        .limit(limit)
+        .sort({adopted: 1})
         .exec();
 
-      res.status(200).json(register);
+      const totalRegisters: IPet[] = await Pet.find({
+        $and: [query],
+      })
+
+      res.status(200).json({
+        pets: register,
+        totalPets: totalRegisters.length,
+      });
     }
   } catch (e) {
     res.status(500).send({
