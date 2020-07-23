@@ -5,4 +5,10 @@ export default {
     USER: '',
     PASSWORD: '',
   },
+  awsConfig:{
+    SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+    ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    REGION: process.env.AWS_REGION,
+    BUCKET: process.env.AWS_BUCKET,
+  }
 };
