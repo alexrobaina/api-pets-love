@@ -265,17 +265,15 @@ export const getPetForUser = async (req: any, res: any) => {
 };
 
 export const getPetForUserAdopted = async (req: any, res: any) => {
-  const {_id, perPage, page} = req.query;
+  const {_id} = req.query;
+  const limit = parseInt(req.query.limit);
+  const page = parseInt(req.query.page);
+  const startIndex = (page - 1) * limit;
   try {
     const register: IPet[] = await Pet.find({userAdopter: _id})
-      .populate('userCreator', {name: 1, email: 1, phone: 1})
-      .populate('userAdopter', {name: 1, email: 1, phone: 1})
-      .populate('userTransit', {name: 1, email: 1, phone: 1})
-      .populate('vet', {name: 1, email: 1, phone: 1})
-      .skip(perPage * page - perPage)
-      .populate('dogMedicalHistory')
-      .populate('catMedicalHistory')
       .populate('image')
+      .skip(startIndex)
+      .limit(limit)
       .sort({name: 1})
       .exec();
 
@@ -319,6 +317,7 @@ export const getPetsForUserVet = async (req: any, res: any) => {
 
     if (userCreator !== []) {
       pets.push(userCreator[0])
+      totalRegisters.push(userCreator[0])
     }
 
     res.status(200).json({
@@ -329,6 +328,52 @@ export const getPetsForUserVet = async (req: any, res: any) => {
     console.error(e);
     res.status(500).send({
       message: 'An error occurred on pets vet',
+    });
+  }
+};
+
+export const getPetsForUserTransit = async (req: any, res: any) => {
+  const {_id} = req.query;
+  const limit = parseInt(req.query.limit);
+  const page = parseInt(req.query.page);
+  const startIndex = (page - 1) * limit;
+
+  try {
+    const pets: IPet[] = await Pet.find({
+      userTransit: _id,
+    })
+      .populate('image')
+      .skip(startIndex)
+      .limit(limit)
+      .sort({adopted: 1})
+      .exec();
+
+    const totalRegisters: IPet[] = await Pet.find({
+      userTransit: _id,
+    });
+
+    const userCreator: IPet[] = await Pet.find({
+      userCreator: _id,
+    })
+      .populate('image')
+      .skip(startIndex)
+      .limit(limit)
+      .sort({name: 1})
+      .exec();
+
+    if (userCreator !== []) {
+      pets.push(userCreator[0])
+      totalRegisters.push(userCreator[0])
+    }
+
+    res.status(200).json({
+      pets,
+      totalPets: totalRegisters.length,
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).send({
+      message: 'An error occurred on pets transit',
     });
   }
 };
