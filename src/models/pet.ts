@@ -4,10 +4,12 @@ export interface IPet extends Document {
   image: Array<String>;
   update: any;
   name: string;
+  city: string;
   lost: boolean;
   state: boolean;
   terms: boolean;
   gender: string;
+  country: string;
   history: string;
   urgent: boolean;
   adopted: boolean;
@@ -31,17 +33,19 @@ const petSchema = new Schema({
   },
   name: { type: String },
   gender: { type: String },
+  birthday: { type: Date },
   history: { type: String },
   adopted: { type: Boolean },
   category: { type: String },
-  birthday: { type: Date },
   textAddress: { type: String },
   activityLevel: { type: String },
   lost: { type: Boolean, default: false },
   terms: { type: Boolean, default: true },
   state: { type: Boolean, default: true },
+  city: { type: String, lowercase: true },
   update: { type: Date, default: Date.now },
   urgent: { type: Boolean, default: false },
+  country: { type: String, lowercase: true },
   userVet: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   image: { type: Schema.Types.ObjectId, ref: 'PetImage', default: null },
   userCreator: { type: Schema.Types.ObjectId, ref: 'User', default: null },

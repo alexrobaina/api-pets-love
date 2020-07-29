@@ -1,5 +1,6 @@
 import { model, Schema, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
+import { stringify } from 'querystring';
 
 export interface IUser extends Document {
   name: string;
@@ -56,6 +57,12 @@ userSchema.pre<IUser>('save', async function (next) {
   }
 
   user.name = `${user.firstname} ${user.lastname}`;
+
+  if (user.username) {
+    user.username = user.username.replace(/ /g, '-');
+  }
+
+  console.log(`${user.firstname} ${user.lastname}`);
 
   next();
 });
