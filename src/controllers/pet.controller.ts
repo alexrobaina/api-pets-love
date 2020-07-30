@@ -37,7 +37,7 @@ export const create = async (req: Request, res: Response) => {
 
     // @ts-ignore
     if (dataUserCreator.role === ROLE_ADOPTER) {
-      register.userTransit = register.userCreator;
+      register.userAdopter = register.userCreator;
     }
 
     // @ts-ignore
