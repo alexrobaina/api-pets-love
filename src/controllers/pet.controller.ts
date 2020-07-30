@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import Pet, { IPet } from '../models/pet';
+import User, { IUser } from '../models/user';
+import { ROLE_ADOPTER, ROLE_SHELTER, ROLE_VET, ROLE_TRANSIT } from '../config/roles';
 import DogMedicalHistory, { IDogMedicalHistory } from '../models/dogMedicalHistory';
 import CatMedicalHistory, { ICatMedicalHistory } from '../models/catMedicalHistory';
 
@@ -20,6 +22,30 @@ export const create = async (req: Request, res: Response) => {
       );
       register.catMedicalHistory = registerMedicalHistory._id;
     }
+
+    const dataUserCreator = await User.findOne({ _id: req.body.userCreator });
+
+    // @ts-ignore
+    if (dataUserCreator.role === ROLE_VET) {
+      register.userVet = register.userCreator;
+    }
+
+    // @ts-ignore
+    if (dataUserCreator.role === ROLE_TRANSIT) {
+      register.userTransit = register.userCreator;
+    }
+
+    // @ts-ignore
+    if (dataUserCreator.role === ROLE_ADOPTER) {
+      register.userTransit = register.userCreator;
+    }
+
+    // @ts-ignore
+    if (dataUserCreator.role === ROLE_SHELTER) {
+      register.userShelter = register.userCreator;
+    }
+
+    console.log(register);
 
     await register.save();
 
@@ -270,14 +296,19 @@ export const getPetForUserAdopted = async (req: any, res: any) => {
   const page = parseInt(req.query.page);
   const startIndex = (page - 1) * limit;
   try {
-    const register: IPet[] = await Pet.find({ userAdopter: _id })
+    const pets: IPet[] = await Pet.find({ userAdopter: _id })
       .populate('image')
       .skip(startIndex)
       .limit(limit)
       .sort({ name: 1 })
       .exec();
 
-    res.status(200).json(register);
+    const totalPets: IPet[] = await Pet.find({ userAdopter: _id });
+
+    res.status(200).json({
+      pets,
+      totalPets: totalPets.length,
+    });
   } catch (e) {
     console.log(e);
     res.status(500).send({
@@ -292,37 +323,21 @@ export const getPetsForUserVet = async (req: any, res: any) => {
   const page = parseInt(req.query.page);
   const startIndex = (page - 1) * limit;
 
+  let petFiltered: any = [];
+
   try {
-    const pets: IPet[] = await Pet.find({
-      userVet: _id,
-    })
+    let pets: IPet[] = await Pet.find({ userVet: _id })
       .populate('image')
       .skip(startIndex)
       .limit(limit)
       .sort({ name: 1 })
       .exec();
 
-    const totalRegisters: IPet[] = await Pet.find({
-      userVet: _id,
-    });
-
-    const userCreator: IPet[] = await Pet.find({
-      userCreator: _id,
-    })
-      .populate('image')
-      .skip(startIndex)
-      .limit(limit)
-      .sort({ name: 1 })
-      .exec();
-
-    if (userCreator !== []) {
-      pets.push(userCreator[0]);
-      totalRegisters.push(userCreator[0]);
-    }
+    const totalPets: IPet[] = await Pet.find({ userVet: _id });
 
     res.status(200).json({
       pets,
-      totalPets: totalRegisters.length,
+      totalPets: totalPets.length,
     });
   } catch (e) {
     console.error(e);
@@ -338,6 +353,8 @@ export const getPetsForUserTransit = async (req: any, res: any) => {
   const page = parseInt(req.query.page);
   const startIndex = (page - 1) * limit;
 
+  let petFiltered: any = [];
+
   try {
     const pets: IPet[] = await Pet.find({
       userTransit: _id,
@@ -348,27 +365,11 @@ export const getPetsForUserTransit = async (req: any, res: any) => {
       .sort({ adopted: 1 })
       .exec();
 
-    const totalRegisters: IPet[] = await Pet.find({
-      userTransit: _id,
-    });
-
-    const userCreator: IPet[] = await Pet.find({
-      userCreator: _id,
-    })
-      .populate('image')
-      .skip(startIndex)
-      .limit(limit)
-      .sort({ name: 1 })
-      .exec();
-
-    if (userCreator !== []) {
-      pets.push(userCreator[0]);
-      totalRegisters.push(userCreator[0]);
-    }
+    const totalPets: IPet[] = await Pet.find({ userTransit: _id });
 
     res.status(200).json({
       pets,
-      totalPets: totalRegisters.length,
+      totalPets: totalPets.length,
     });
   } catch (e) {
     console.error(e);

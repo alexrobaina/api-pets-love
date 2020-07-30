@@ -145,3 +145,18 @@ export const listUsersRole = async (req: any, res: any) => {
     });
   }
 };
+
+export const listUsers = async (req: any, res: any) => {
+  try {
+    const users: IUser[] = await User.find().populate('image').sort({
+      name: 1,
+    });
+
+    res.status(200).json(users);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      message: 'Internal error on services list users',
+    });
+  }
+};
