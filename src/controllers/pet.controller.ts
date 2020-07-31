@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Pet, { IPet } from '../models/pet';
-import User, { IUser } from '../models/user';
+import User from '../models/user';
 import { ROLE_ADOPTER, ROLE_SHELTER, ROLE_VET, ROLE_TRANSIT } from '../config/roles';
 import DogMedicalHistory, { IDogMedicalHistory } from '../models/dogMedicalHistory';
 import CatMedicalHistory, { ICatMedicalHistory } from '../models/catMedicalHistory';
@@ -37,7 +37,7 @@ export const create = async (req: Request, res: Response) => {
 
     // @ts-ignore
     if (dataUserCreator.role === ROLE_ADOPTER) {
-      register.userAdopter = register.userCreator;
+      register.userTransit = register.userCreator;
     }
 
     // @ts-ignore

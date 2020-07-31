@@ -48,9 +48,11 @@ export const updatePetImages = async (req: any, res: any) => {
       if (typeof req.body.image === 'string') {
         data.push(req.body.image);
       } else {
-        req.body.image.forEach((image: any) => {
-          data.push(image);
-        });
+        if (req.body.image) {
+          req.body.image.forEach((image: any) => {
+            data.push(image);
+          });
+        }
       }
     }
     const register = await PetImage.findOneAndUpdate({ _id: req.body._id }, { filenames: data });
