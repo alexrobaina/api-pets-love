@@ -384,7 +384,31 @@ export const queryList = async (req: any, res: any) => {
   const page = parseInt(req.query.page);
   const startIndex = (page - 1) * limit;
 
-  let query = {};
+  let query = {
+    adopted: false,
+    'userCreator.role': 'protectionist',
+  };
+
+  const petsAggregate = [
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'userCreator',
+        foreignField: '_id',
+        as: 'userCreator',
+      },
+    },
+    { $unwind: '$userCreator' },
+    {
+      $lookup: {
+        from: 'petimages',
+        localField: 'image',
+        foreignField: '_id',
+        as: 'image',
+      },
+    },
+    { $unwind: '$image' },
+  ];
 
   Object.entries(req.query).forEach(([key, value]) => {
     if (value !== '' && value !== undefined) {
@@ -409,42 +433,32 @@ export const queryList = async (req: any, res: any) => {
     }
   });
 
+  console.log(query);
+
   try {
-    if (req.query.city !== '' || req.query.category !== '' || req.query.gender !== '') {
-      const register: IPet[] = await Pet.find({
-        $and: [query],
-      })
-        .populate('image')
-        .skip(startIndex)
-        .limit(limit)
-        .sort({ adopted: 1 })
-        .exec();
-
-      const totalRegisters: IPet[] = await Pet.find({
-        $and: [query],
+    const register: IPet[] = await Pet.aggregate(petsAggregate)
+      .match(query)
+      .skip(startIndex)
+      .limit(limit)
+      .project({
+        name: 1,
+        image: 1,
+        urgent: 1,
+        gender: 1,
+        country: 1,
+        history: 1,
+        category: 1,
       });
 
-      res.status(200).json({
-        pets: register,
-        totalPets: totalRegisters.length,
-      });
-    } else {
-      const register: IPet[] = await Pet.find()
-        .populate('image')
-        .skip(startIndex)
-        .limit(limit)
-        .sort({ adopted: 1 })
-        .exec();
+    const totalCount: IPet[] = await Pet.aggregate(petsAggregate).match(query);
+    console.log(totalCount);
 
-      const totalRegisters: IPet[] = await Pet.find({
-        $and: [query],
-      });
-
-      res.status(200).json({
-        pets: register,
-        totalPets: totalRegisters.length,
-      });
-    }
+    res.status(200).json({
+      pets: register,
+      // @ts-ignore
+      totalPets: totalCount.length,
+    });
+    // }
   } catch (e) {
     console.log(e);
     res.status(500).send({
