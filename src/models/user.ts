@@ -59,10 +59,8 @@ userSchema.pre<IUser>('save', async function (next) {
   user.name = `${user.firstname} ${user.lastname}`;
 
   if (user.username) {
-    user.username = user.username.replace(/ /g, '-');
+    user.username = user.username.replace(/ /g, '-').toLowerCase();
   }
-
-  console.log(`${user.firstname} ${user.lastname}`);
 
   next();
 });

@@ -11,7 +11,7 @@ function createToken(user: IUser) {
 }
 
 export const signUp = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { email, password, username } = req.body;
 
   try {
     if (!email || !password) {
@@ -23,7 +23,16 @@ export const signUp = async (req: Request, res: Response) => {
     const user = await User.findOne({ email });
 
     if (user) {
-      return res.status(400).json({ message: 'The user already exist' });
+      return res.status(400).json({ status: 400, message: 'The user already exist' });
+    }
+
+    const existUsername = await User.findOne({ username });
+
+    if (existUsername) {
+      return res.status(400).json({
+        status: 400,
+        message: 'The username already exist',
+      });
     }
 
     const newUser = new User(req.body);
@@ -31,7 +40,7 @@ export const signUp = async (req: Request, res: Response) => {
 
     return res.status(201).json(newUser);
   } catch (e) {
-    console.error(e);
+    console.log(e.message);
     return res.status(500);
   }
 };
