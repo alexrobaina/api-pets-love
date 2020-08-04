@@ -26,7 +26,13 @@ export const signUp = async (req: Request, res: Response) => {
       return res.status(400).json({ status: 400, message: 'The user already exist' });
     }
 
-    const existUsername = await User.findOne({ username });
+    if (username) {
+      // @ts-ignore
+      const usernameFormated = req.body.username.replace(/ /g, '-').toLowerCase();
+      req.body.username = usernameFormated;
+    }
+
+    const existUsername = await User.findOne({ username: req.body.username });
 
     if (existUsername) {
       return res.status(400).json({
@@ -75,10 +81,12 @@ export const signIn = async (req: Request, res: Response) => {
 };
 
 export const update = async (req: Request, res: Response) => {
+  const { password, username, _id } = req.body;
+
   try {
     let data: any = {};
 
-    const pass = req.body.password;
+    const pass = password;
 
     if (pass !== undefined) {
       const password = await bcrypt.hash(pass, 10);
@@ -86,14 +94,27 @@ export const update = async (req: Request, res: Response) => {
     }
 
     Object.entries(req.body).forEach(([key, value]) => {
-      if (key !== 'password') {
-        // @ts-ignore
+      if (key !== 'password' && key !== 'username') {
         data[key] = value;
       }
     });
 
-    // @ts-ignore
-    const register = await User.findByIdAndUpdate({ _id: req.body._id }, data).populate('image');
+    const user = await User.findOne({ username });
+
+    if (user) {
+      if (req.body._id == user._id) {
+        data.username = username.replace(/ /g, '-').toLowerCase();
+      } else {
+        return res.status(400).json({
+          status: 400,
+          message: 'The username already exist',
+        });
+      }
+    }
+
+    data.username = username.replace(/ /g, '-').toLowerCase();
+
+    const register = await User.findByIdAndUpdate({ _id }, data).populate('image');
     res.status(200).json(register);
   } catch (e) {
     console.log(e);

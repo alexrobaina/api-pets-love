@@ -3,9 +3,14 @@ import UserImage from '../models/userImage';
 
 export const addUserImages = async (req: any, res: any) => {
   try {
-    const register = await UserImage.create({ filenames: req.imageUrl[0].key });
+    if (req.imageUrl) {
+      const register = await UserImage.create({ filenames: req.imageUrl[0].key });
 
-    res.status(200).json(register);
+      res.status(200).json(register);
+    }
+    res.status(200).json({
+      message: 'Not exist images for save. But dont worry its fine',
+    });
   } catch (e) {
     console.log(e);
     res.status(500).send({

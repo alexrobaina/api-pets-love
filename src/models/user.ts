@@ -1,6 +1,5 @@
 import { model, Schema, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
-import { stringify } from 'querystring';
 
 export interface IUser extends Document {
   name: string;
@@ -52,15 +51,13 @@ userSchema.pre<IUser>('save', async function (next) {
     if (!user.isModified('password')) return next();
 
     const salt = await bcrypt.genSalt(10);
+
     const hash = await bcrypt.hash(user.password, salt);
+
     user.password = hash;
   }
 
   user.name = `${user.firstname} ${user.lastname}`;
-
-  if (user.username) {
-    user.username = user.username.replace(/ /g, '-').toLowerCase();
-  }
 
   next();
 });
