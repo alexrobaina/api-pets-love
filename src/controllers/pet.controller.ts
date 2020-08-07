@@ -46,8 +46,6 @@ export const create = async (req: Request, res: Response) => {
       register.userShelter = register.userCreator;
     }
 
-    console.log(register);
-
     await register.save();
 
     res.status(200).json(register);
@@ -136,6 +134,7 @@ export const listPets = async (req: Request, res: Response) => {
       .populate('userCreator', { name: 1, email: 1, phone: 1, role: 1 })
       .populate('userAdopter', { name: 1, email: 1, phone: 1 })
       .populate('userTransit', { name: 1, email: 1, phone: 1 })
+      .populate('userShelter', { name: 1, email: 1, phone: 1 })
       .populate('userVet', { name: 1, email: 1, phone: 1 })
       .populate('dogMedicalHistory')
       .populate('catMedicalHistory')
@@ -158,6 +157,7 @@ export const getOnePet = async (req: Request, res: Response) => {
       .populate('userCreator', { name: 1, email: 1, phone: 1, role: 1 })
       .populate('userAdopter', { name: 1, email: 1, phone: 1 })
       .populate('userTransit', { name: 1, email: 1, phone: 1 })
+      .populate('userShelter', { name: 1, email: 1, phone: 1 })
       .populate('userVet', { name: 1, email: 1, phone: 1 })
       .populate('dogMedicalHistory')
       .populate('catMedicalHistory')
@@ -180,6 +180,7 @@ export const pet = async (req: Request, res: Response) => {
       .populate('userCreator', { name: 1, email: 1, phone: 1, role: 1 })
       .populate('userAdopter', { name: 1, email: 1, phone: 1 })
       .populate('userTransit', { name: 1, email: 1, phone: 1 })
+      .populate('userShelter', { name: 1, email: 1, phone: 1 })
       .populate('userVet', { name: 1, email: 1, phone: 1 })
       .populate('dogMedicalHistory')
       .populate('catMedicalHistory')
@@ -206,12 +207,6 @@ export const petsForAdoption = async (req: any, res: any) => {
       adopted: false,
       userCreator: _id,
     })
-      .populate('userCreator', { name: 1, email: 1, phone: 1 })
-      .populate('userAdopter', { name: 1, email: 1, phone: 1 })
-      .populate('userTransit', { name: 1, email: 1, phone: 1 })
-      .populate('dogMedicalHistory')
-      .populate('catMedicalHistory')
-      .populate('vet', { name: 1, email: 1, phone: 1 })
       .skip(startIndex)
       .limit(limit)
       .populate('image')
@@ -275,6 +270,7 @@ export const getPetForUser = async (req: any, res: any) => {
       .populate('userCreator', { name: 1, email: 1, phone: 1 })
       .populate('userAdopter', { name: 1, email: 1, phone: 1 })
       .populate('userTransit', { name: 1, email: 1, phone: 1 })
+      .populate('userShelter', { name: 1, email: 1, phone: 1 })
       .populate('vet', { name: 1, email: 1, phone: 1 })
       .populate('dogMedicalHistory')
       .populate('catMedicalHistory')
@@ -446,6 +442,15 @@ export const queryList = async (req: any, res: any) => {
     { $unwind: '$userCreator' },
     {
       $lookup: {
+        from: 'users',
+        localField: 'userShelter',
+        foreignField: '_id',
+        as: 'userShelter',
+      },
+    },
+    { $unwind: '$userShelter' },
+    {
+      $lookup: {
         from: 'petimages',
         localField: 'image',
         foreignField: '_id',
@@ -460,12 +465,12 @@ export const queryList = async (req: any, res: any) => {
       // @ts-ignore
       if (key === 'country') {
         // @ts-ignore
-        query.country = new RegExp(value.toLocaleString(), 'i');
+        query.country = new RegExp(value, 'i');
       }
       // @ts-ignore
       if (key === 'city') {
         // @ts-ignore
-        query.city = new RegExp(value.toLocaleString(), 'i');
+        query.city = new RegExp(value, 'i');
       }
       if (key === 'gender') {
         // @ts-ignore
