@@ -197,7 +197,7 @@ export const pet = async (req: Request, res: Response) => {
 };
 
 export const petsForAdoption = async (req: any, res: any) => {
-  const { _id } = req.query;
+  const { _id, search } = req.query;
   const limit = parseInt(req.query.limit);
   const page = parseInt(req.query.page);
   const startIndex = (page - 1) * limit;
@@ -206,11 +206,12 @@ export const petsForAdoption = async (req: any, res: any) => {
     const registers: IPet[] = await Pet.find({
       adopted: false,
       userCreator: _id,
+      name: { $regex: new RegExp(search.toLowerCase()) },
     })
-      .skip(startIndex)
-      .limit(limit)
       .populate('image')
+      .skip(startIndex)
       .sort({ name: 1 })
+      .limit(limit)
       .exec();
 
     const totalRegisters: IPet[] = await Pet.find({
@@ -231,7 +232,7 @@ export const petsForAdoption = async (req: any, res: any) => {
 };
 
 export const petsAdopted = async (req: any, res: any) => {
-  const { _id } = req.query;
+  const { _id, search } = req.query;
   const limit = parseInt(req.query.limit);
   const page = parseInt(req.query.page);
   const startIndex = (page - 1) * limit;
@@ -240,6 +241,7 @@ export const petsAdopted = async (req: any, res: any) => {
     const registers: IPet[] = await Pet.find({
       adopted: true,
       userCreator: _id,
+      name: { $regex: new RegExp(search.toLowerCase()) },
     })
       .populate('image')
       .skip(startIndex)
@@ -359,22 +361,26 @@ export const getPetForUserAdopted = async (req: any, res: any) => {
 };
 
 export const getPetsForUserVet = async (req: any, res: any) => {
-  const { _id } = req.query;
+  const { _id, search } = req.query;
   const limit = parseInt(req.query.limit);
   const page = parseInt(req.query.page);
   const startIndex = (page - 1) * limit;
 
-  let petFiltered: any = [];
-
   try {
-    let pets: IPet[] = await Pet.find({ userVet: _id })
+    let pets: IPet[] = await Pet.find({
+      userVet: _id,
+      name: { $regex: new RegExp(search.toLowerCase()) },
+    })
       .populate('image')
       .skip(startIndex)
       .limit(limit)
       .sort({ name: 1 })
       .exec();
 
-    const totalPets: IPet[] = await Pet.find({ userVet: _id });
+    const totalPets: IPet[] = await Pet.find({
+      userVet: _id,
+      name: { $regex: new RegExp(search) },
+    });
 
     res.status(200).json({
       pets,
@@ -389,16 +395,15 @@ export const getPetsForUserVet = async (req: any, res: any) => {
 };
 
 export const getPetsForUserTransit = async (req: any, res: any) => {
-  const { _id } = req.query;
+  const { _id, search } = req.query;
   const limit = parseInt(req.query.limit);
   const page = parseInt(req.query.page);
   const startIndex = (page - 1) * limit;
 
-  let petFiltered: any = [];
-
   try {
     const pets: IPet[] = await Pet.find({
       userTransit: _id,
+      name: { $regex: new RegExp(search.toLowerCase()) },
     })
       .populate('image')
       .skip(startIndex)
@@ -406,7 +411,9 @@ export const getPetsForUserTransit = async (req: any, res: any) => {
       .sort({ adopted: 1 })
       .exec();
 
-    const totalPets: IPet[] = await Pet.find({ userTransit: _id });
+    const totalPets: IPet[] = await Pet.find({
+      userTransit: _id,
+    });
 
     res.status(200).json({
       pets,
