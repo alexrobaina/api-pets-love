@@ -7,10 +7,8 @@ import passport from 'passport';
 import passportMiddleware from './middlewares/passport';
 
 import authRoute from './routes/auth.routes';
-import privateRoutes from './routes/private.routes';
 import petRoutes from './routes/pet.routes';
 import imageRoutes from './routes/image.routes';
-
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 
@@ -31,11 +29,10 @@ passport.use(passportMiddleware);
 
 // routes
 app.get('/', (req, res) => {
-  res.send(`Welcome to petslove. Running in http://localhost:${app.get('port')}`);
+  res.send(`Welcome to Petslove 🦄`);
 });
 
 app.use(authRoute);
-app.use(privateRoutes);
 app.use(imageRoutes);
 app.use(petRoutes);
 

@@ -126,7 +126,21 @@ export const update = async (req: Request, res: Response) => {
 
 export const userId = async (req: Request, res: Response) => {
   try {
-    const user = await User.findOne({ _id: req.query._id }).populate('userImage').populate('image');
+    const user = await User.findOne({ _id: req.query._id })
+      .populate('userImage')
+      .populate('image')
+      .select({
+        _id: 1,
+        name: 1,
+        role: 1,
+        phone: 1,
+        email: 1,
+        aboutUs: 1,
+        location: 1,
+        username: 1,
+        textAddress: 1,
+        requirementsToAdopt: 1,
+      });
 
     if (!user) {
       res.status(404).send({
