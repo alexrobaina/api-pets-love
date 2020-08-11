@@ -17,11 +17,7 @@ router.put('/api/user/update', passport.authenticate('jwt', { session: false }),
 router.get('/api/user/query', userId);
 router.get('/api/user/listUsers', listUsers);
 
-router.get(
-  '/api/user/listUsersRole',
-  passport.authenticate('jwt', { session: false }),
-  listUsersRole
-);
+router.get('/api/user/listUsersRole', listUsersRole);
 
 router.get(
   '/api/user/updateUserImages',
