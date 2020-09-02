@@ -11,7 +11,7 @@ import {
   queryList,
   petsAdopted,
   getPetForUser,
-  petsForAdoption,
+  petsShelter,
   getPetsForUserVet,
   getPetForUserAdopted,
   getPetsForUserTransit,
@@ -25,7 +25,7 @@ router.get('/api/pet/getOnePet', getOnePet);
 router.get('/api/pet/queryList', queryList);
 router.get('/api/pet/petsAdopted', petsAdopted);
 router.get('/api/pet/listPetsForUser', getPetForUser);
-router.get('/api/pet/petsForAdoption', petsForAdoption);
+router.get('/api/pet/petsShelter', petsShelter);
 router.get('/api/pet/listPetForUserVet', getPetsForUserVet);
 router.get('/api/pet/listPetsForUserTransit', getPetsForUserTransit);
 router.get('/api/pet/listPetForUserAdopted', getPetForUserAdopted);

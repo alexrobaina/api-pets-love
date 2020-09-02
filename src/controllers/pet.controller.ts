@@ -186,20 +186,20 @@ export const pet = async (req: Request, res: Response) => {
     res.status(200).json(register);
   } catch (e) {
     res.status(500).send({
-      message: 'An error occurred on petsForAdoption',
+      message: 'An error occurred on pets',
     });
   }
 };
 
-export const petsForAdoption = async (req: any, res: any) => {
-  const { _id, search } = req.query;
+export const petsShelter = async (req: any, res: any) => {
+  const { _id, search, isAdopted } = req.query;
   const limit = parseInt(req.query.limit);
   const page = parseInt(req.query.page);
   const startIndex = (page - 1) * limit;
 
   try {
     const registers: IPet[] = await Pet.find({
-      adopted: false,
+      adopted: isAdopted,
       userCreator: _id,
       name: { $regex: new RegExp(search.toLowerCase()) },
     })
@@ -210,7 +210,7 @@ export const petsForAdoption = async (req: any, res: any) => {
       .exec();
 
     const totalRegisters: IPet[] = await Pet.find({
-      adopted: false,
+      adopted: isAdopted,
       userCreator: _id,
     });
 
