@@ -9,6 +9,7 @@ import passportMiddleware from './middlewares/passport';
 import authRoute from './routes/auth.routes';
 import petRoutes from './routes/pet.routes';
 import imageRoutes from './routes/image.routes';
+import dashboardRoutes from './routes/dashboard.routes';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 
@@ -35,5 +36,6 @@ app.get('/', (req, res) => {
 app.use(authRoute);
 app.use(imageRoutes);
 app.use(petRoutes);
+app.use(dashboardRoutes);
 
 export default app;
