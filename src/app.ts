@@ -10,6 +10,7 @@ import authRoute from './routes/auth.routes';
 import petRoutes from './routes/pet.routes';
 import imageRoutes from './routes/image.routes';
 import dashboardRoutes from './routes/dashboard.routes';
+import volunteersRoutes from './routes/volunteers.routes';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 
@@ -37,5 +38,6 @@ app.use(authRoute);
 app.use(imageRoutes);
 app.use(petRoutes);
 app.use(dashboardRoutes);
+app.use(volunteersRoutes);
 
 export default app;

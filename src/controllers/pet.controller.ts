@@ -221,7 +221,7 @@ export const petsShelter = async (req: any, res: any) => {
   } catch (e) {
     console.log(e);
     res.status(500).send({
-      message: 'An error occurred on petsForAdoption',
+      message: 'An error occurred on petsShelter',
     });
   }
 };
