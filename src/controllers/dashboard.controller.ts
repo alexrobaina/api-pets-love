@@ -29,11 +29,25 @@ export const getDashboard = async (req: Request, res: Response) => {
       userCreator: _id,
     });
 
+    const totalVeterinaryCared: IPet[] = await Pet.find({
+      adopted: false,
+      // @ts-ignore
+      userVet: _id,
+    });
+
+    const totalPetsAdopter: IPet[] = await Pet.find({
+      adopted: false,
+      // @ts-ignore
+      userVet: _id,
+    });
+
     res.status(200).json({
       totalPetsAdopted: totalPetsAdopted.length,
       totalPetsForAdoption: totalPetsForAdoption.length,
       totalVolunteersPetsCare: totalVolunteersPetsCare.length,
       totalVolunteersPetsOwner: totalVolunteersPetsOwner.length,
+      totalVeterinaryCared: totalVeterinaryCared.length,
+      totalPetsAdopter: totalPetsAdopter.length,
     });
   } catch (e) {
     console.log(e);

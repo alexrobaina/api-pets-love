@@ -11,6 +11,8 @@ import petRoutes from './routes/pet.routes';
 import imageRoutes from './routes/image.routes';
 import dashboardRoutes from './routes/dashboard.routes';
 import volunteersRoutes from './routes/volunteers.routes';
+import veterinaryRoutes from './routes/veterinary.routes';
+import adopterRoutes from './routes/adopter.routes';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 
@@ -35,9 +37,11 @@ app.get('/', (req, res) => {
 });
 
 app.use(authRoute);
-app.use(imageRoutes);
 app.use(petRoutes);
+app.use(imageRoutes);
+app.use(adopterRoutes);
 app.use(dashboardRoutes);
 app.use(volunteersRoutes);
+app.use(veterinaryRoutes);
 
 export default app;

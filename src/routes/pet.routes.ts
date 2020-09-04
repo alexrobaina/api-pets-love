@@ -13,7 +13,6 @@ import {
   getPetForUser,
   petsShelter,
   getPetsForUserVet,
-  getPetForUserAdopted,
   getPetsForUserTransit,
 } from '../controllers/pet.controller';
 
@@ -28,6 +27,5 @@ router.get('/api/pet/listPetsForUser', getPetForUser);
 router.get('/api/pet/petsShelter', petsShelter);
 router.get('/api/pet/listPetForUserVet', getPetsForUserVet);
 router.get('/api/pet/listPetsForUserTransit', getPetsForUserTransit);
-router.get('/api/pet/listPetForUserAdopted', getPetForUserAdopted);
 
 export default router;

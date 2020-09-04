@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import mongoose from 'mongoose';
 import Pet, { IPet } from '../models/pet';
 import User from '../models/user';
 import { ROLE_ADOPTER, ROLE_SHELTER, ROLE_VET, ROLE_TRANSIT } from '../config/roles';
@@ -276,77 +275,6 @@ export const getPetForUser = async (req: any, res: any) => {
       .exec();
 
     res.status(200).json(pets);
-  } catch (e) {
-    console.log(e);
-    res.status(500).send({
-      message: 'An error occurred',
-    });
-  }
-};
-
-export const getPetForUserAdopted = async (req: any, res: any) => {
-  const { _id } = req.query;
-  const limit = parseInt(req.query.limit);
-  const page = parseInt(req.query.page);
-  const startIndex = (page - 1) * limit;
-
-  const petsAggregate = [
-    {
-      $match: {
-        userAdopter: new mongoose.Types.ObjectId(_id),
-      },
-    },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'userCreator',
-        foreignField: '_id',
-        as: 'userCreator',
-      },
-    },
-    { $unwind: '$userCreator' },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'userAdopter',
-        foreignField: '_id',
-        as: 'userAdopter',
-      },
-    },
-    { $unwind: '$userAdopter' },
-    {
-      $lookup: {
-        from: 'petimages',
-        localField: 'image',
-        foreignField: '_id',
-        as: 'image',
-      },
-    },
-    { $unwind: '$image' },
-  ];
-
-  try {
-    const register: IPet[] = await Pet.aggregate(petsAggregate)
-      .skip(startIndex)
-      .limit(limit)
-      .project({
-        name: 1,
-        image: 1,
-        urgent: 1,
-        gender: 1,
-        country: 1,
-        history: 1,
-        category: 1,
-        userAdopter: 1,
-      });
-
-    const totalCount: IPet[] = await Pet.aggregate(petsAggregate);
-
-    res.status(200).json({
-      pets: register,
-      // @ts-ignore
-      totalPets: totalCount.length,
-    });
   } catch (e) {
     console.log(e);
     res.status(500).send({
