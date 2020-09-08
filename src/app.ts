@@ -13,6 +13,7 @@ import dashboardRoutes from './routes/dashboard.routes';
 import volunteersRoutes from './routes/volunteers.routes';
 import veterinaryRoutes from './routes/veterinary.routes';
 import adopterRoutes from './routes/adopter.routes';
+import forgotPasswordRoutes from './routes/forgotPassword.routes';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 
@@ -43,5 +44,6 @@ app.use(adopterRoutes);
 app.use(dashboardRoutes);
 app.use(volunteersRoutes);
 app.use(veterinaryRoutes);
+app.use(forgotPasswordRoutes);
 
 export default app;
