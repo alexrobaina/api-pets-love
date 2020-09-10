@@ -4,6 +4,6 @@ import petRouter from './pet.routes';
 
 const router = routerx();
 
-router.use('', authRouter);
+router.use('api', authRouter);
 
 export default router;
