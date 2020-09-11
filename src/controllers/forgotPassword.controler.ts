@@ -1,5 +1,4 @@
 import * as nodemailer from 'nodemailer';
-import { google } from 'googleapis';
 import jwt from 'jsonwebtoken';
 import config from '../config';
 import Hogan from 'hogan.js';
