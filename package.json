@@ -27,7 +27,6 @@
     "express": "^4.17.1",
     "express-promise-router": "^3.0.3",
     "form-data": "^3.0.0",
-    "googleapis": "^59.0.0",
     "hogan.js": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.18",

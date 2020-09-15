@@ -4,7 +4,6 @@ import config from '../config';
 import Hogan from 'hogan.js';
 import path from 'path';
 import { readFileSync } from 'fs';
-
 import User, { IUser } from '../models/user';
 import dotenv from 'dotenv';
 
