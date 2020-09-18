@@ -14,4 +14,8 @@ export default {
     REGION: process.env.AWS_REGION || '',
     BUCKET: process.env.AWS_BUCKET || '',
   },
+  gmail: {
+    user: process.env.AWS_SECRET_ACCESS_KEY || '',
+    pass: process.env.AWS_ACCESS_KEY_ID || '',
+  },
 };
