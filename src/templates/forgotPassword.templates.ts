@@ -1,4 +1,5 @@
-<html>
+export const templateForgotPassword = (urlResetPassword: any) => {
+  return `<html>
 <style type="text/css">
   @import 'https://fonts.googleapis.com/css?family=Bowlby+One+SC&display=swap&subset=latin-ext';
   @import 'https://fonts.googleapis.com/css?family=Noto+Sans+HK:400,500,700,900&display=swap';
@@ -47,10 +48,11 @@
       Reset your password
     </div>
     <div style="text-align: center; padding-top: 30px; padding-bottom: 30px; padding-left: 50px; padding-right: 50px;">
-      <a href="{{urlResetPassword}}" class="primary" type="button">Change Password</a>
+      <a href="${urlResetPassword}" class="primary" type="button">Change Password</a>
     </div>
   </div>
   </div>
 </body>
 
-</html>
+</html>`;
+};

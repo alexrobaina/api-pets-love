@@ -1,9 +1,7 @@
 import * as nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken';
 import config from '../config';
-import Hogan from 'hogan.js';
-import path from 'path';
-import { readFileSync } from 'fs';
+import { templateForgotPassword } from '../templates/forgotPassword.templates';
 import User, { IUser } from '../models/user';
 import dotenv from 'dotenv';
 
@@ -25,14 +23,6 @@ export const forgotPassword = async (req: any, res: any, next: any) => {
     tokenReturn = await createToken(register[0]._id);
   }
 
-  const password = 'xcxmpqpsdwucvouy';
-
-  const template = readFileSync(
-    path.join(__dirname, '../emailTransporter/forgotPasswordEmail.hjs'),
-    'utf-8'
-  );
-
-  const compiledTemplate = Hogan.compile(template);
   const urlResetPassword = `${server}/reset-password/${tokenReturn}`;
 
   let transporter = nodemailer.createTransport({
@@ -47,7 +37,7 @@ export const forgotPassword = async (req: any, res: any, next: any) => {
     from: config.gmail.user,
     to: email,
     subject: 'Forgot password - PetsLove',
-    html: compiledTemplate.render({ urlResetPassword }),
+    html: templateForgotPassword(urlResetPassword),
   };
 
   try {
