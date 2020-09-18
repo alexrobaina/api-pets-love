@@ -13,7 +13,6 @@
   "license": "ISC",
   "dependencies": {
     "@types/dotenv": "^8.2.0",
-    "@types/hogan.js": "^3.0.0",
     "@types/multer": "^1.4.3",
     "@types/multer-s3": "^2.7.7",
     "@types/nodemailer": "^6.4.0",
@@ -26,7 +25,6 @@
     "express": "^4.17.1",
     "express-promise-router": "^3.0.3",
     "form-data": "^3.0.0",
-    "hogan.js": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.18",
     "morgan": "^1.10.0",
