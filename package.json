@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node dist/index.js",
     "dev": "tsc-watch --onSuccess \"node dist/index.js\" ",
+    "prestart": "copyfiles -u 1 src/**/* dist/",
     "build": "tsc"
   },
   "keywords": [],
