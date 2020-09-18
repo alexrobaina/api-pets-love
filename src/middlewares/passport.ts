@@ -8,7 +8,7 @@ const opts: StrategyOptions = {
 };
 
 export default new Strategy(opts, async (payload, done) => {
-  console.log(payload);
+  
   try {
     const user = await User.findById(payload.id);
     if (user) {
