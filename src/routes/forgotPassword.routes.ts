@@ -3,6 +3,6 @@ const router = Router();
 
 import { forgotPassword } from '../controllers/forgotPassword.controler';
 
-router.post('/api/forgotPassword', forgotPassword);
+router.post('/forgotPassword', forgotPassword);
 
 export default router;

@@ -3,6 +3,6 @@ const router = Router();
 
 import { getPetAdopter } from '../controllers/adopter.controller';
 
-router.get('/api/adopter/listPetsAdopter', getPetAdopter);
+router.get('/adopter/listPetsAdopter', getPetAdopter);
 
 export default router;
