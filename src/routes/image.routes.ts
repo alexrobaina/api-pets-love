@@ -6,16 +6,16 @@ const router = Router();
 import { addPetImages, listPetImage, updatePetImages } from '../controllers/petImage.controller';
 
 router.post(
-  '/api/pet/images',
+  '/pet/images',
   passport.authenticate('jwt', { session: false }),
   uploadImages,
   addPetImages
 );
 
-router.get('/api/pet/listImages', passport.authenticate('jwt', { session: false }), listPetImage);
+router.get('/pet/listImages', passport.authenticate('jwt', { session: false }), listPetImage);
 
 router.post(
-  '/api/pet/updateImage',
+  '/pet/updateImage',
   passport.authenticate('jwt', { session: false }),
   uploadImages,
   updatePetImages
@@ -28,20 +28,16 @@ import {
 } from '../controllers/userImage.controller';
 
 router.post(
-  '/api/user/addUserImages',
+  '/user/addUserImages',
   passport.authenticate('jwt', { session: false }),
   uploadImages,
   addUserImages
 );
 
-router.get(
-  '/api/user/listUserImage',
-  passport.authenticate('jwt', { session: false }),
-  listUserImage
-);
+router.get('/user/listUserImage', passport.authenticate('jwt', { session: false }), listUserImage);
 
 router.post(
-  '/api/user/updateUserImages',
+  '/user/updateUserImages',
   passport.authenticate('jwt', { session: false }),
   uploadImages,
   updateUserImages

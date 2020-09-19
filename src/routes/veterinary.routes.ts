@@ -5,7 +5,7 @@ const router = Router();
 import { listPetsVeterinaryCared } from '../controllers/veterinary.controller';
 
 router.get(
-  '/api/veterinary/listPetsVeterinaryCared',
+  '/veterinary/listPetsVeterinaryCared',
   passport.authenticate('jwt', { session: false }),
   listPetsVeterinaryCared
 );

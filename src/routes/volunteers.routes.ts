@@ -8,11 +8,11 @@ import {
 } from '../controllers/volunteers.controller';
 
 router.get(
-  '/api/volunteers/getPetsVolunteersOwner',
+  '/volunteers/getPetsVolunteersOwner',
   passport.authenticate('jwt', { session: false }),
   getPetsVolunteersOwner
 );
 
-router.get('/api/volunteers/getPetsAssignedVolunteer', getPetsAssignedVolunteer);
+router.get('/volunteers/getPetsAssignedVolunteer', getPetsAssignedVolunteer);
 
 export default router;

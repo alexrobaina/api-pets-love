@@ -16,16 +16,16 @@ import {
   getPetsForUserTransit,
 } from '../controllers/pet.controller';
 
-router.get('/api/pet/pet', pet);
-router.post('/api/pet/create', passport.authenticate('jwt', { session: false }), create);
-router.get('/api/pet/listPets', listPets);
-router.put('/api/pet/updatePet', passport.authenticate('jwt', { session: false }), updatePet);
-router.get('/api/pet/getOnePet', getOnePet);
-router.get('/api/pet/queryList', queryList);
-router.get('/api/pet/petsAdopted', petsAdopted);
-router.get('/api/pet/listPetsForUser', getPetForUser);
-router.get('/api/pet/petsShelter', petsShelter);
-router.get('/api/pet/listPetForUserVet', getPetsForUserVet);
-router.get('/api/pet/listPetsForUserTransit', getPetsForUserTransit);
+router.get('/pet/pet', pet);
+router.post('/pet/create', passport.authenticate('jwt', { session: false }), create);
+router.get('/pet/listPets', listPets);
+router.put('/pet/updatePet', passport.authenticate('jwt', { session: false }), updatePet);
+router.get('/pet/getOnePet', getOnePet);
+router.get('/pet/queryList', queryList);
+router.get('/pet/petsAdopted', petsAdopted);
+router.get('/pet/listPetsForUser', getPetForUser);
+router.get('/pet/petsShelter', petsShelter);
+router.get('/pet/listPetForUserVet', getPetsForUserVet);
+router.get('/pet/listPetsForUserTransit', getPetsForUserTransit);
 
 export default router;
