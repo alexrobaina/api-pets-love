@@ -51,6 +51,19 @@ export const create = async (req: Request, res: Response) => {
   }
 };
 
+export const remove = async (req: Request, res: Response) => {
+  try {
+    const register = await Pet.findByIdAndDelete({
+      _id: req.body._id,
+    });
+    res.status(200).json(register);
+  } catch (e) {
+    res.status(500).send({
+      message: 'An error occurred in remove pet',
+    });
+  }
+};
+
 export const updatePet = async (req: any, res: any) => {
   let data: any = {};
 

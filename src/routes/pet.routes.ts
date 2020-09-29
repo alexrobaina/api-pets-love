@@ -5,6 +5,7 @@ const router = Router();
 import {
   pet,
   create,
+  remove,
   listPets,
   updatePet,
   getOnePet,
@@ -17,6 +18,7 @@ import {
 } from '../controllers/pet.controller';
 
 router.get('/pet/pet', pet);
+router.delete('/pet/remove', passport.authenticate('jwt', { session: false }), remove);
 router.post('/pet/create', passport.authenticate('jwt', { session: false }), create);
 router.get('/pet/listPets', listPets);
 router.put('/pet/updatePet', passport.authenticate('jwt', { session: false }), updatePet);
