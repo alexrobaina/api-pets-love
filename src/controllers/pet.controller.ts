@@ -54,8 +54,9 @@ export const create = async (req: Request, res: Response) => {
 export const remove = async (req: Request, res: Response) => {
   try {
     const register = await Pet.findByIdAndDelete({
-      _id: req.body._id,
+      _id: req.query._id,
     });
+
     res.status(200).json(register);
   } catch (e) {
     res.status(500).send({
