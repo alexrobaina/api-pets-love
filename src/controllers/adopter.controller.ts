@@ -15,24 +15,6 @@ export const getPetAdopter = async (req: any, res: any) => {
     },
     {
       $lookup: {
-        from: 'users',
-        localField: 'userCreator',
-        foreignField: '_id',
-        as: 'userCreator',
-      },
-    },
-    { $unwind: '$userCreator' },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'userAdopter',
-        foreignField: '_id',
-        as: 'userAdopter',
-      },
-    },
-    { $unwind: '$userAdopter' },
-    {
-      $lookup: {
         from: 'petimages',
         localField: 'image',
         foreignField: '_id',
