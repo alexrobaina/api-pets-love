@@ -56,3 +56,26 @@ export const forgotPassword = async (req: any, res: any, next: any) => {
     return next(e);
   }
 };
+
+export const resetPassWord = async (req: any, res: any, next: any) => {
+  let data = {};
+
+  try {
+    const user = await token.decode(req.headers.token);
+    const pass = req.body.password;
+
+    if (pass) {
+      let password = await bcrypt.hash(req.body.password, 10);
+      data.password = password;
+    }
+    if (user) {
+      const register = await models.User.findByIdAndUpdate({ _id: user._id }, data);
+      res.status(200).json(register);
+    }
+  } catch (e) {
+    res.status(500).send({
+      message: 'Error occurred',
+    });
+    next(e);
+  }
+};

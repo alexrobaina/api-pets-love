@@ -1,10 +1,10 @@
 import { model, Schema, Document } from 'mongoose';
 
 export interface IPet extends Document {
-  image: Array<String>;
   update: any;
   name: string;
   city: string;
+  notes: string;
   lost: boolean;
   state: boolean;
   terms: boolean;
@@ -21,6 +21,7 @@ export interface IPet extends Document {
   userShelter: object;
   userAdopter: object;
   userTransit: object;
+  image: Array<String>;
   activityLevel: string;
   foundLocation: object;
   dogMedicalHistory: object;
@@ -32,6 +33,7 @@ const petSchema = new Schema({
     lat: { type: Number },
     lng: { type: Number },
   },
+  notes: { type: String },
   gender: { type: String },
   birthday: { type: Date },
   history: { type: String },
