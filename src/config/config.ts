@@ -5,8 +5,8 @@ export default {
   jwrSecret: process.env.JWT_SECRET || 'seedSecreteToken',
   DB: {
     URI: process.env.DB_MONGO_DB_URL || 'mongodb://localhost:27017/petsLove-typescript',
-    USER: '',
-    PASSWORD: '',
+    USER: process.env.DB_MONGO_DB_USER || '',
+    PASSWORD: process.env.DB_MONGO_DB_PASSWORD || '',
   },
   awsConfig: {
     SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY || '',

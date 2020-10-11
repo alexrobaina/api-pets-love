@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  mongodb_container:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_MONGO_DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_MONGO_DB_PASSWORD}
+      MONGO_INITDB_DATABASE: petsLove-typescript
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+volumes:
+  mongodb_data_container:
