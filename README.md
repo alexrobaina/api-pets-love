@@ -4,15 +4,15 @@
 
 2 - Install MongoDB and run a database
 
-* Run MongoDB using docker: ```npm run mongodb```
+- Run MongoDB using docker: `npm run mongodb`
 
-* Or install it manually: https://docs.mongodb.com/manual/
+- Or install it manually: https://docs.mongodb.com/manual/
 
 3 - Rename .env.example to .env and fill in the credentials.
 The defaults is enough to make the API run, but you need S3 credentials to do image-uploads and gmail credentials to send "forgot password"-emails.
 
-4 - When you've cloned this project you need to install the dependencies with ```npm install```
+4 - When you've cloned this project you need to install the dependencies with `npm install`
 
-5 - Finally execute ```npm run dev```
+5 - Finally execute `npm run dev`
 
 :D
