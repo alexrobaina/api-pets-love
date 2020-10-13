@@ -1,13 +1,13 @@
 import * as dotenv from 'dotenv';
-dotenv.config();
+const result = dotenv.config();
 
-if (process.env.DB_MONGO_DB_USER === undefined || process.env.DB_MONGO_DB_PASSWORD === undefined || process.env.DB_MONGO_DB_HOST === undefined || process.env.DB_MONGO_DB_NAME === undefined){
-  console.log('Please set up a DB and configure the .env file');
+if (result.error) {
+  console.log('Please set up a .env file with values. See README.md for more info.');
   process.exit(0);
 }
 
 export default {
-  jwrSecret: process.env.JWT_SECRET || 'seedSecreteToken',
+  jwrSecret: process.env.JWT_SECRET || ' ',
   DB: {
     URI: `mongodb://${process.env.DB_MONGO_DB_USER}:${process.env.DB_MONGO_DB_PASSWORD}@${process.env.DB_MONGO_DB_HOST}/${process.env.DB_MONGO_DB_NAME}?authSource=admin`,
   },
