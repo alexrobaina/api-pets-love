@@ -9,7 +9,7 @@ if (result.error) {
 export default {
   jwrSecret: process.env.JWT_SECRET || ' ',
   DB: {
-    URI: `mongodb://${process.env.DB_MONGO_DB_USER}:${process.env.DB_MONGO_DB_PASSWORD}@${process.env.DB_MONGO_DB_HOST}/${process.env.DB_MONGO_DB_NAME}?authSource=admin`,
+    URI: `mongodb://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@${process.env.MONGO_DB_HOST}:${process.env.MONGO_DB_HOST_PORT}/${process.env.MONGO_DB_NAME}?authSource=admin`,
   },
   awsConfig: {
     SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY || '',
