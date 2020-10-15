@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "start": "node dist/index.js",
     "dev": "tsc-watch --onSuccess \"node dist/index.js\" ",
-    "build": "tsc"
+    "mongodb": "docker-compose --env-file .env up"
   },
   "keywords": [],
   "author": "",

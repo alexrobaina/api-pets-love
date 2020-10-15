@@ -1,12 +1,15 @@
 import * as dotenv from 'dotenv';
-dotenv.config();
+const result = dotenv.config();
+
+if (result.error) {
+  console.log('Please set up a .env file with values. See README.md for more info.');
+  process.exit(0);
+}
 
 export default {
-  jwrSecret: process.env.JWT_SECRET || 'seedSecreteToken',
+  jwrSecret: process.env.JWT_SECRET || ' ',
   DB: {
-    URI: process.env.DB_MONGO_DB_URL || 'mongodb://localhost:27017/petsLove-typescript',
-    USER: '',
-    PASSWORD: '',
+    URI: `${process.env.MONGO_DB_PREFIX}${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@${process.env.MONGO_DB_HOST}:${process.env.MONGO_DB_HOST_PORT}/${process.env.MONGO_DB_NAME}${process.env.MONGO_DB_OPTIONS}`,
   },
   awsConfig: {
     SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY || '',
