@@ -20,7 +20,7 @@ export const forgotPassword = async (req: any, res: any, next: any) => {
   let tokenReturn = '';
 
   if (register[0]) {
-    tokenReturn = await createToken(register[0]._id);
+    tokenReturn = await createToken(register[0]);
   }
 
   const urlResetPassword = `${server}/reset-password/${tokenReturn}`;
