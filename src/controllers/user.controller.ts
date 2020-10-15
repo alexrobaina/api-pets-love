@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from '../config';
 
+
 function createToken(user: IUser) {
   return jwt.sign({ id: user.id, email: user.email }, config.jwrSecret, {
     expiresIn: 86400,
@@ -203,4 +204,34 @@ export const listUsers = async (req: any, res: any) => {
       message: 'Internal error on services list users',
     });
   }
+};
+
+
+export const resetPassword = async (req: any, res: any, next: any) => {
+  let password
+  
+  try {
+
+    if (req.body.password) {
+      password = await bcrypt.hash(req.body.password, 10);
+    } else {
+        return res.status(500).json({
+          message: 'Something went wrong 🙄',
+        });
+    }
+
+    const user = await User.findOneAndUpdate({ _id: req.user.id }, { password });
+
+    return res.status(200).json({
+      user,
+      message: 'Password change successfull',
+    });
+     
+  }catch(e) {
+    console.log(e)
+    return res.status(500).json({
+      message: 'Something went wrong 🙄',
+    });
+  }
+
 };
