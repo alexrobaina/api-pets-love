@@ -33,5 +33,3 @@ The defaults is enough to make the API run, but you need S3 credentials to do im
 You can also "buy me cofee" and it all be used to the development and grow of _Pets Love_.<br>
 
 [![Invitame un café en cafecito.app](https://cdn.cafecito.app/imgs/buttons/button_6.svg)](https://cafecito.app/petslove)
-
-https://www.patreon.com/alexrobaina
