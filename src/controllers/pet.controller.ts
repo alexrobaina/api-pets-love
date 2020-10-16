@@ -51,7 +51,7 @@ export const create = async (req: Request, res: Response) => {
   }
 };
 
-export const remove = async (req: Request, res: Response) => {
+export const deletePet = async (req: Request, res: Response) => {
   try {
     const register = await Pet.findByIdAndDelete({
       _id: req.query._id,

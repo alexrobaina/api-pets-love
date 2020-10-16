@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import passport from 'passport';
-import tokenDecoded from '../middlewares/tokenDecoded'
+import tokenDecoded from '../middlewares/tokenDecoded';
 const router = Router();
 
 import {
@@ -11,6 +11,7 @@ import {
   listUsers,
   listUsersRole,
   resetPassword,
+  deleteUser,
 } from '../controllers/user.controller';
 
 router.post('/user/create', signUp);
@@ -20,6 +21,7 @@ router.get('/user/query', userId);
 router.get('/user/listUsers', listUsers);
 router.get('/user/listUsersRole', listUsersRole);
 router.post('/user/resetPassword', tokenDecoded, resetPassword);
+router.post('/pet/deleteUser', passport.authenticate('jwt', { session: false }), deleteUser);
 
 router.get(
   '/user/updateUserImages',

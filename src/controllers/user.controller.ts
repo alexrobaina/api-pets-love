@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from '../config';
 
-
 function createToken(user: IUser) {
   return jwt.sign({ id: user.id, email: user.email }, config.jwrSecret, {
     expiresIn: 86400,
@@ -206,18 +205,30 @@ export const listUsers = async (req: any, res: any) => {
   }
 };
 
+export const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const register = await User.findByIdAndDelete({
+      _id: req.query._id,
+    });
+
+    res.status(200).json(register);
+  } catch (e) {
+    res.status(500).send({
+      message: 'An error occurred in remove pet',
+    });
+  }
+};
 
 export const resetPassword = async (req: any, res: any, next: any) => {
-  let password
-  
-  try {
+  let password;
 
+  try {
     if (req.body.password) {
       password = await bcrypt.hash(req.body.password, 10);
     } else {
-        return res.status(500).json({
-          message: 'Something went wrong 🙄',
-        });
+      return res.status(500).json({
+        message: 'Something went wrong',
+      });
     }
 
     const user = await User.findOneAndUpdate({ _id: req.user.id }, { password });
@@ -226,12 +237,10 @@ export const resetPassword = async (req: any, res: any, next: any) => {
       user,
       message: 'Password change successfull',
     });
-     
-  }catch(e) {
-    console.log(e)
+  } catch (e) {
+    console.log(e);
     return res.status(500).json({
-      message: 'Something went wrong 🙄',
+      message: 'Something went wrong',
     });
   }
-
 };

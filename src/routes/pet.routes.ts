@@ -5,20 +5,19 @@ const router = Router();
 import {
   pet,
   create,
-  remove,
   listPets,
   updatePet,
   getOnePet,
   queryList,
+  deletePet,
   petsAdopted,
-  getPetForUser,
   petsShelter,
+  getPetForUser,
   getPetsForUserVet,
   getPetsForUserTransit,
 } from '../controllers/pet.controller';
 
 router.get('/pet/pet', pet);
-router.delete('/pet/remove', passport.authenticate('jwt', { session: false }), remove);
 router.post('/pet/create', passport.authenticate('jwt', { session: false }), create);
 router.get('/pet/listPets', listPets);
 router.put('/pet/updatePet', passport.authenticate('jwt', { session: false }), updatePet);
@@ -29,5 +28,6 @@ router.get('/pet/listPetsForUser', getPetForUser);
 router.get('/pet/petsShelter', petsShelter);
 router.get('/pet/listPetForUserVet', getPetsForUserVet);
 router.get('/pet/listPetsForUserTransit', getPetsForUserTransit);
+router.delete('/pet/deletePet', passport.authenticate('jwt', { session: false }), deletePet);
 
 export default router;

@@ -78,3 +78,17 @@ export const listPetImage = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const deletePetImage = async (req: Request, res: Response) => {
+  try {
+    const register = await PetImage.findByIdAndDelete({
+      _id: req.query._id,
+    });
+
+    res.status(200).json(register);
+  } catch (e) {
+    res.status(500).send({
+      message: 'An error occurred in remove pet',
+    });
+  }
+};
