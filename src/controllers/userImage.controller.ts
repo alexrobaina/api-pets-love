@@ -61,3 +61,17 @@ export const listUserImage = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const deleteUserImage = async (req: Request, res: Response) => {
+  try {
+    const register = await UserImage.findByIdAndDelete({
+      _id: req.query._id,
+    });
+
+    res.status(200).json(register);
+  } catch (e) {
+    res.status(500).send({
+      message: 'An error occurred in remove user image',
+    });
+  }
+};
