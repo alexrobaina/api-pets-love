@@ -1,7 +1,9 @@
 import * as dotenv from 'dotenv';
 const result = dotenv.config();
 
-if (result.error && process.env.DEV) {
+const PROD = process.env.PROD || true;
+
+if (result.error && PROD) {
   console.log('Please set up a .env file with values. See README.md for more info.');
   process.exit(0);
 }
