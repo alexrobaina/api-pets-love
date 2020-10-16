@@ -227,7 +227,7 @@ export const resetPassword = async (req: any, res: any, next: any) => {
       password = await bcrypt.hash(req.body.password, 10);
     } else {
       return res.status(500).json({
-        message: 'Something went wrong 🙄',
+        message: 'Something went wrong',
       });
     }
 
@@ -240,7 +240,7 @@ export const resetPassword = async (req: any, res: any, next: any) => {
   } catch (e) {
     console.log(e);
     return res.status(500).json({
-      message: 'Something went wrong 🙄',
+      message: 'Something went wrong',
     });
   }
 };
