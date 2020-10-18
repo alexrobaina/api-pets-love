@@ -14,7 +14,7 @@ export interface IPet extends Document {
   urgent: boolean;
   adopted: boolean;
   category: string;
-  birthday: string;
+  birthday: any;
   userVet: object;
   textAddress: string;
   userCreator: object;
