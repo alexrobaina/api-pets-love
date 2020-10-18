@@ -447,6 +447,7 @@ export const queryList = async (req: any, res: any) => {
         country: 1,
         history: 1,
         category: 1,
+        activityLevel: 1,
       });
 
     const totalCount: IPet[] = await Pet.aggregate(petsAggregate).match(query);
