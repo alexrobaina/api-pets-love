@@ -21,7 +21,7 @@ router.get('/user/query', userId);
 router.get('/user/listUsers', listUsers);
 router.get('/user/listUsersRole', listUsersRole);
 router.post('/user/resetPassword', tokenDecoded, resetPassword);
-router.post('/pet/deleteUser', passport.authenticate('jwt', { session: false }), deleteUser);
+router.post('/pet/delete', passport.authenticate('jwt', { session: false }), deleteUser);
 
 router.get(
   '/user/updateUserImages',

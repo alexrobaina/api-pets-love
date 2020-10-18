@@ -28,6 +28,6 @@ router.get('/pet/listPetsForUser', getPetForUser);
 router.get('/pet/petsShelter', petsShelter);
 router.get('/pet/listPetForUserVet', getPetsForUserVet);
 router.get('/pet/listPetsForUserTransit', getPetsForUserTransit);
-router.delete('/pet/deletePet', passport.authenticate('jwt', { session: false }), deletePet);
+router.delete('/pet/delete', passport.authenticate('jwt', { session: false }), deletePet);
 
 export default router;
