@@ -210,15 +210,21 @@ export const petsShelter = async (req: any, res: any) => {
   const page = parseInt(req.query.page);
   const startIndex = (page - 1) * limit;
 
+  const formatIsAdopted = isAdopted == 'true';
+
+  let petsSearch = {
+    adopted: formatIsAdopted,
+    userCreator: _id,
+  };
+  if (search) {
+    // @ts-ignore
+    petsSearch.name = { $regex: new RegExp(search.toLowerCase()) };
+  }
+
   try {
-    const registers: IPet[] = await Pet.find({
-      adopted: isAdopted,
-      userCreator: _id,
-      name: { $regex: new RegExp(search.toLowerCase()) },
-    })
+    const registers: IPet[] = await Pet.find(petsSearch)
       .populate('image')
       .skip(startIndex)
-      .sort({ name: 1 })
       .limit(limit)
       .exec();
 
