@@ -218,6 +218,7 @@ export const petsShelter = async (req: any, res: any) => {
     adopted: formatIsAdopted,
     userCreator: _id,
   };
+
   if (search) {
     // @ts-ignore
     petsSearch.name = { $regex: new RegExp(search.toLowerCase()) };
