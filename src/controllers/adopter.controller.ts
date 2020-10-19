@@ -38,6 +38,7 @@ export const getPetAdopter = async (req: any, res: any) => {
         category: 1,
         userAdopter: 1,
         userCreator: 1,
+        activityLevel: 1,
       });
 
     const totalCount: IPet[] = await Pet.aggregate(petsAggregate);

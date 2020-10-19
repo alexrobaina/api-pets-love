@@ -93,6 +93,8 @@ export const updatePet = async (req: any, res: any) => {
       } else {
         data[key] = value;
       }
+    } else if (key === 'birthday' && value === null) {
+      data.birthday = null;
     }
   });
 
