@@ -2,6 +2,7 @@ import { Request } from 'express';
 import * as dotenv from 'dotenv';
 import aws from 'aws-sdk';
 dotenv.config();
+
 import config from '../config/config';
 
 aws.config.update({
@@ -11,23 +12,33 @@ aws.config.update({
 });
 
 const s3 = new aws.S3();
-
-const deleteImage = async () => {
-  const params = {
-    Bucket: config.awsConfig.BUCKET,
-    Key: 'filename', //if any sub folder-> path/of/the/folder.ext
-  };
+const deleteImage = async (arrayImage: any) => {
   try {
-    await s3.headObject(params).promise();
-    console.log('File Found in S3');
-    try {
-      await s3.deleteObject(params).promise();
-      console.log('file deleted Successfully');
-    } catch (err) {
-      console.log('ERROR in file Deleting : ' + JSON.stringify(err));
+    if (arrayImage) {
+      let deleteItems: any = [];
+
+      arrayImage.forEach((imgUrl: string) => {
+        deleteItems.push({ key: imgUrl });
+      });
+
+      const params: any = {
+        Bucket: config.awsConfig.BUCKET,
+        Delete: {
+          Objects: [
+            {
+              key: deleteItems[0],
+            },
+          ],
+          Quiet: false,
+        },
+      };
+
+      s3.deleteObjects(params, function (err, data) {
+        console.log('Successfully deleted myBucket/myKey', data);
+      });
     }
-  } catch (err) {
-    console.log('File not Found ERROR : ' + err.code);
+  } catch (e) {
+    console.log(e);
   }
 };
 

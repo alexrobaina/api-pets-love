@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
 import Pet, { IPet } from '../models/pet';
 import User from '../models/user';
+import PetImage from '../models/petImage';
 import { ROLE_ADOPTER, ROLE_SHELTER, ROLE_VET, ROLE_TRANSIT } from '../config/roles';
 import DogMedicalHistory, { IDogMedicalHistory } from '../models/dogMedicalHistory';
 import CatMedicalHistory, { ICatMedicalHistory } from '../models/catMedicalHistory';
+import deleteImage from '../services/delete-files-aws';
 
 export const create = async (req: Request, res: Response) => {
   try {
@@ -52,20 +54,37 @@ export const create = async (req: Request, res: Response) => {
 };
 
 export const deletePet = async (req: Request, res: Response) => {
-  // try {
-  //   const register = await Pet.findByIdAndDelete({
-  //     _id: req.query._id,
-  //   });
+  let imageUrlForDelete = [];
+  try {
+    const register = await Pet.find({
+      _id: req.query._id,
+    });
 
-  //   res.status(200).json(register);
-  // } catch (e) {
-  //   res.status(500).send({
-  //     message: 'An error occurred in remove pet',
-  //   });
-  res.status(500).send({
-    message: 'weonpooo',
-  });
-  // }
+    if (register[0].image) {
+      const images = await PetImage.find({
+        _id: register[0].image,
+      });
+
+      // @ts-ignore
+      deleteImage(images[0].filenames);
+
+      // await PetImage.findByIdAndDelete({
+      //   _id: register[0].image,
+      // });
+    }
+    // const register = await Pet.findByIdAndDelete({
+    //   _id: req.query._id,
+    // });
+
+    res.status(200).json(register);
+  } catch (e) {
+    res.status(500).send({
+      message: 'An error occurred in remove pet',
+    });
+    res.status(500).send({
+      message: 'weonpooo',
+    });
+  }
 };
 
 export const updatePet = async (req: any, res: any) => {

@@ -31,8 +31,8 @@ router.get('/pet/listPetForUserVet', getPetsForUserVet);
 router.get('/pet/listPetsForUserTransit', getPetsForUserTransit);
 router.delete(
   '/pet/delete',
-  passport.authenticate('jwt', { session: false }),
-  awsDeleteImage,
+  // passport.authenticate('jwt', { session: false }),
+  // awsDeleteImage,
   deletePet
 );
 
