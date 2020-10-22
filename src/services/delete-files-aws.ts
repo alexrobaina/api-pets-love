@@ -10,33 +10,31 @@ aws.config.update({
   accessKeyId: config.awsConfig.ACCESS_KEY_ID,
   region: config.awsConfig.REGION,
 });
-
 const s3 = new aws.S3();
+
 const deleteImage = async (arrayImage: any) => {
   try {
-    if (arrayImage) {
-      let deleteItems: any = [];
+    const params: any = {
+      Bucket: config.awsConfig.BUCKET,
+    };
 
-      arrayImage.forEach((imgUrl: string) => {
-        deleteItems.push({ key: imgUrl });
+    s3.listObjects(params, function (err, data) {
+      if (err) return console.log(err);
+
+      params.Delete = { Objects: [] };
+
+      arrayImage.forEach((content: string) => {
+        params.Delete.Objects.push({ Key: content });
       });
-
-      const params: any = {
-        Bucket: config.awsConfig.BUCKET,
-        Delete: {
-          Objects: [
-            {
-              key: deleteItems[0],
-            },
-          ],
-          Quiet: false,
-        },
-      };
 
       s3.deleteObjects(params, function (err, data) {
-        console.log('Successfully deleted myBucket/myKey', data);
+        if (err) console.log(err);
+        else {
+          console.log('well done!');
+          return true;
+        }
       });
-    }
+    });
   } catch (e) {
     console.log(e);
   }

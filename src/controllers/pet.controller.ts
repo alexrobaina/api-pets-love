@@ -54,7 +54,6 @@ export const create = async (req: Request, res: Response) => {
 };
 
 export const deletePet = async (req: Request, res: Response) => {
-  let imageUrlForDelete = [];
   try {
     const register = await Pet.find({
       _id: req.query._id,
@@ -66,17 +65,34 @@ export const deletePet = async (req: Request, res: Response) => {
       });
 
       // @ts-ignore
-      deleteImage(images[0].filenames);
-
-      // await PetImage.findByIdAndDelete({
-      //   _id: register[0].image,
-      // });
+      if (deleteImage(images[0].filenames)) {
+        await PetImage.findByIdAndDelete({
+          _id: register[0].image,
+        });
+      } else {
+        return res.status(500).send({
+          message: 'Something is wrong in delete image',
+        });
+      }
     }
-    // const register = await Pet.findByIdAndDelete({
-    //   _id: req.query._id,
-    // });
 
-    res.status(200).json(register);
+    await Pet.findByIdAndDelete({ _id: req.query._id });
+
+    // @ts-ignore
+    if (register.category === 'dog') {
+      // @ts-ignore
+      await DogMedicalHistory.findByIdAndDelete(register.dogMedicalHistory);
+    }
+
+    // @ts-ignore
+    if (register.category === 'cat') {
+      // @ts-ignore
+      await CatMedicalHistory.findByIdAndDelete(register.catMedicalHistory);
+    }
+
+    res.status(200).send({
+      message: 'Delete pet success',
+    });
   } catch (e) {
     res.status(500).send({
       message: 'An error occurred in remove pet',
