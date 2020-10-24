@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import Pet, { IPet } from '../models/pet';
 import User from '../models/user';
 import PetImage from '../models/petImage';
-import { ROLE_ADOPTER, ROLE_SHELTER, ROLE_VET, ROLE_TRANSIT } from '../config/roles';
+import config from '../config/config';
+import { ROLE_ADOPTER, ROLE_SHELTER, ROLE_VET } from '../config/roles';
 import DogMedicalHistory, { IDogMedicalHistory } from '../models/dogMedicalHistory';
 import CatMedicalHistory, { ICatMedicalHistory } from '../models/catMedicalHistory';
 import deleteImage from '../services/delete-files-aws';
@@ -65,7 +66,7 @@ export const deletePet = async (req: Request, res: Response) => {
       });
 
       // @ts-ignore
-      if (deleteImage(images[0].filenames)) {
+      if (deleteImage(images[0].filenames, config.awsConfig.PET_BUCKET_FOLDER)) {
         await PetImage.findByIdAndDelete({
           _id: register[0].image,
         });
@@ -85,6 +86,9 @@ export const deletePet = async (req: Request, res: Response) => {
     }
 
     // @ts-ignore
+    console.log(register.dogMedicalHistory);
+
+    // @ts-ignore
     if (register.category === 'cat') {
       // @ts-ignore
       await CatMedicalHistory.findByIdAndDelete(register.catMedicalHistory);
@@ -96,9 +100,6 @@ export const deletePet = async (req: Request, res: Response) => {
   } catch (e) {
     res.status(500).send({
       message: 'An error occurred in remove pet',
-    });
-    res.status(500).send({
-      message: 'weonpooo',
     });
   }
 };

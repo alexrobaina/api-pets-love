@@ -20,6 +20,8 @@ export default {
     ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID || '',
     REGION: process.env.AWS_REGION || '',
     BUCKET: process.env.AWS_BUCKET || '',
+    PET_BUCKET_FOLDER: 'pet_images',
+    USER_BUCKET_FOLDER: 'user_images',
   },
   gmail: {
     user: process.env.GMAIL_USER || '',

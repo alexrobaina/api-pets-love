@@ -1,8 +1,8 @@
 import deleteImage from '../services/delete-files-aws';
 
 const awsDeleteImage = async (req: any, res: any, next: Function) => {
-  console.log(req.body);
   try {
+    // @ts-ignore
     await deleteImage(req.body.image);
     return res.status(200).json({
       message: 'Image delete success',
