@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import awsDeleteImage from '../middlewares/awsDeleteImage';
 import passport from 'passport';
 const router = Router();
 
@@ -28,6 +29,11 @@ router.get('/pet/listPetsForUser', getPetForUser);
 router.get('/pet/petsShelter', petsShelter);
 router.get('/pet/listPetForUserVet', getPetsForUserVet);
 router.get('/pet/listPetsForUserTransit', getPetsForUserTransit);
-router.delete('/pet/delete', passport.authenticate('jwt', { session: false }), deletePet);
+router.delete(
+  '/pet/delete',
+  // passport.authenticate('jwt', { session: false }),
+  // awsDeleteImage,
+  deletePet
+);
 
 export default router;

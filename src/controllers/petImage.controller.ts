@@ -1,5 +1,9 @@
 import { Request, Response } from 'express';
+import * as dotenv from 'dotenv';
 import PetImage from '../models/petImage';
+import config from '../config/config';
+import deleteImage from '../services/delete-files-aws';
+dotenv.config();
 
 export const addPetImages = async (req: any, res: any) => {
   try {
@@ -89,6 +93,23 @@ export const deletePetImage = async (req: Request, res: Response) => {
   } catch (e) {
     res.status(500).send({
       message: 'An error occurred in remove pet',
+    });
+  }
+};
+
+export const deleteImages = async (req: Request, res: Response) => {
+  const { image } = req.query;
+  try {
+    if (image) {
+      await deleteImage(image, config.awsConfig.PET_BUCKET_FOLDER);
+    }
+
+    res.status(200).send({
+      message: 'delete image success',
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: 'An error occurred in remove image pet',
     });
   }
 };

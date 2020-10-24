@@ -1,5 +1,9 @@
 import { Request, Response } from 'express';
 import UserImage from '../models/userImage';
+import * as dotenv from 'dotenv';
+import config from '../config/config';
+import deleteImage from '../services/delete-files-aws';
+dotenv.config();
 
 export const addUserImages = async (req: any, res: any) => {
   try {
@@ -63,15 +67,18 @@ export const listUserImage = async (req: Request, res: Response) => {
 };
 
 export const deleteUserImage = async (req: Request, res: Response) => {
+  const { image } = req.query;
   try {
-    const register = await UserImage.findByIdAndDelete({
-      _id: req.query._id,
-    });
+    if (image) {
+      await deleteImage(image, config.awsConfig.USER_BUCKET_FOLDER);
+    }
 
-    res.status(200).json(register);
+    res.status(200).send({
+      message: 'delete image success',
+    });
   } catch (e) {
     res.status(500).send({
-      message: 'An error occurred in remove user image',
+      message: 'An error occurred in remove image pet',
     });
   }
 };

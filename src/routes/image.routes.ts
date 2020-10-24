@@ -8,6 +8,7 @@ import {
   listPetImage,
   updatePetImages,
   deletePetImage,
+  deleteImages,
 } from '../controllers/petImage.controller';
 
 router.post(
@@ -16,6 +17,8 @@ router.post(
   uploadImages,
   addPetImages
 );
+
+router.delete('/deleteImage', passport.authenticate('jwt', { session: false }), deleteImages);
 
 router.get('/pet/listImages', passport.authenticate('jwt', { session: false }), listPetImage);
 
@@ -36,21 +39,21 @@ router.delete(
 import {
   addUserImages,
   listUserImage,
-  updateUserImages,
   deleteUserImage,
+  updateUserImages,
 } from '../controllers/userImage.controller';
+
+router.delete(
+  '/deleteUserImage',
+  passport.authenticate('jwt', { session: false }),
+  deleteUserImage
+);
 
 router.post(
   '/user/addUserImages',
   passport.authenticate('jwt', { session: false }),
   uploadImages,
   addUserImages
-);
-
-router.delete(
-  '/user/deleteUserImage',
-  passport.authenticate('jwt', { session: false }),
-  deleteUserImage
 );
 
 router.get('/user/listUserImage', passport.authenticate('jwt', { session: false }), listUserImage);

@@ -21,12 +21,7 @@ router.get('/user/query', userId);
 router.get('/user/listUsers', listUsers);
 router.get('/user/listUsersRole', listUsersRole);
 router.post('/user/resetPassword', tokenDecoded, resetPassword);
-router.post('/pet/delete', passport.authenticate('jwt', { session: false }), deleteUser);
-
-router.get(
-  '/user/updateUserImages',
-  passport.authenticate('jwt', { session: false }),
-  listUsersRole
-);
+// this route not using now because its not finish
+router.post('/user/delete', passport.authenticate('jwt', { session: false }), deleteUser);
 
 export default router;

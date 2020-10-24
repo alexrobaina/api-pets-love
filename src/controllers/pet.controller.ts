@@ -1,9 +1,12 @@
 import { Request, Response } from 'express';
 import Pet, { IPet } from '../models/pet';
 import User from '../models/user';
-import { ROLE_ADOPTER, ROLE_SHELTER, ROLE_VET, ROLE_TRANSIT } from '../config/roles';
+import PetImage from '../models/petImage';
+import config from '../config/config';
+import { ROLE_ADOPTER, ROLE_SHELTER, ROLE_VET } from '../config/roles';
 import DogMedicalHistory, { IDogMedicalHistory } from '../models/dogMedicalHistory';
 import CatMedicalHistory, { ICatMedicalHistory } from '../models/catMedicalHistory';
+import deleteImage from '../services/delete-files-aws';
 
 export const create = async (req: Request, res: Response) => {
   try {
@@ -53,11 +56,47 @@ export const create = async (req: Request, res: Response) => {
 
 export const deletePet = async (req: Request, res: Response) => {
   try {
-    const register = await Pet.findByIdAndDelete({
+    const register = await Pet.find({
       _id: req.query._id,
     });
 
-    res.status(200).json(register);
+    if (register[0].image) {
+      const images = await PetImage.find({
+        _id: register[0].image,
+      });
+
+      // @ts-ignore
+      if (deleteImage(images[0].filenames, config.awsConfig.PET_BUCKET_FOLDER)) {
+        await PetImage.findByIdAndDelete({
+          _id: register[0].image,
+        });
+      } else {
+        return res.status(500).send({
+          message: 'Something is wrong in delete image',
+        });
+      }
+    }
+
+    await Pet.findByIdAndDelete({ _id: req.query._id });
+
+    // @ts-ignore
+    if (register.category === 'dog') {
+      // @ts-ignore
+      await DogMedicalHistory.findByIdAndDelete(register.dogMedicalHistory);
+    }
+
+    // @ts-ignore
+    console.log(register.dogMedicalHistory);
+
+    // @ts-ignore
+    if (register.category === 'cat') {
+      // @ts-ignore
+      await CatMedicalHistory.findByIdAndDelete(register.catMedicalHistory);
+    }
+
+    res.status(200).send({
+      message: 'Delete pet success',
+    });
   } catch (e) {
     res.status(500).send({
       message: 'An error occurred in remove pet',
