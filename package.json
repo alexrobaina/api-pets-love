@@ -7,7 +7,6 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "tsc-watch --onSuccess \"node dist/index.js\" ",
-    "deploy": "vercel deploy --prod",
     "mongodb": "docker-compose --env-file .env up"
   },
   "keywords": [],
