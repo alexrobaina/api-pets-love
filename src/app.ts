@@ -14,7 +14,8 @@ import path from 'path';
 const app = express();
 
 // settings
-app.set('port', process.env.PORT || 3000);
+const PORT = process.env.PORT || 3000;
+app.set('port', PORT);
 
 // middleware
 app.use(morgan('dev'));
