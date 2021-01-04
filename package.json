@@ -2,7 +2,7 @@
   "name": "petslovebackendtypescript",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
