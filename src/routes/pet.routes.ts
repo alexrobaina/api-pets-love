@@ -9,11 +9,11 @@ import {
   listPets,
   updatePet,
   getOnePet,
-  queryList,
   deletePet,
   petsAdopted,
   petsShelter,
   getPetForUser,
+  searchFilterPet,
   getPetsForUserVet,
   getPetsForUserTransit,
 } from '../controllers/pet.controller';
@@ -23,7 +23,7 @@ router.post('/pet/create', passport.authenticate('jwt', { session: false }), cre
 router.get('/pet/listPets', listPets);
 router.put('/pet/updatePet', passport.authenticate('jwt', { session: false }), updatePet);
 router.get('/pet/getOnePet', getOnePet);
-router.get('/pet/queryList', queryList);
+router.get('/pet/searchFilterPet', searchFilterPet);
 router.get('/pet/petsAdopted', petsAdopted);
 router.get('/pet/listPetsForUser', getPetForUser);
 router.get('/pet/petsShelter', petsShelter);

@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import Pet, { IPet } from '../models/pet';
-import User from '../models/user';
+import _ from 'lodash';
 import PetImage from '../models/petImage';
 import config from '../config/config';
-import { ROLE_ADOPTER, ROLE_SHELTER, ROLE_VET } from '../config/roles';
 import DogMedicalHistory, { IDogMedicalHistory } from '../models/dogMedicalHistory';
 import CatMedicalHistory, { ICatMedicalHistory } from '../models/catMedicalHistory';
 import deleteImage from '../services/delete-files-aws';
@@ -24,23 +23,6 @@ export const create = async (req: Request, res: Response) => {
         req.body.medicalCat
       );
       register.catMedicalHistory = registerMedicalHistory._id;
-    }
-
-    const dataUserCreator = await User.findOne({ _id: req.body.userCreator });
-
-    // @ts-ignore
-    if (dataUserCreator.role === ROLE_VET) {
-      register.userVet = register.userCreator;
-    }
-
-    // @ts-ignore
-    if (dataUserCreator.role === ROLE_ADOPTER) {
-      register.userAdopter = register.userCreator;
-    }
-
-    // @ts-ignore
-    if (dataUserCreator.role === ROLE_SHELTER) {
-      register.userShelter = register.userCreator;
     }
 
     await register.save();
@@ -412,14 +394,14 @@ export const getPetsForUserTransit = async (req: any, res: any) => {
   }
 };
 
-export const queryList = async (req: any, res: any) => {
+export const searchFilterPet = async (req: any, res: any) => {
   const limit = parseInt(req.query.limit);
   const page = parseInt(req.query.page);
   const startIndex = (page - 1) * limit;
 
   let query = {
     adopted: false,
-    'userCreator.role': 'protectionist',
+    'userCreator.role': 'shelter',
   };
 
   const petsAggregate = [
@@ -434,15 +416,6 @@ export const queryList = async (req: any, res: any) => {
     { $unwind: '$userCreator' },
     {
       $lookup: {
-        from: 'users',
-        localField: 'userShelter',
-        foreignField: '_id',
-        as: 'userShelter',
-      },
-    },
-    { $unwind: '$userShelter' },
-    {
-      $lookup: {
         from: 'petimages',
         localField: 'image',
         foreignField: '_id',
@@ -452,7 +425,7 @@ export const queryList = async (req: any, res: any) => {
     { $unwind: '$image' },
   ];
 
-  Object.entries(req.query).forEach(([key, value]) => {
+  Object.entries(req.query).forEach(async ([key, value]) => {
     if (value !== '' && value !== undefined) {
       // @ts-ignore
       if (key === 'country') {
@@ -495,7 +468,6 @@ export const queryList = async (req: any, res: any) => {
 
     res.status(200).json({
       pets: register,
-      // @ts-ignore
       totalPets: totalCount.length,
     });
   } catch (e) {
