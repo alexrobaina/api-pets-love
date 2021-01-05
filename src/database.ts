@@ -7,8 +7,6 @@ const dbOptions: ConnectionOptions = {
   useCreateIndex: true,
 };
 
-console.log(config.DB.URI);
-
 mongoose.connect(config.DB.URI, dbOptions);
 
 const connection = mongoose.connection;
