@@ -11,10 +11,11 @@ if (result.error && IS_DEV) {
 export default {
   jwrSecret: process.env.JWT_SECRET || ' ',
   DB: {
-    URI: process.env.TEST,
+    URI: JSON.stringify(process.env.TEST),
     // URI: !IS_DEV
     //   ? `${process.env.MONGO_DB_PREFIX}${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@${process.env.MONGO_DB_HOST}/${process.env.MONGO_DB_NAME}${process.env.MONGO_DB_OPTIONS}`
-    //   : `${process.env.MONGO_DB_PREFIX}${process.env.MONGO_DB_HOST}:${process.env.MONGO_DB_HOST_PORT}/${process.env.MONGO_DB_NAME}${process.env.MONGO_DB_OPTIONS}`,
+    //   : // : `mongodb+srv://alexrobainaph:rocovivo2018>@petslovev1.lox5f.mongodb.net/test>?retryWrites=true&w=majority`,
+    //     `mongodb+srv://alexrobainaph:ZvfYIAd3256SxdaD@petslovev1.lox5f.mongodb.net/test`,
   },
   awsConfig: {
     SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY || '',
