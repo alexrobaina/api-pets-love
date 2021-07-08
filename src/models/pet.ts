@@ -24,8 +24,6 @@ export interface IPet extends Document {
   image: Array<String>;
   activityLevel: string;
   foundLocation: object;
-  dogMedicalHistory: object;
-  catMedicalHistory: object;
 }
 
 const petSchema = new Schema({
@@ -49,14 +47,12 @@ const petSchema = new Schema({
   update: { type: Date, default: Date.now },
   urgent: { type: Boolean, default: false },
   country: { type: String, lowercase: true },
-  userVet: { type: Schema.Types.ObjectId, ref: 'User', default: null },
-  image: { type: Schema.Types.ObjectId, ref: 'PetImage', default: null },
+  userVet: { type: Object, ref: 'User', default: null },
+  image: { type: Object, default: [] },
   userShelter: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   userCreator: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   userAdopter: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   userTransit: { type: Schema.Types.ObjectId, ref: 'User', default: null },
-  dogMedicalHistory: { type: Schema.Types.ObjectId, ref: 'DogMedicalHistory', default: null },
-  catMedicalHistory: { type: Schema.Types.ObjectId, ref: 'CatMedicalHistory', default: null },
 });
 
 export default model<IPet>('Pet', petSchema);

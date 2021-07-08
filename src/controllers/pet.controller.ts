@@ -11,20 +11,6 @@ export const create = async (req: Request, res: Response) => {
   try {
     const register = await Pet.create(req.body);
 
-    if (register.category === 'dog') {
-      const registerMedicalHistory: IDogMedicalHistory = await DogMedicalHistory.create(
-        req.body.medicalDog
-      );
-      register.dogMedicalHistory = registerMedicalHistory._id;
-    }
-
-    if (register.category === 'cat') {
-      const registerMedicalHistory: ICatMedicalHistory = await CatMedicalHistory.create(
-        req.body.medicalCat
-      );
-      register.catMedicalHistory = registerMedicalHistory._id;
-    }
-
     await register.save();
 
     res.status(200).json(register);
@@ -190,9 +176,6 @@ export const getOnePet = async (req: Request, res: Response) => {
       .populate('userTransit', { name: 1, email: 1, phone: 1 })
       .populate('userShelter', { name: 1, email: 1, phone: 1 })
       .populate('userVet', { name: 1, email: 1, phone: 1 })
-      .populate('dogMedicalHistory')
-      .populate('catMedicalHistory')
-      .populate('image')
       .sort({ name: 1 })
       .exec();
 
@@ -414,55 +397,54 @@ export const searchFilterPet = async (req: any, res: any) => {
       },
     },
     { $unwind: '$userCreator' },
-    {
-      $lookup: {
-        from: 'petimages',
-        localField: 'image',
-        foreignField: '_id',
-        as: 'image',
-      },
-    },
-    { $unwind: '$image' },
   ];
 
-  Object.entries(req.query).forEach(async ([key, value]) => {
-    if (value !== '' && value !== undefined) {
-      // @ts-ignore
-      if (key === 'country') {
-        // @ts-ignore
-        query.country = new RegExp(value, 'i');
-      }
-      // @ts-ignore
-      if (key === 'city') {
-        // @ts-ignore
-        query.city = new RegExp(value, 'i');
-      }
-      if (key === 'gender') {
-        // @ts-ignore
-        query.gender = value;
-      }
-      if (key === 'category') {
-        // @ts-ignore
-        query.category = value;
-      }
-    }
-  });
+  // Object.entries(req.query).forEach(async ([key, value]) => {
+  //   if (value !== '' && value !== undefined) {
+  //     // @ts-ignore
+  //     if (key === 'country') {
+  //       // @ts-ignore
+  //       query.country = new RegExp(value, 'i');
+  //     }
+  //     // @ts-ignore
+  //     if (key === 'city') {
+  //       // @ts-ignore
+  //       query.city = new RegExp(value, 'i');
+  //     }
+  //     if (key === 'gender') {
+  //       // @ts-ignore
+  //       query.gender = value;
+  //     }
+  //     if (key === 'category') {
+  //       // @ts-ignore
+  //       query.category = value;
+  //     }
+  //   }
+  // });
 
   try {
-    const register: IPet[] = await Pet.aggregate(petsAggregate)
-      .match(query)
-      .skip(startIndex)
-      .limit(limit)
-      .project({
-        name: 1,
-        image: 1,
-        urgent: 1,
-        gender: 1,
-        country: 1,
-        history: 1,
-        category: 1,
-        activityLevel: 1,
-      });
+    // const register: IPet[] = await Pet.aggregate(petsAggregate)
+    //   .match(query)
+    //   .skip(startIndex)
+    //   .limit(limit)
+    //   .project({
+    //     name: 1,
+    //     image: 1,
+    //     urgent: 1,
+    //     gender: 1,
+    //     country: 1,
+    //     history: 1,
+    //     category: 1,
+    //     activityLevel: 1,
+    //   });
+    const register: IPet[] = await Pet.find()
+      .populate('userCreator', { name: 1, email: 1, phone: 1, role: 1 })
+      .populate('userAdopter', { name: 1, email: 1, phone: 1 })
+      .populate('userTransit', { name: 1, email: 1, phone: 1 })
+      .populate('userShelter', { name: 1, email: 1, phone: 1 })
+      .populate('userVet', { name: 1, email: 1, phone: 1 })
+      .sort({ name: 1 })
+      .exec();
 
     const totalCount: IPet[] = await Pet.aggregate(petsAggregate).match(query);
 
