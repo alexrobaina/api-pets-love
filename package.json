@@ -13,6 +13,7 @@
   "author": "alex-robaina",
   "license": "MIT",
   "dependencies": {
+    "@types/bcrypt": "^5.0.0",
     "aws-sdk": "^2.792.0",
     "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
