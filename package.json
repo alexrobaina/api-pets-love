@@ -1,7 +1,7 @@
 {
-  "name": "petslovebackendtypescript",
+  "name": "api-clean-code-template",
   "version": "1.0.0",
-  "description": "",
+  "description": "Pets Love is an app created with the goal of helping animal shelters, veterinarians, adopters and all of those that wish to adopt a pet.",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
@@ -10,15 +10,9 @@
     "mongodb": "docker-compose --env-file .env up"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "alex-robaina",
+  "license": "MIT",
   "dependencies": {
-    "@types/dotenv": "^8.2.0",
-    "@types/multer": "^1.4.4",
-    "@types/multer-s3": "^2.7.8",
-    "@types/nodemailer": "^6.4.0",
-    "@types/passport-jwt": "^3.0.3",
-    "@types/uuid": "^8.3.0",
     "aws-sdk": "^2.792.0",
     "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
@@ -27,21 +21,27 @@
     "express-promise-router": "^4.0.1",
     "form-data": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.10.14",
+    "mongoose": "^5.13.13",
+    "mongoose-unique-validator": "^3.0.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
     "multer-s3": "^2.9.0",
     "nodemailer": "^6.4.16",
     "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0",
-    "uuid": "^8.3.1"
+    "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
-    "@types/bcrypt": "^3.0.0",
+    "@types/passport-jwt": "^3.0.6",
+    "@types/mongoose-unique-validator": "^1.0.5",
+    "@types/dotenv": "^8.2.0",
+    "@types/multer": "^1.4.4",
+    "@types/multer-s3": "^2.7.8",
+    "@types/nodemailer": "^6.4.0",
+    "@types/uuid": "^8.3.0",
     "@types/cors": "^2.8.8",
     "@types/express": "^4.17.9",
     "@types/jsonwebtoken": "^8.5.0",
-    "@types/mongoose": "^5.10.0",
+    "@types/mongoose": "^5.11.97",
     "@types/morgan": "^1.9.2",
     "@types/node": "^14.14.7",
     "@types/passport": "^1.0.4",
@@ -51,5 +51,13 @@
     "prettier": "^2.1.2",
     "tsc-watch": "^4.2.9",
     "typescript": "^4.0.5"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexrobaina/api-clean-code.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alexrobaina/api-clean-code/issues"
+  },
+  "homepage": "https://github.com/alexrobaina/api-clean-code#readme"
 }

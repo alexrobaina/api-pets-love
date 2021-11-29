@@ -1,21 +1,22 @@
 import express from 'express';
 // morgan sirve para ver las peticiones a la api cuando esta corriendo el servidor en la consola
 import morgan from 'morgan';
+import dotenv from 'dotenv';
 // sirve para comunicarnos con otros tipos de servidores de desarrollo
 import cors from 'cors';
 import passport from 'passport';
 import passportMiddleware from './middlewares/passport';
-
 import routes from './routes';
-import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
+
+import { APP_NAME } from './constants/constants';
 
 // initializations
 const app = express();
+dotenv.config();
 
 // settings
-app.set('port', process.env.PORT || 3000);
-
+app.set('port', process.env.PORT || 3001);
 // middleware
 app.use(morgan('dev'));
 app.use(cors());
@@ -27,7 +28,7 @@ passport.use(passportMiddleware);
 
 // routes
 app.get('/', (req, res) => {
-  res.send(`Welcome to Petslove 🦄`);
+  res.send(`Welcome to ${APP_NAME}`);
 });
 
 app.use(routes);

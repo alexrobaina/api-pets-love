@@ -1,11 +1,19 @@
-# **🐶 🐱 🦊 Pets Love 🐭 🐹 🐰**
+# **🐶 Resources 🐶**
 
-Pets Love is an app created with the goal of helping animal shelters, veterinarians, volunteers and all of those that wish to adopt a pet.
+Api documentation:
+[Postman](https://documenter.getpostman.com/view/4785582/UVJckGh1)
 
-This app will help maintain a continuity of care for the animal after its adoption. The app will achieve this by providing a continuous flow of information from the professionals at the animal shelter. The information will include exact medical data and pictures of our animal friend. This will help keep a medical history of the animal and ensure its health and security.
+# **🦊 Clean architecture templeate login 🦊**
 
-If you want to read more about the project you can go to the landing page 😁<br>
-[https://www.pets-love.app/](https://www.pets-love.app/)
+## Technologies:
+
+- Express.js
+- Typescript
+- mongoose.
+- bcrypt.
+- multer.
+- aws-sdk.
+- passport-jwt.
 
 ## How to run this project in you localhost?
 
@@ -14,13 +22,12 @@ If you want to read more about the project you can go to the landing page 😁<b
 1 - You need to install nodejs from https://nodejs.org/
 
 2 - Rename .env.example to .env and fill in the credentials.
-The defaults is enough to make the API run, but you need S3 credentials to do image-uploads and gmail credentials to send "forgot password"-emails.
+
+<!-- The defaults is enough to make the API run, but you need S3 credentials to do image-uploads and gmail credentials to send "forgot password"-emails. -->
 
 3 - Install MongoDB and run a database
 
-- Run MongoDB using docker: `npm run mongodb`
-
-- Or install it manually: https://docs.mongodb.com/manual/
+- Install mongodb: https://docs.mongodb.com/manual/
 
 4 - When you've cloned this project you need to install the dependencies with `npm install`
 
