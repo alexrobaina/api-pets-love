@@ -8,15 +8,14 @@ import passport from 'passport';
 import passportMiddleware from './middlewares/passport';
 import routes from './routes';
 import path from 'path';
-
-import { APP_NAME } from './constants/constants';
+import { config } from './config/config';
 
 // initializations
 const app = express();
 dotenv.config();
 
 // settings
-app.set('port', process.env.PORT || 3001);
+app.set('port', config.PORT || 3001);
 // middleware
 app.use(morgan('dev'));
 app.use(cors());
@@ -28,7 +27,7 @@ passport.use(passportMiddleware);
 
 // routes
 app.get('/', (req, res) => {
-  res.send(`Welcome to ${APP_NAME}`);
+  res.send(`Welcome to ${config.APP_NAME}`);
 });
 
 app.use(routes);

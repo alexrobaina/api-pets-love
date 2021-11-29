@@ -1,19 +1,18 @@
 import { Response, Request } from 'express';
 import jwt from 'jsonwebtoken';
+import { config } from '../config/config';
 import { MUST_AUTHENTICATED } from '../constants/constants';
 import { ADMIN_ROLE, SUPER_ROLE, USER_ROLE } from '../database/models/constants/roles';
-import { SEED_DEVELOP } from '../constants/constants';
 
 //=====================================
-// CONFIGURANDO tokem
+// CONFIG tokem
 //=====================================
 
 export const verificaToken = function (req: Request, res: Response, next: any) {
   const headersToken = req.headers?.authorization || '';
   const token: string = headersToken.split(' ')[1];
-  const SEED = process.env.SEED || SEED_DEVELOP;
 
-  jwt.verify(token, SEED, (err: any, decoded: any) => {
+  jwt.verify(token, config.SEED, (err: any, decoded: any) => {
     if (err) {
       return res.status(401).json({
         ok: false,

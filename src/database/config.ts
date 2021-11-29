@@ -1,6 +1,5 @@
 import mongoose, { ConnectionOptions } from 'mongoose';
-
-const URI = process.env.MONGO_URI || 'mongodb://localhost:27018/petslove';
+import { config } from '../config/config';
 
 const dbOptions: ConnectionOptions = {
   useNewUrlParser: true,
@@ -8,7 +7,7 @@ const dbOptions: ConnectionOptions = {
   useCreateIndex: true,
 };
 
-mongoose.connect(URI, dbOptions);
+mongoose.connect(config.MONGO_URI, dbOptions);
 
 const connection = mongoose.connection;
 
