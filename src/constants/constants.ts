@@ -1,7 +1,3 @@
-export const APP_NAME = 'Petslove 🦄';
-
-export const SEED_DEVELOP = 'key-desarollo-secrets-yes';
-
 // ERRORS
 export const SOMETHING_IS_WRONG = 'Something went wrong. 🙄';
 export const MUST_AUTHENTICATED = 'Must be authenticated. 🙄';

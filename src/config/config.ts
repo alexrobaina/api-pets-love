@@ -1,27 +1,13 @@
-//=====================================
-// CONFIGURATION URL GLOBAL PORT
-//=====================================
+export const config = {
+  APP_NAME: 'Petslove 🦄',
+  PORT: process.env.PORT || '3001',
 
-process.env.PORT = process.env.PORT || '3001';
+  MONGO_URI: process.env.MONGO_URI || 'mongodb://localhost:27018/petslove',
+  EXPIRES_IN: process.env.EXPIRES_IN || 86400,
+  SEED: process.env.SEED || 'key-desarollo-secrets-yes',
 
-//=====================================
-// CONFIGURANDO URL GLOBAL DB
-//=====================================
-///
+  USER_NODEMAILER: process.env.USER_NODEMAILER,
+  PASS_NODEMAILER: process.env.PASS_NODEMAILER,
 
-process.env.MONGO_URI = process.env.MONGO_URI;
-
-//=====================================
-// CONFIGURANDO URL SEED TOKE
-//=====================================
-
-process.env.expiresIn = process.env.expiresIn;
-
-///SEED
-process.env.SEED = process.env.SEED;
-
-//Auth config nodemailer
-process.env.user = process.env.user;
-process.env.pass = process.env.pass;
-
-process.env.URL_SITE = process.env.URL_SITE;
+  URL_SITE: process.env.URL_SITE,
+};

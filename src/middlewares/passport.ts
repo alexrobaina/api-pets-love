@@ -1,10 +1,10 @@
 import { Strategy, ExtractJwt, StrategyOptions } from 'passport-jwt';
-import { SEED_DEVELOP } from '../constants/constants';
+import { config } from '../config/config';
 import User from '../database/models/user';
 
 const opts: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.SEED || SEED_DEVELOP,
+  secretOrKey: config.SEED,
 };
 
 export default new Strategy(opts, async (payload, done) => {
