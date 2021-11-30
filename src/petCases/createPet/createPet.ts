@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
 import { SOMETHING_IS_WRONG, SUCCESS_RESPONSE } from '../../constants/constants';
-import { save } from '../../repositories/userRepository';
+import { save } from '../../repositories/petRepository';
 
 //=====================================
 //           CREATE USER = POST

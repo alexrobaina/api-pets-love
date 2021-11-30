@@ -2,10 +2,16 @@ import { Response, Request } from 'express';
 import jwt from 'jsonwebtoken';
 import { config } from '../config/config';
 import { MUST_AUTHENTICATED } from '../constants/constants';
-import { ADMIN_ROLE, SUPER_ROLE, USER_ROLE } from '../database/models/constants/roles';
+import {
+  USER_VET_ROLE,
+  USER_SUPER_ROLE,
+  USER_ADMIN_ROLE,
+  USER_ADOPTER_ROLE,
+  USER_SHELTER_ROLE,
+} from '../database/models/constants/roles';
 
 //=====================================
-// CONFIG tokem
+// CONFIG token
 //=====================================
 
 export const verificaToken = function (req: Request, res: Response, next: any) {
@@ -29,7 +35,7 @@ export const verificaToken = function (req: Request, res: Response, next: any) {
 export const verificaRole_Admin = (req: any, res: Response, next: any) => {
   const user: any = req.user;
 
-  if (user.role === ADMIN_ROLE) {
+  if (user.role === USER_ADMIN_ROLE) {
   } else {
     return res.status(401).json({
       ok: false,
@@ -44,7 +50,7 @@ export const verificaRole_Admin = (req: any, res: Response, next: any) => {
 export const verificaRole_Super = (req: any, res: Response, next: any) => {
   const user = req.user;
 
-  if (user.role === SUPER_ROLE) {
+  if (user.role === USER_SUPER_ROLE) {
   } else {
     return res.status(401).json({
       ok: false,
@@ -59,7 +65,11 @@ export const verificaRole_Super = (req: any, res: Response, next: any) => {
 export const verificaRole_User = (req: any, res: Response, next: any) => {
   const user = req.user;
 
-  if (user.role === USER_ROLE) {
+  if (
+    user.role === USER_ADOPTER_ROLE ||
+    user.role === USER_VET_ROLE ||
+    user.role === USER_SHELTER_ROLE
+  ) {
   } else {
     return res.status(401).json({
       ok: false,

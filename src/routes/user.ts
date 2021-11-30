@@ -10,7 +10,7 @@ router.post('/user/', create); // POST USER
 
 router.get('/users/', [verificaToken, verificaRole_Admin], getUsers); // GET USERS
 
-router.get('/user', verificaToken, verificaToken, getUser); // GET USER
+router.get('/user', [verificaToken], getUser); // GET USER
 
 router.delete('/user', [verificaToken, verificaRole_Admin], Delete); // DELETE USERS
 

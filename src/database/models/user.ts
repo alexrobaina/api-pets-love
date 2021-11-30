@@ -1,12 +1,18 @@
 import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
-import { ADMIN_ROLE, SUPER_ROLE, USER_ROLE } from './constants/roles';
+import {
+  USER_ADOPTER_ROLE,
+  USER_VET_ROLE,
+  USER_ADMIN_ROLE,
+  USER_SUPER_ROLE,
+  USER_SHELTER_ROLE,
+} from './constants/roles';
 import { IUser } from './constants/interface';
 import { IS_REQUIRED } from './constants/errors';
 import { SALT_BCRYPT } from './constants/saltBcrypt';
 
 const rolesValidos = {
-  values: [USER_ROLE, SUPER_ROLE, ADMIN_ROLE],
+  values: [USER_ADOPTER_ROLE, USER_VET_ROLE, USER_SHELTER_ROLE, USER_SUPER_ROLE, USER_ADMIN_ROLE],
   message: 'Error, expected {PATH} is not valid.',
 };
 
@@ -16,6 +22,7 @@ var userSchema = new Schema({
   state: { type: Boolean, default: true },
   phone: { type: String, required: false },
   createdDate: { type: Date, required: true },
+  updatedDate: { type: Date, required: true },
   name: { type: String, required: false, lowercase: true },
   lastname: {
     trim: true,
@@ -36,7 +43,7 @@ var userSchema = new Schema({
     lowercase: true,
     required: [true, `The email ${IS_REQUIRED}`],
   },
-  role: { type: String, enum: rolesValidos, required: true, default: USER_ROLE },
+  role: { type: String, enum: rolesValidos, required: true, default: USER_ADOPTER_ROLE },
   password: { type: String, required: [true, `The password ${IS_REQUIRED}`] },
 });
 
