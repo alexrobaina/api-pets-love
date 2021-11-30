@@ -1,12 +1,11 @@
 import User from '../database/models/user';
 
-const userProps = 'email role name firstname lastname';
+const userProps = 'email role name firstname lastname phone updatedDate createdDate';
 
 export const getAll = async () => await User.find({}, userProps);
 export const getOne = async (_id: string) => await User.findById({ _id }, userProps);
 
 export const save = async (body: any) => {
-  console.log(4, body.password);
   const user = new User({
     img: body.img,
     role: body.role,
@@ -16,6 +15,7 @@ export const save = async (body: any) => {
     lastname: body.lastname,
     password: body.password,
     createdDate: new Date(),
+    updatedDate: new Date(),
     firstname: body.firstname,
     name: `${body.firstname} ${body.lastname}`,
   });

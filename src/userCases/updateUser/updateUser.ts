@@ -2,7 +2,7 @@ import { Response, Request } from 'express';
 import { bcrypt } from '../userModule';
 import User from '../../database/models/user';
 import { SALT_BCRYPT } from '../../database/models/constants/saltBcrypt';
-import { NOT_FOUND_DOCUMENT, SUCCESS_RESPONSE } from '../../constants/constants';
+import { EMAIL_EXIST, NOT_FOUND_DOCUMENT, SUCCESS_RESPONSE } from '../../constants/constants';
 
 //=====================================
 //       UPDATE USER ID = PUT
@@ -21,11 +21,21 @@ const updateUser = async (req: Request, res: Response) => {
     });
   }
 
+  const userEmail = await User.findOne({ email: body.email });
+
+  if (userEmail) {
+    return res.status(400).json({
+      status: 400,
+      message: EMAIL_EXIST,
+    });
+  }
+
   if (body.password !== undefined) {
     const password = await bcrypt.hash(body.password, SALT_BCRYPT);
     body.password = password;
   }
 
+  body.updatedDate = new Date();
   const userUpdated = await User.findByIdAndUpdate({ _id }, body);
 
   res.status(200).json({

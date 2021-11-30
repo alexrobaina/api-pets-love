@@ -1,4 +1,4 @@
-import create from './createUser/createUser';
+import { create } from './createUser/createUser';
 import { getUsers, getUser } from './getUsers/getUsers';
 import update from './updateUser/updateUser';
 import Delete from './deleteUser/deleteUser';
