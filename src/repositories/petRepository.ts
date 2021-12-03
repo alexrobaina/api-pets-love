@@ -1,23 +1,28 @@
 import Pet from '../database/models/pet';
 
 const petProps =
-  'age name city notes gender images country adopted category createdDate location textAddress updatedDate userCreator';
+  'age name city notes gender color images country adopted category createdDate location textAddress updatedDate userCreator height description';
 
 export const getAll = async () =>
-  await Pet.find({}, petProps)
-    .populate('userVet', { name: 1, email: 1, phone: 1 })
-    .populate('userAdopter', { name: 1, email: 1, phone: 1 })
-    .populate('userShelter', { name: 1, email: 1, phone: 1 })
-    .populate('userCreator', { name: 1, email: 1, phone: 1, role: 1 });
-export const getOne = async (_id: string) => await Pet.findById({ _id }, petProps);
+  await Pet.find({}, petProps).populate('userCreator', { name: 1, email: 1, phone: 1, role: 1 });
+
+export const getOne = async (_id: string) =>
+  await Pet.findById({ _id }, petProps).populate('userCreator', {
+    name: 1,
+    email: 1,
+    phone: 1,
+    role: 1,
+  });
 
 export const save = async (body: any) => {
   const pet = new Pet({
     age: body.age,
     name: body.name,
     city: body.city,
+    color: body.color,
     notes: body.notes,
     gender: body.gender,
+    height: body.height,
     images: body.images,
     country: body.country,
     adopted: body.adopted,
@@ -36,4 +41,25 @@ export const save = async (body: any) => {
   await pet.save();
 
   return pet;
+};
+
+export const getSearchFilter = async (
+  query: object,
+  limit: number,
+  startIndex: number,
+  petsAggregate: any
+) => {
+  const pets = await Pet.aggregate(petsAggregate)
+    .match(query)
+    .skip(startIndex)
+    .limit(limit)
+    .project({
+      name: 1,
+      images: 1,
+      gender: 1,
+      country: 1,
+      category: 1,
+    });
+
+  return pets;
 };
