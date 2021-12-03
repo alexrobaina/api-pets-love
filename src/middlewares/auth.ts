@@ -23,7 +23,7 @@ export const verificaToken = function (req: Request, res: Response, next: any) {
       return res.status(401).json({
         ok: false,
         err: {
-          mensaje: 'Must be authenticated 🙄',
+          mensaje: MUST_AUTHENTICATED,
         },
       });
     }

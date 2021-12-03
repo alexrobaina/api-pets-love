@@ -8,7 +8,7 @@ router.post('/login/', login); // POST USER
 
 router.post('/user/', create); // POST USER
 
-router.get('/users/', [verificaToken, verificaRole_Admin], getUsers); // GET USERS
+router.get('/users/', getUsers); // GET USERS
 
 router.get('/user', [verificaToken], getUser); // GET USER
 

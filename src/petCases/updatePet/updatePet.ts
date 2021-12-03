@@ -21,7 +21,6 @@ export const update = async (req: Request, res: Response) => {
 
   body.updatedDate = new Date();
   const petUpdated = await Pet.findByIdAndUpdate({ _id }, body);
-  console.log(body);
 
   res.status(200).json({
     ok: true,
