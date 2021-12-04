@@ -1,8 +1,8 @@
 import { Response, Request } from 'express';
 import { bcrypt } from '../userModule';
-import User from '../../database/models/user';
-import { SALT_BCRYPT } from '../../database/models/constants/saltBcrypt';
-import { EMAIL_EXIST, NOT_FOUND_DOCUMENT, SUCCESS_RESPONSE } from '../../constants/constants';
+import User from '../../../database/models/user';
+import { SALT_BCRYPT } from '../../../database/models/constants/saltBcrypt';
+import { EMAIL_EXIST, NOT_FOUND_DOCUMENT, SUCCESS_RESPONSE } from '../../../constants/constants';
 
 //=====================================
 //       UPDATE USER ID = PUT

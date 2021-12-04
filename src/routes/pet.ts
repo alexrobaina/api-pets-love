@@ -6,7 +6,7 @@ import {
   update,
   Delete,
   getSearchFilterPets,
-} from '../petCases/petController';
+} from '../useCases/petCases/petController';
 import { verificaToken, verificaRole_Admin } from '../middlewares/auth';
 
 const router = express.Router();

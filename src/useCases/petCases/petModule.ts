@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { config } from '../config/config';
+import { config } from '../../config/config';
 import { response } from 'express';
 import jwt from 'jsonwebtoken';
 import { TUser } from './types';

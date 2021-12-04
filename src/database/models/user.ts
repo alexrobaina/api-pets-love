@@ -17,12 +17,13 @@ const rolesValidos = {
 };
 
 var userSchema = new Schema({
-  img: { type: String, required: false },
+  pets: { type: Array, required: false, default: [] },
   terms: { type: Boolean, default: true },
   state: { type: Boolean, default: true },
   phone: { type: String, required: false },
   createdDate: { type: Date, required: true },
   updatedDate: { type: Date, required: true },
+  image: { type: Array, required: false, default: [] },
   name: { type: String, required: false, lowercase: true },
   lastname: {
     trim: true,

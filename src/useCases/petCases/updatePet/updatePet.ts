@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
-import Pet from '../../database/models/pet';
-import { NOT_FOUND_DOCUMENT, SUCCESS_RESPONSE } from '../../constants/constants';
+import Pet from '../../../database/models/pet';
+import { NOT_FOUND_DOCUMENT, SUCCESS_RESPONSE } from '../../../constants/constants';
 
 //=====================================
 //       UPDATE USER ID = PUT

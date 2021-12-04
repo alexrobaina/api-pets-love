@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
-import { getAll, getOne } from '../../repositories/userRepository';
-import User from '../../database/models/user';
-import { SUCCESS_RESPONSE, SOMETHING_IS_WRONG } from '../../constants/constants';
+import { getAll, getOne } from '../../../repositories/userRepository';
+import User from '../../../database/models/user';
+import { SUCCESS_RESPONSE, SOMETHING_IS_WRONG } from '../../../constants/constants';
+import Pet from '../../../database/models/pet';
+const ObjectId = require('mongoose').Types.ObjectId;
 
 //=====================================
 //        READ LIST USERS = GET
@@ -47,6 +49,8 @@ export const getUser = async (req: Request, res: Response) => {
     // @ts-ignore
     const userDB = await getOne(_id);
 
+    const pets: any = await Pet.find({ userCreator: new ObjectId(_id) });
+
     if (!userDB) {
       return res.status(401).json({
         ok: false,
@@ -56,14 +60,15 @@ export const getUser = async (req: Request, res: Response) => {
 
     res.status(200).json({
       ok: true,
-      message: ' Everything is normal',
+      message: SUCCESS_RESPONSE,
       userDB,
+      pets,
     });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       ok: true,
-      message: `'Something on the server didn't work right.'`,
+      message: SOMETHING_IS_WRONG,
       error,
     });
   }

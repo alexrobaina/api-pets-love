@@ -1,4 +1,6 @@
 export interface IUser extends Document {
+  pets: [];
+  image: [];
   img: string;
   name: string;
   role: string;

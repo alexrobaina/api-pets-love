@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { getAll, getOne, getSearchFilter } from '../../repositories/petRepository';
-import Pet from '../../database/models/pet';
-import { SUCCESS_RESPONSE, SOMETHING_IS_WRONG } from '../../constants/constants';
-import { USER_SHELTER_ROLE } from '../../database/models/constants/roles';
+import { getAll, getOne, getSearchFilter } from '../../../repositories/petRepository';
+import Pet from '../../../database/models/pet';
+import { SUCCESS_RESPONSE, SOMETHING_IS_WRONG } from '../../../constants/constants';
+import { USER_SHELTER_ROLE } from '../../../database/models/constants/roles';
 
 //=====================================
 //        READ LIST PETS = GET

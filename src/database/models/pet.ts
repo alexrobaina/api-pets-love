@@ -5,7 +5,7 @@ import { DESCRIPTION_NOT_FOUND, IS_REQUIRED } from './constants/errors';
 const petSchema = new Schema({
   location: {
     lat: { type: Number },
-    long: { type: Number },
+    lng: { type: Number },
   },
   notes: { type: Array },
   images: { type: Array },
