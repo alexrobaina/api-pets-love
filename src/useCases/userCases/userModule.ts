@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { response } from 'express';
 import jwt from 'jsonwebtoken';
-import { config } from '../config/config';
+import { config } from '../../config/config';
 
 type TUser = {
   _id?: string;

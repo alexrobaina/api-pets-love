@@ -1,10 +1,10 @@
 import { Response, Request } from 'express';
-import User from '../../database/models/user';
+import User from '../../../database/models/user';
 import {
   NOT_FOUND_DOCUMENT,
   SOMETHING_IS_WRONG,
   SUCCESS_RESPONSE,
-} from '../../constants/constants';
+} from '../../../constants/constants';
 
 //=====================================
 //       DELETE USER ID = DELETE

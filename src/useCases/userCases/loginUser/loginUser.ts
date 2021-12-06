@@ -1,11 +1,11 @@
 import { Response, Request } from 'express';
 import { createToken } from '../userModule';
-import User from '../../database/models/user';
+import User from '../../../database/models/user';
 import {
   NOT_FOUND_DOCUMENT,
   EMAIL_PASSWORD_INVALID,
   CREDENTIAL_ERROR,
-} from '../../constants/constants';
+} from '../../../constants/constants';
 
 //=====================================
 //        LOGIN USERS = POST
@@ -27,6 +27,7 @@ export const login = async (req: Request, res: Response) => {
   }
 
   const isMath = await user.comparePassword(password);
+  user.password = `🙈`;
 
   if (isMath) {
     return res.status(200).json({

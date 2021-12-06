@@ -5,9 +5,10 @@ import {
   getPets,
   update,
   Delete,
+  getPetsUser,
   getSearchFilterPets,
-} from '../petCases/petController';
-import { verificaToken, verificaRole_Admin } from '../middlewares/auth';
+} from '../useCases/petCases/petController';
+import { verificaToken } from '../middlewares/auth';
 
 const router = express.Router();
 
@@ -18,8 +19,9 @@ router.get('/pets/', getPets); // GET PETS
 
 router.get('/pets/searchFilterPets', getSearchFilterPets); // GET PETS
 
+router.get('/pets/petsUser', [verificaToken], getPetsUser); // GET PETS
+
 router.get('/pet', getPet); // GET PET
-// router.get('/pet', [verificaToken], getPet); // GET PET
 
 router.delete('/pet', Delete); // DELETE PETS
 

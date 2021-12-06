@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { getAll, getOne, getSearchFilter } from '../../repositories/petRepository';
-import Pet from '../../database/models/pet';
-import { SUCCESS_RESPONSE, SOMETHING_IS_WRONG } from '../../constants/constants';
-import { USER_SHELTER_ROLE } from '../../database/models/constants/roles';
+import { getAll, getOne, getSearchFilter } from '../../../repositories/petRepository';
+import Pet from '../../../database/models/pet';
+import { SUCCESS_RESPONSE, SOMETHING_IS_WRONG } from '../../../constants/constants';
+import { USER_SHELTER_ROLE } from '../../../database/models/constants/roles';
 
 //=====================================
 //        READ LIST PETS = GET
@@ -116,15 +116,18 @@ export const getSearchFilterPets = async (req: Request, res: Response) => {
   });
 
   try {
-    const petsDB = await getSearchFilter(query, parseInt(limit), startIndex, petsAggregate);
+    const { pets, total } = await getSearchFilter(
+      query,
+      parseInt(limit),
+      startIndex,
+      petsAggregate
+    );
 
-    const total = petsDB.length;
-
-    if (!petsDB) {
+    if (!pets) {
       return res.status(401).json({
         ok: true,
         total,
-        petsDB,
+        pets,
         message: SUCCESS_RESPONSE,
       });
     }
@@ -132,7 +135,7 @@ export const getSearchFilterPets = async (req: Request, res: Response) => {
     res.status(200).json({
       ok: true,
       total,
-      petsDB,
+      pets,
       message: SUCCESS_RESPONSE,
     });
   } catch (error) {
