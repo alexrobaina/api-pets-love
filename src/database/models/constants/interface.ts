@@ -1,5 +1,4 @@
 export interface IUser extends Document {
-  pets: [];
   image: [];
   img: string;
   name: string;
@@ -18,8 +17,10 @@ export interface IUser extends Document {
 
 export interface IPet extends Document {
   age: string;
+  vet: object;
   name: string;
   city: string;
+  owner: object;
   gender: string;
   country: string;
   category: string;

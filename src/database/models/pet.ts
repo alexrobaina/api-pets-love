@@ -22,7 +22,9 @@ const petSchema = new Schema({
   color: { type: String, required: false, lowercase: true },
   gender: { type: String, required: false, lowercase: true },
   description: { type: String, default: DESCRIPTION_NOT_FOUND },
-  userCreator: { type: Schema.Types.ObjectId, ref: 'User', default: null },
+  vet: { type: Schema.Types.ObjectId, ref: 'User', default: null },
+  owner: { type: Schema.Types.ObjectId, ref: 'User', default: null },
+  userCreator: { type: Schema.Types.ObjectId, ref: 'User', default: [] },
   createdDate: { type: Date, required: [true, `The createdDate ${IS_REQUIRED}`] },
 });
 

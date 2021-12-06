@@ -1,5 +1,6 @@
 import { Response, Request } from 'express';
 import Pet from '../../../database/models/pet';
+import User from '../../../database/models/user';
 import { NOT_FOUND_DOCUMENT, SUCCESS_RESPONSE } from '../../../constants/constants';
 
 //=====================================
@@ -17,6 +18,18 @@ export const update = async (req: Request, res: Response) => {
       ok: true,
       message: NOT_FOUND_DOCUMENT,
     });
+  }
+
+  if (body.vet) {
+    const user = await User.findOne({ email: body.vet }, '_id');
+    if (!user) {
+      return res.status(401).json({
+        ok: true,
+        message: `${NOT_FOUND_DOCUMENT} from veterinary`,
+      });
+    }
+
+    body.vet = user._id;
   }
 
   body.updatedDate = new Date();

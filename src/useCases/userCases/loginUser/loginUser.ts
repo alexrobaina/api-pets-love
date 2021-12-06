@@ -27,6 +27,7 @@ export const login = async (req: Request, res: Response) => {
   }
 
   const isMath = await user.comparePassword(password);
+  user.password = `🙈`;
 
   if (isMath) {
     return res.status(200).json({

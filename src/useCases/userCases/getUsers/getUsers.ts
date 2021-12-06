@@ -3,6 +3,7 @@ import { getAll, getOne } from '../../../repositories/userRepository';
 import User from '../../../database/models/user';
 import { SUCCESS_RESPONSE, SOMETHING_IS_WRONG } from '../../../constants/constants';
 import Pet from '../../../database/models/pet';
+import { USER_SHELTER_ROLE, USER_VET_ROLE } from '../../../database/models/constants/roles';
 const ObjectId = require('mongoose').Types.ObjectId;
 
 //=====================================
@@ -19,7 +20,9 @@ export const getUsers = async (req: Request, res: Response) => {
         message: '',
       });
     }
+
     const total = await User.countDocuments();
+
     res.status(200).json({
       ok: true,
       total,
@@ -43,14 +46,12 @@ export const getUsers = async (req: Request, res: Response) => {
 //=====================================
 
 export const getUser = async (req: Request, res: Response) => {
+  let pets: object = {};
   const { _id } = req.query;
 
   try {
     // @ts-ignore
-    const userDB = await getOne(_id);
-
-    const pets: any = await Pet.find({ userCreator: new ObjectId(_id) });
-
+    const userDB: any = await getOne(_id);
     if (!userDB) {
       return res.status(401).json({
         ok: false,

@@ -1,7 +1,7 @@
 import Pet from '../database/models/pet';
 
 const petProps =
-  'age name city notes gender color images country adopted category createdDate location textAddress updatedDate userCreator height description';
+  'age name city notes gender color images country adopted category createdDate location textAddress updatedDate userCreator height description vet owner';
 
 export const getAll = async () =>
   await Pet.find({}, petProps).populate('userCreator', { name: 1, email: 1, phone: 1, role: 1 });
@@ -49,6 +49,7 @@ export const getSearchFilter = async (
   startIndex: number,
   petsAggregate: any
 ) => {
+  const total = await Pet.aggregate(petsAggregate).match(query);
   const pets = await Pet.aggregate(petsAggregate)
     .match(query)
     .skip(startIndex)
@@ -61,5 +62,5 @@ export const getSearchFilter = async (
       category: 1,
     });
 
-  return pets;
+  return { pets, total: total.length };
 };

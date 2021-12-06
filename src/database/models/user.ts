@@ -17,7 +17,6 @@ const rolesValidos = {
 };
 
 var userSchema = new Schema({
-  pets: { type: Array, required: false, default: [] },
   terms: { type: Boolean, default: true },
   state: { type: Boolean, default: true },
   phone: { type: String, required: false },
