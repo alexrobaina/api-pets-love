@@ -6,6 +6,7 @@ import {
   USER_SHELTER_ROLE,
   USER_VET_ROLE,
 } from '../../../database/models/constants/roles';
+import User from '../../../database/models/user';
 
 //=====================================
 //        READ LIST PETS = GET
@@ -14,14 +15,20 @@ import {
 export const getPetsUser = async (req: Request, res: Response) => {
   let query = {};
   // @ts-ignore
-  const limit: any = parseInt(req.query.limit) || 1;
-  const page: any = req.query.page;
-  const startIndex: number = (parseInt(page) - 1) * parseInt(limit);
+  const limit: any = parseInt(req.query?.limit);
   // @ts-ignore
-  const userRole = req.user.role;
+  const page: any = parseInt(req.query?.page);
+  const startIndex: number = (page - 1) * limit;
+  console.log('startIndex', startIndex);
+  console.log('page', page);
+  console.log('limit', limit);
   // @ts-ignore
-  const userId = req.user._id;
+  const userId = req.query._id;
   const category = req.query.category;
+
+  const user: any = await User.findOne({ _id: userId }, 'role');
+
+  const userRole = user.role;
 
   if (userRole === USER_SHELTER_ROLE) {
     query = {

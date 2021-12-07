@@ -15,12 +15,12 @@ router.post('/login/', login); // POST USER
 
 router.post('/user/', create); // POST USER
 
-router.get('/users/', getUsers); // GET USERS
+router.get('/users/', [verificaToken, verificaRole_Admin], getUsers); // GET USERS
 
 router.get('/user', getUser); // GET USER
 
 router.delete('/user', [verificaToken, verificaRole_Admin], Delete); // DELETE USERS
 
-router.put('/user', update); // PUT USER
+router.put('/user', [verificaToken], update); // PUT USER
 
 export default router;
