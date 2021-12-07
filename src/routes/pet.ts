@@ -12,19 +12,18 @@ import { verificaToken } from '../middlewares/auth';
 
 const router = express.Router();
 
-// router.post('/pet/', [verificaToken], create); // POST PET
-router.post('/pet/', create); // POST PET
+router.post('/pet/', [verificaToken], create); // POST PET
 
-router.get('/pets/', getPets); // GET PETS
+router.get('/pets/', [verificaToken], getPets); // GET PETS
 
 router.get('/pets/searchFilterPets', getSearchFilterPets); // GET PETS
 
-router.get('/pets/petsUser', [verificaToken], getPetsUser); // GET PETS
+router.get('/pets/petsUser', getPetsUser); // GET PETS
 
 router.get('/pet', getPet); // GET PET
 
-router.delete('/pet', Delete); // DELETE PETS
+router.delete('/pet', [verificaToken], Delete); // DELETE PETS
 
-router.put('/pet', update); // PUT PET
+router.put('/pet', [verificaToken], update); // PUT PET
 
 export default router;
