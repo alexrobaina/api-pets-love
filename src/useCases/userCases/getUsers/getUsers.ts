@@ -2,9 +2,6 @@ import { Request, Response } from 'express';
 import { getAll, getOne } from '../../../repositories/userRepository';
 import User from '../../../database/models/user';
 import { SUCCESS_RESPONSE, SOMETHING_IS_WRONG } from '../../../constants/constants';
-import Pet from '../../../database/models/pet';
-import { USER_SHELTER_ROLE, USER_VET_ROLE } from '../../../database/models/constants/roles';
-const ObjectId = require('mongoose').Types.ObjectId;
 
 //=====================================
 //        READ LIST USERS = GET
