@@ -23,7 +23,7 @@ export const login = async (req: Request, res: Response) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    return res.status(400).json({ message: NOT_FOUND_DOCUMENT });
+    return res.status(400).json({ status: 400, code: 2, message: NOT_FOUND_DOCUMENT });
   }
 
   const isMath = await user.comparePassword(password);
@@ -32,11 +32,14 @@ export const login = async (req: Request, res: Response) => {
   if (isMath) {
     return res.status(200).json({
       user,
+      status: 200,
       token: createToken(user),
     });
   }
 
   return res.status(400).json({
+    code: 1,
+    status: 400,
     message: CREDENTIAL_ERROR,
   });
 };
