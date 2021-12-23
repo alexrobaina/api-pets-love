@@ -28,13 +28,13 @@ var userSchema = new Schema({
     trim: true,
     type: String,
     lowercase: true,
-    required: [true, `The lastname ${IS_REQUIRED}`],
+    required: false,
   },
   firstname: {
     trim: true,
     type: String,
     lowercase: true,
-    required: [true, `The firstname ${IS_REQUIRED}`],
+    required: false,
   },
   email: {
     trim: true,

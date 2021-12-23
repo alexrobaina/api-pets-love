@@ -1,5 +1,6 @@
 import { Response, Request } from 'express';
-import { SOMETHING_IS_WRONG, SUCCESS_RESPONSE } from '../../../constants/constants';
+import { EMAIL_EXIST, SOMETHING_IS_WRONG, SUCCESS_RESPONSE } from '../../../constants/constants';
+import User from '../../../database/models/user';
 import { save } from '../../../repositories/userRepository';
 
 //=====================================
@@ -8,8 +9,17 @@ import { save } from '../../../repositories/userRepository';
 
 export const create = async (req: Request, res: Response) => {
   try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (user) {
+      return res.status(400).json({ status: 400, code: 3, message: EMAIL_EXIST });
+    }
+
     await save(req.body);
     res.status(201).json({
+      code: 5,
       ok: true,
       message: SUCCESS_RESPONSE,
     });
@@ -18,6 +28,7 @@ export const create = async (req: Request, res: Response) => {
       console.log(error);
 
       return res.status(500).json({
+        code: 4,
         ok: false,
         error: Error,
         message: SOMETHING_IS_WRONG,
