@@ -1,11 +1,12 @@
 import express from 'express';
 import {
+  login,
   create,
-  getUser,
-  getUsers,
   update,
   Delete,
-  login,
+  getUser,
+  getUsers,
+  forgotPassword,
 } from '../useCases/userCases/userController';
 import { verificaToken, verificaRole_Admin } from '../middlewares/auth';
 
@@ -15,12 +16,14 @@ router.post('/login/', login); // POST USER
 
 router.post('/user/', create); // POST USER
 
-router.get('/users/', [verificaToken, verificaRole_Admin], getUsers); // GET USERS
+router.get('/users/', getUsers); // GET USERS
 
 router.get('/user', getUser); // GET USER
 
 router.delete('/user', [verificaToken, verificaRole_Admin], Delete); // DELETE USERS
 
-router.put('/user', [verificaToken], update); // PUT USER
+router.put('/user', update); // PUT USER
+
+router.post('/forgot-password', forgotPassword); // SEND EMAIL FORGOT PASSWORD
 
 export default router;

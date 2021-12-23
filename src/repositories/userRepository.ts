@@ -8,6 +8,7 @@ export const getOne = async (_id: string) => await User.findById({ _id }, userPr
 export const save = async (body: any) => {
   const user = new User({
     role: body.role,
+    name: body.name,
     email: body.email,
     phone: body.phone,
     terms: body.terms,
@@ -17,7 +18,6 @@ export const save = async (body: any) => {
     createdDate: new Date(),
     updatedDate: new Date(),
     firstname: body.firstname,
-    name: `${body.firstname} ${body.lastname}`,
   });
 
   await user.save();
