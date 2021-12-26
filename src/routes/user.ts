@@ -6,6 +6,7 @@ import {
   Delete,
   getUser,
   getUsers,
+  resetPassword,
   forgotPassword,
 } from '../useCases/userCases/userController';
 import { verificaToken, verificaRole_Admin } from '../middlewares/auth';
@@ -24,6 +25,8 @@ router.delete('/user', [verificaToken, verificaRole_Admin], Delete); // DELETE U
 
 router.put('/user', update); // PUT USER
 
-router.post('/forgot-password', forgotPassword); // SEND EMAIL FORGOT PASSWORD
+router.post('/forgot-password', forgotPassword); // POST SEND EMAIL FORGOT PASSWORD
+
+router.post('/reset-password', [verificaToken], resetPassword); // POST RESET PASSWORD PASSWORD
 
 export default router;

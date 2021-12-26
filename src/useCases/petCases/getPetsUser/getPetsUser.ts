@@ -19,9 +19,6 @@ export const getPetsUser = async (req: Request, res: Response) => {
   // @ts-ignore
   const page: any = parseInt(req.query?.page);
   const startIndex: number = (page - 1) * limit;
-  console.log('startIndex', startIndex);
-  console.log('page', page);
-  console.log('limit', limit);
   // @ts-ignore
   const userId = req.query._id;
   const category = req.query.category;
