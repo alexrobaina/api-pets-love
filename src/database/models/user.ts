@@ -24,6 +24,13 @@ var userSchema = new Schema({
   updatedDate: { type: Date, required: true },
   image: { type: Array, required: false, default: [] },
   name: { type: String, required: false, lowercase: true },
+  requirementsToAdopt: { type: String, required: false },
+  aboutUs: { type: String, required: false },
+  textAddress: { type: String, required: false },
+  location: {
+    lat: { type: Number },
+    lng: { type: Number },
+  },
   lastname: {
     trim: true,
     type: String,

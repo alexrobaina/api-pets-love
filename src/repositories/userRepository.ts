@@ -1,6 +1,7 @@
 import User from '../database/models/user';
 
-const userProps = 'email role name phone createdDate image';
+const userProps =
+  'email role name phone createdDate image requirementsToAdopt aboutUs location textAddress';
 
 export const getAll = async () => await User.find({}, userProps);
 export const getOne = async (_id: string) => await User.findById({ _id }, userProps);
