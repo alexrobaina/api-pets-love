@@ -7,6 +7,7 @@ import {
   Delete,
   getPetsUser,
   getSearchFilterPets,
+  getPetsUserDashboard,
 } from '../useCases/petCases/petController';
 import { verificaToken } from '../middlewares/auth';
 
@@ -17,6 +18,8 @@ router.post('/pet/', [verificaToken], create); // POST PET
 router.get('/pets/', [verificaToken], getPets); // GET PETS
 
 router.get('/pets/searchFilterPets', getSearchFilterPets); // GET PETS
+
+router.get('/pets/petsDashboard', getPetsUserDashboard); // GET PETS DASHBOARD
 
 router.get('/pets/petsUser', getPetsUser); // GET PETS
 
