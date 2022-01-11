@@ -8,6 +8,7 @@ import {
   getUsers,
   resetPassword,
   forgotPassword,
+  getDashboardData,
 } from '../useCases/userCases/userController';
 import { verificaToken, verificaRole_Admin } from '../middlewares/auth';
 
@@ -20,6 +21,8 @@ router.post('/user/', create); // POST USER
 router.get('/users/', getUsers); // GET USERS
 
 router.get('/user', getUser); // GET USER
+
+router.get('/user/dashboard', [verificaToken], getDashboardData); // GET USER
 
 router.delete('/user', [verificaToken, verificaRole_Admin], Delete); // DELETE USERS
 

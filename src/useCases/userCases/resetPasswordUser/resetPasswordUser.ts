@@ -9,7 +9,6 @@ import { SOMETHING_IS_WRONG, SUCCESS_RESPONSE } from '../../../constants/constan
 
 export const resetPassword = async (req: Request, res: Response) => {
   let password;
-  console.log(req.body.password);
 
   try {
     if (req.body.password) {
