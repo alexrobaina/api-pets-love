@@ -9,8 +9,7 @@ const petSchema = new Schema({
   },
   notes: { type: Array },
   images: { type: Array },
-  heigth: { type: String },
-  height: { type: Number },
+  weight: { type: String, default: '0' },
   category: { type: String },
   textAddress: { type: String },
   city: { type: String, lowercase: true },
@@ -23,8 +22,8 @@ const petSchema = new Schema({
   gender: { type: String, required: false, lowercase: true },
   description: { type: String, default: DESCRIPTION_NOT_FOUND },
   vet: { type: Schema.Types.ObjectId, ref: 'User', default: null },
-  owner: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   userCreator: { type: Schema.Types.ObjectId, ref: 'User', default: [] },
+  userAdopted: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   createdDate: { type: Date, required: [true, `The createdDate ${IS_REQUIRED}`] },
 });
 

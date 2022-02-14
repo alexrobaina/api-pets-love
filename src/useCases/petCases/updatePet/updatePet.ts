@@ -25,7 +25,19 @@ export const update = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(401).json({
         ok: true,
-        message: `${NOT_FOUND_DOCUMENT} from veterinary`,
+        message: `${NOT_FOUND_DOCUMENT} from update pet`,
+      });
+    }
+
+    body.vet = user._id;
+  }
+
+  if (body.userAdopted) {
+    const user = await User.findOne({ email: body.userAdopted }, '_id');
+    if (!user) {
+      return res.status(401).json({
+        ok: true,
+        message: `${NOT_FOUND_DOCUMENT} from update pet`,
       });
     }
 

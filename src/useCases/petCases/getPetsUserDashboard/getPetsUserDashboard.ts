@@ -58,7 +58,7 @@ export const getPetsUserDashboard = async (req: Request, res: Response) => {
   if (userRole === USER_ADOPTER_ROLE) {
     query = {
       // @ts-ignore
-      owner: userId,
+      userAdopted: userId,
     };
   }
   // @ts-ignore
