@@ -13,12 +13,6 @@ import User from '../../../database/models/user';
 //=====================================
 
 export const getDashboardData = async (req: Request, res: Response) => {
-  // [] Mis perros
-  // [] Mis mis gatos
-  // [] Mis mis exotico
-  // [] Filtrar por adoptados
-  // [] Filtrar por no adoptados
-
   let query: any = {};
   const userId = req.query._id;
 
@@ -40,7 +34,7 @@ export const getDashboardData = async (req: Request, res: Response) => {
 
   if (userRole === USER_ADOPTER_ROLE) {
     query = {
-      owner: userId,
+      userAdopted: userId,
     };
   }
 

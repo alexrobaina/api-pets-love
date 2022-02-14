@@ -42,7 +42,7 @@ export const getPetsUser = async (req: Request, res: Response) => {
 
   if (userRole === USER_ADOPTER_ROLE) {
     query = {
-      owner: userId,
+      userAdopted: userId,
     };
   }
 

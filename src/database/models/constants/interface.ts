@@ -20,7 +20,6 @@ export interface IPet extends Document {
   vet: object;
   name: string;
   city: string;
-  owner: object;
   gender: string;
   country: string;
   category: string;

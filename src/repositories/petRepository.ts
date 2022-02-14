@@ -1,7 +1,7 @@
 import Pet from '../database/models/pet';
 
 const petProps =
-  'age name city notes gender color images country adopted category createdDate location textAddress updatedDate userCreator height description vet owner';
+  'age name city notes gender color images country adopted category createdDate location textAddress updatedDate userCreator height description vet userAdopted';
 
 export const getAll = async () =>
   await Pet.find({}, petProps).populate('userCreator', { name: 1, email: 1, phone: 1, role: 1 });
@@ -22,7 +22,7 @@ export const save = async (body: any) => {
     color: body.color,
     notes: body.notes,
     gender: body.gender,
-    height: body.height,
+    weight: body.weight,
     images: body.images,
     country: body.country,
     adopted: body.adopted,
