@@ -16,7 +16,10 @@ dotenv.config();
 
 // settings
 app.set('port', config.PORT || 3001);
+
 // middleware
+
+app.use(morgan('dev'));
 app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());

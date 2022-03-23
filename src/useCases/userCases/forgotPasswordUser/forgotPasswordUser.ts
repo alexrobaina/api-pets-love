@@ -9,6 +9,7 @@ import {
   SUCCESS_RESPONSE,
 } from '../../../constants/constants';
 import { ENGLISH_US, SPANISH_AR } from './langContants';
+import { config } from '../../../config/config';
 
 //=====================================
 //        USERS FORGOT PASSWORD = POST
@@ -30,8 +31,8 @@ export const forgotPassword = async (req: Request, res: Response) => {
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.GMAIL,
-        pass: process.env.PASS,
+        user: config.gmail.user,
+        pass: config.gmail.pass,
       },
     });
 

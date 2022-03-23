@@ -21,6 +21,7 @@ export interface IPet extends Document {
   name: string;
   city: string;
   gender: string;
+  weight: string;
   country: string;
   category: string;
   adopted: boolean;
@@ -31,6 +32,6 @@ export interface IPet extends Document {
   userCreator: object;
   userShelter: object;
   userAdopter: object;
-  notes: Array<object>;
+  MedicalNotes: Array<object>;
   images: HTMLCollectionOf<HTMLImageElement>;
 }
