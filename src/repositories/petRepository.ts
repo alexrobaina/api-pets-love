@@ -1,7 +1,7 @@
 import Pet from '../database/models/pet';
 
 const petProps =
-  'age name city notes gender color images country adopted category createdDate location textAddress updatedDate userCreator height description vet userAdopted';
+  'age name city medicalNotes gender color images country adopted category createdDate location textAddress updatedDate userCreator W description vet userAdopted';
 
 export const getAll = async () =>
   await Pet.find({}, petProps).populate('userCreator', { name: 1, email: 1, phone: 1, role: 1 });
@@ -14,30 +14,29 @@ export const getOne = async (_id: string) =>
     role: 1,
   });
 
-export const save = async (body: any) => {
+export const save = async (body: any, userId: string, images: Array<String>) => {
   const pet = new Pet({
+    images,
     age: body.age,
     name: body.name,
     city: body.city,
     color: body.color,
-    notes: body.notes,
     gender: body.gender,
     weight: body.weight,
-    images: body.images,
-    country: body.country,
+    country: body.country || '',
     adopted: body.adopted,
     category: body.category,
     updatedDate: new Date(),
     createdDate: new Date(),
-    description: body.category,
-    textAddress: body.textAddress,
-    userCreator: body.userCreator,
+    description: body.description,
+    textAddress: body?.textAddress || '',
+    userCreator: userId,
+    medicalNotes: body.medicalNotes,
     location: {
-      lat: body.lat,
-      long: body.long,
+      lat: body?.location?.lat || '',
+      lng: body?.location?.lng || '',
     },
   });
-
   await pet.save();
 
   return pet;

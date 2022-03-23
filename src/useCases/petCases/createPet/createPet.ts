@@ -8,9 +8,21 @@ import { save } from '../../../repositories/petRepository';
 
 export const create = async (req: Request, res: Response) => {
   try {
-    await save(req.body);
-    res.status(201).json({
+    let images: Array<String> = [];
+    // @ts-ignore
+    if (req.imageUrl) {
+      // @ts-ignore
+      req.imageUrl.forEach((image: any) => {
+        images.push(`${image.key}`);
+      });
+    }
+
+    // @ts-ignore
+    const pet = await save(req.body, req.user.userId, images);
+
+    return res.status(201).json({
       ok: true,
+      pet,
       message: SUCCESS_RESPONSE,
     });
   } catch (error) {
