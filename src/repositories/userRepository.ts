@@ -3,7 +3,10 @@ import User from '../database/models/user';
 const userProps =
   'email role name phone createdDate image requirementsToAdopt aboutUs location textAddress';
 
+const userPropsType = 'email _id';
+
 export const getAll = async () => await User.find({}, userProps);
+export const getAllUserTypeRole = async (role: string) => await User.find({ role }, userPropsType);
 export const getOne = async (_id: string) => await User.findById({ _id }, userProps);
 
 export const save = async (body: any) => {

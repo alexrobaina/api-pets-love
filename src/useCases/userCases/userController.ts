@@ -1,5 +1,5 @@
 import { create } from './createUser/createUser';
-import { getUsers, getUser } from './getUsers/getUsers';
+import { getUsers, getUser, getUsersTypeRole } from './getUsers/getUsers';
 import update from './updateUser/updateUser';
 import Delete from './deleteUser/deleteUser';
 import { forgotPassword } from './forgotPasswordUser/forgotPasswordUser';
@@ -17,4 +17,5 @@ export {
   resetPassword,
   forgotPassword,
   getDashboardData,
+  getUsersTypeRole,
 };
