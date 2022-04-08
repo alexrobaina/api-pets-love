@@ -27,7 +27,7 @@ export const create = async (req: Request, res: Response) => {
     if (error) {
       console.log(error);
 
-      return res.status(500).json({
+      res.status(500).json({
         code: 4,
         ok: false,
         error: Error,

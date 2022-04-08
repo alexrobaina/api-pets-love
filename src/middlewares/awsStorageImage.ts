@@ -1,18 +1,18 @@
 import upload from '../services/file-upload';
-const uploadImages = upload.array('images');
+const uploadImages = upload.array('newImages');
 
 const awsStorageImage = (req: any, res: any, next: Function) => {
+  console.log('awsStorageImage');
+
   try {
     const saveImage = new Promise((resolve, reject) => {
       uploadImages(req, res, function (err: any) {
         if (req?.files?.length === 1) {
           req.imageUrl = req.files;
-          resolve(req);
         }
 
         if (req?.files?.length > 1) {
           req.imageUrl = req.files;
-          resolve(req);
         }
 
         if (err) {
@@ -20,7 +20,7 @@ const awsStorageImage = (req: any, res: any, next: Function) => {
           return res.status(422).send({ errors: [{ title: 'File upload Error' }] });
         }
 
-        next();
+        resolve(req);
       });
     });
 
@@ -28,7 +28,7 @@ const awsStorageImage = (req: any, res: any, next: Function) => {
       next();
     });
   } catch (e) {
-    return res.status(500).json({
+    res.status(500).json({
       message: 'Error save image',
     });
   }

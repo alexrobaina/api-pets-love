@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getAll, getOne, getAllUserTypeRole } from '../../../repositories/userRepository';
+import { getAll, getOne, getAllUsersTypeRole } from '../../../repositories/userRepository';
 import User from '../../../database/models/user';
 import { SUCCESS_RESPONSE, SOMETHING_IS_WRONG } from '../../../constants/constants';
 
@@ -10,7 +10,6 @@ import { SUCCESS_RESPONSE, SOMETHING_IS_WRONG } from '../../../constants/constan
 export const getUsers = async (req: Request, res: Response) => {
   try {
     const usersDB = await getAll();
-    console.log(usersDB);
 
     if (!usersDB) {
       return res.status(401).json({
@@ -78,11 +77,11 @@ export const getUser = async (req: Request, res: Response) => {
 //=====================================
 
 export const getUsersTypeRole = async (req: Request, res: Response) => {
-  const { role } = req.query;
+  const { role } = req.body;
 
   try {
     // @ts-ignore
-    const userDB: any = await getAllUserTypeRole(role);
+    const userDB: any = await getAllUsersTypeRole(role);
     if (!userDB) {
       return res.status(401).json({
         ok: false,
