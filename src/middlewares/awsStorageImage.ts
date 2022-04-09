@@ -2,8 +2,6 @@ import upload from '../services/file-upload';
 const uploadImages = upload.array('newImages');
 
 const awsStorageImage = (req: any, res: any, next: Function) => {
-  console.log('awsStorageImage');
-
   try {
     const saveImage = new Promise((resolve, reject) => {
       uploadImages(req, res, function (err: any) {
