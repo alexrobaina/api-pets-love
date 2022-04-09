@@ -1,6 +1,5 @@
 import { Response, Request } from 'express';
 import jwt from 'jsonwebtoken';
-import { resolve } from 'path';
 import { config } from '../config/config';
 import { MUST_AUTHENTICATED } from '../constants/constants';
 import {

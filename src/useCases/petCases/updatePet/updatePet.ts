@@ -2,6 +2,7 @@ import { Response, Request } from 'express';
 import Pet from '../../../database/models/pet';
 import User from '../../../database/models/user';
 import { NOT_FOUND_DOCUMENT, SUCCESS_RESPONSE } from '../../../constants/constants';
+import awsDeleteImage from '../../../middlewares/awsDeleteImage';
 
 //=====================================
 //       UPDATE USER ID = PUT
@@ -12,36 +13,66 @@ export const update = async (req: Request, res: Response) => {
   const { body } = req;
 
   const pet = await Pet.findOne({ _id });
+  if (body.imageDeleted) {
+    const imagesDeletedFormatted = Array.from(body.imageDeleted);
+    // @ts-ignore
+    await awsDeleteImage(body.imageDeleted, 'pets');
+    // @ts-ignore
+    const petImages = Array.from(pet.images);
+
+    var filtered = petImages.filter(function (e) {
+      // @ts-ignore
+      return this.indexOf(e) < 0;
+    }, imagesDeletedFormatted);
+
+    body.images = filtered;
+  }
 
   if (!pet) {
-    return res.status(401).json({
+    return res.status(404).json({
       ok: true,
       message: NOT_FOUND_DOCUMENT,
     });
   }
 
-  if (body.vet) {
-    const user = await User.findOne({ email: body.vet }, '_id');
-    if (!user) {
-      return res.status(401).json({
-        ok: true,
-        message: `${NOT_FOUND_DOCUMENT} from update pet`,
-      });
+  // @ts-ignore
+  if (req?.imageUrl) {
+    // @ts-ignore
+    if (!body.images) {
+      body.images = [];
     }
-
-    body.vet = user._id;
+    // @ts-ignore
+    req.imageUrl.forEach((image: any) => {
+      body.images.push(image.key);
+    });
   }
 
-  if (body.userAdopted) {
-    const user = await User.findOne({ email: body.userAdopted }, '_id');
+  if (body.userVet !== 'null') {
+    const user = await User.findOne({ email: body.userVet }, '_id');
     if (!user) {
-      return res.status(401).json({
+      return res.status(404).json({
         ok: true,
         message: `${NOT_FOUND_DOCUMENT} from update pet`,
       });
     }
 
-    body.vet = user._id;
+    body.userVet = user._id;
+  } else {
+    body.userVet = null;
+  }
+
+  if (body.userAdopted !== 'null') {
+    const user = await User.findOne({ email: body.userAdopted }, '_id');
+    if (!user) {
+      return res.status(404).json({
+        ok: true,
+        message: `${NOT_FOUND_DOCUMENT} from update pet`,
+      });
+    }
+
+    body.userAdopted = user._id;
+  } else {
+    body.userAdopted = null;
   }
 
   body.updatedDate = new Date();

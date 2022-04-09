@@ -28,6 +28,6 @@ router.get('/pet', getPet); // GET PET
 
 router.delete('/pet', [verificaToken], Delete); // DELETE PETS
 
-router.put('/pet', [verificaToken], update); // PUT PET
+router.put('/pet', [verificaToken, uploadImage], update); // PUT PET
 
 export default router;

@@ -1,9 +1,12 @@
 import * as dotenv from 'dotenv';
 import aws from 'aws-sdk';
 import { config } from '../config/config';
+
 dotenv.config();
 
 const deleteImage = async (images: any, folderBucketName: string) => {
+  let objectImagesToDelete: any = [];
+
   try {
     aws.config.update({
       secretAccessKey: config.awsConfig.SECRET_ACCESS_KEY,
@@ -12,29 +15,25 @@ const deleteImage = async (images: any, folderBucketName: string) => {
     });
     const s3 = new aws.S3();
 
+    images.forEach((image: string) => {
+      objectImagesToDelete.push({ Key: `${folderBucketName}/${image}` });
+    });
+
     const params: any = {
       Bucket: `${config.awsConfig.BUCKET}`,
     };
 
-    s3.listObjects(params, function (err, data) {
+    await s3.listObjects(params, function (err, data) {
       if (err) return console.log(err);
 
-      params.Delete = { Objects: [] };
+      params.Delete = { Objects: objectImagesToDelete };
 
-      if (Array.isArray(images)) {
-        images.forEach((content: string) => {
-          params.Delete.Objects.push({ Key: `${folderBucketName}/${content}` });
+      s3.deleteObjects(params)
+        .promise()
+        .then(data => {})
+        .catch(error => {
+          console.log(error);
         });
-      } else {
-        params.Delete.Objects.push({ Key: `${folderBucketName}/${images}` });
-      }
-
-      s3.deleteObjects(params, function (err, data) {
-        if (err) console.log(err);
-        else {
-          return true;
-        }
-      });
     });
   } catch (e) {
     console.log(e);

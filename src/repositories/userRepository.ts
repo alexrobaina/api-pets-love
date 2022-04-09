@@ -6,7 +6,18 @@ const userProps =
 const userPropsType = 'email _id';
 
 export const getAll = async () => await User.find({}, userProps);
-export const getAllUserTypeRole = async (role: string) => await User.find({ role }, userPropsType);
+export const getAllUsersTypeRole = async (roles: [string]) => {
+  const usersList: any = [];
+
+  for (let i = 0; i < roles.length; i++) {
+    const userFormatted: any = {};
+    userFormatted[roles[i]] = await User.find({ role: roles[i] }, userPropsType);
+    usersList.push(userFormatted);
+  }
+
+  return usersList;
+};
+
 export const getOne = async (_id: string) => await User.findById({ _id }, userProps);
 
 export const save = async (body: any) => {

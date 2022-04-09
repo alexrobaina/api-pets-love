@@ -25,7 +25,7 @@ router.get('/user', getUser); // GET USER
 
 router.get('/user/dashboard', [verificaToken], getDashboardData); // GET USER
 
-router.get('/user/userTypeRole', getUsersTypeRole); // GET USER
+router.post('/user/usersTypeRole', getUsersTypeRole); // GET USER
 
 router.delete('/user', [verificaToken, verificaRole_Admin], Delete); // DELETE USERS
 
