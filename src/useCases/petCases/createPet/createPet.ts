@@ -24,12 +24,14 @@ export const create = async (req: Request, res: Response) => {
       // @ts-ignore
       medicalNotesFormatter = JSON.parse(req.body.medicalNotes);
     } else if (req?.body?.medicalNotes) {
-      // @ts-ignor
+      // @ts-ignore
       req.body.medicalNotes.forEach((note: any) => {
         // @ts-ignore
         medicalNotesFormatter.push(JSON.parse(note));
       });
     }
+
+    req.body.location = JSON.parse(req.body.location);
 
     // @ts-ignore
     req.body.medicalNotes = medicalNotesFormatter;
