@@ -3,6 +3,7 @@ import Pet from '../../../database/models/pet';
 import User from '../../../database/models/user';
 import { NOT_FOUND_DOCUMENT, SUCCESS_RESPONSE } from '../../../constants/constants';
 import awsDeleteImage from '../../../middlewares/awsDeleteImage';
+import { log } from 'util';
 
 //=====================================
 //       UPDATE USER ID = PUT
@@ -12,6 +13,23 @@ export const update = async (req: Request, res: Response) => {
   const { _id } = req.query;
   const { body } = req;
 
+  let medicalNotesFormatter: any = [];
+  if (typeof body.medicalNotes === 'string') {
+    // @ts-ignore
+    medicalNotesFormatter = JSON.parse(body.medicalNotes);
+  } else {
+    body.medicalNotes.forEach((note: any) => {
+      // @ts-ignore
+      medicalNotesFormatter.push(JSON.parse(note));
+    });
+  }
+
+  body.location = JSON.parse(body.location);
+
+  // @ts-ignore
+  body.medicalNotes = medicalNotesFormatter;
+
+  // @ts-ignore
   const pet = await Pet.findOne({ _id });
   if (body.imageDeleted) {
     const imagesDeletedFormatted = Array.from(body.imageDeleted);

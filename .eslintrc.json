@@ -22,6 +22,7 @@
     "no-async-promise-executor": "off",
     "max-classes-per-file": "off",
     "no-console": "off",
+    "allowForLoopAfterthoughts": true,
     "lines-between-class-members": "off"
   },
   "plugins": ["prettier"],
