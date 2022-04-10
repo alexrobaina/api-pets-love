@@ -18,6 +18,22 @@ export const create = async (req: Request, res: Response) => {
       });
     }
 
+    let medicalNotesFormatter: any = [];
+    // @ts-ignore
+    if (typeof req?.body?.medicalNotes === 'string') {
+      // @ts-ignore
+      medicalNotesFormatter = JSON.parse(req.body.medicalNotes);
+    } else if (req?.body?.medicalNotes) {
+      // @ts-ignor
+      req.body.medicalNotes.forEach((note: any) => {
+        // @ts-ignore
+        medicalNotesFormatter.push(JSON.parse(note));
+      });
+    }
+
+    // @ts-ignore
+    req.body.medicalNotes = medicalNotesFormatter;
+
     const pet = await save(req.body, images);
 
     res.status(201).json({
@@ -27,6 +43,7 @@ export const create = async (req: Request, res: Response) => {
     });
   } catch (error) {
     if (error) {
+      console.log(error);
       res.status(500).json({
         ok: false,
         error: Error,
