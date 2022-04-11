@@ -12,7 +12,7 @@ const petSchema = new Schema({
   medicalNotes: { type: Array, required: false, default: [] },
   imageDeleted: { type: Array, required: false, default: [] },
   images: { type: Array, default: [], required: false },
-  weight: { type: String, default: '0' },
+  weight: { type: Number, default: '0' },
   city: { type: String, lowercase: true, required: false },
   adopted: { type: Boolean, default: false, required: false },
   country: { type: String, lowercase: true, required: false },
