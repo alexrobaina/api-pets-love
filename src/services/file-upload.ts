@@ -40,7 +40,7 @@ const upload = multer({
         bucketName = config.awsConfig.PET_BUCKET_FOLDER;
       }
 
-      if (req.route.path === '/edit-user') {
+      if (req.route.path === '/user') {
         bucketName = config.awsConfig.USER_BUCKET_FOLDER;
       }
       cb(null, `${config.awsConfig.BUCKET}/${bucketName}`);

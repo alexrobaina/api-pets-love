@@ -2,7 +2,7 @@ import { Response, Request } from 'express';
 import { bcrypt } from '../userModule';
 import User from '../../../database/models/user';
 import { SALT_BCRYPT } from '../../../database/models/constants/saltBcrypt';
-import { EMAIL_EXIST, NOT_FOUND_DOCUMENT, SUCCESS_RESPONSE } from '../../../constants/constants';
+import { NOT_FOUND_DOCUMENT, SUCCESS_RESPONSE } from '../../../constants/constants';
 
 //=====================================
 //       UPDATE USER ID = PUT
@@ -12,21 +12,22 @@ const updateUser = async (req: Request, res: Response) => {
   const { _id } = req.query;
   const { body } = req;
 
+  if (body?.location) {
+    body.location = JSON.parse(body.location);
+  }
+
   const user = await User.findOne({ _id });
+
+  // @ts-ignore
+  if (req.imageUrl) {
+    // @ts-ignore
+    body.image = [`${req.imageUrl[0].key}`];
+  }
 
   if (!user) {
     return res.status(401).json({
       ok: true,
       message: NOT_FOUND_DOCUMENT,
-    });
-  }
-
-  const userEmail = await User.findOne({ email: body.email });
-
-  if (userEmail) {
-    return res.status(400).json({
-      status: 400,
-      message: EMAIL_EXIST,
     });
   }
 

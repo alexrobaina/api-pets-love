@@ -27,6 +27,8 @@ var userSchema = new Schema({
   requirementsToAdopt: { type: String, required: false },
   aboutUs: { type: String, required: false },
   textAddress: { type: String, required: false },
+  country: { type: String, required: false },
+  city: { type: String, required: false },
   location: {
     lat: { type: Number },
     lng: { type: Number },

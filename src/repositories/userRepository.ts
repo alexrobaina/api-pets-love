@@ -1,7 +1,7 @@
 import User from '../database/models/user';
 
 const userProps =
-  'email role name phone createdDate image requirementsToAdopt aboutUs location textAddress';
+  'email role name phone createdDate image requirementsToAdopt aboutUs location textAddress firstname lastname';
 
 const userPropsType = 'email _id';
 
@@ -18,7 +18,10 @@ export const getAllUsersTypeRole = async (roles: [string]) => {
   return usersList;
 };
 
-export const getOne = async (_id: string) => await User.findById({ _id }, userProps);
+export const getOne = async (_id: string) => {
+  const user = await User.findById({ _id }, userProps);
+  return user;
+};
 
 export const save = async (body: any) => {
   const user = new User({

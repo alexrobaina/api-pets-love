@@ -11,6 +11,7 @@ import {
   getDashboardData,
   getUsersTypeRole,
 } from '../useCases/userCases/userController';
+import uploadImage from '../middlewares/awsStorageImage';
 import { verificaToken, verificaRole_Admin } from '../middlewares/auth';
 
 const router = express.Router();
@@ -29,7 +30,7 @@ router.post('/user/usersTypeRole', getUsersTypeRole); // GET USER
 
 router.delete('/user', [verificaToken, verificaRole_Admin], Delete); // DELETE USERS
 
-router.put('/user', update); // PUT USER
+router.put('/user', [verificaToken, uploadImage], update); // PUT USER
 
 router.post('/forgot-password', forgotPassword); // POST SEND EMAIL FORGOT PASSWORD
 
