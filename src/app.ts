@@ -14,8 +14,9 @@ import { config } from './config/config';
 const app = express();
 dotenv.config();
 
+const port = config.PORT || 3001;
 // settings
-app.set('port', config.PORT || 3001);
+app.set('port', port);
 
 // middleware
 

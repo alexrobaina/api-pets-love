@@ -3,12 +3,8 @@
   "version": "1.0.0",
   "description": "Pets Love is an app created with the goal of helping animal shelters, veterinarians, adopters and all of those that wish to adopt a pet.",
   "main": "index.js",
-  "engines": {
-    "node": "14.x"
-  },
   "scripts": {
-    "build": "node build --output public",
-    "build-local": "tsc",
+    "build": "tsc",
     "start": "node dist/index.js",
     "dev": "tsc-watch --onSuccess \"node dist/index.js\" ",
     "mongodb": "docker-compose --env-file .env up"
