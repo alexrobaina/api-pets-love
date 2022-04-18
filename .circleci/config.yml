@@ -1,0 +1,4 @@
+- deploy:
+    name: Deploy to Elastic Beanstalk
+    command: |
+      npm install && npm run build && npm run dist && eb deploy --staged petslove-env
