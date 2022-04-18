@@ -7,9 +7,6 @@ export const config = {
   MONGO_URI: process.env.MONGO_URI || 'mongodb://localhost:27018/petslove',
   EXPIRES_IN: 86400,
   SEED: process.env.SEED || 'key-desarollo-secrets-yes',
-  USER_NODEMAILER: process.env.USER_NODEMAILER,
-  PASS_NODEMAILER: process.env.PASS_NODEMAILER,
-  URL_SITE: process.env.URL_SITE,
   awsConfig: {
     SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
     ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
