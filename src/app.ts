@@ -14,7 +14,7 @@ import { config } from './config/config';
 const app = express();
 dotenv.config();
 
-const port = config.PORT || 3001;
+const port = config.PORT;
 // settings
 app.set('port', port);
 
