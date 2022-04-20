@@ -2,6 +2,7 @@
 /dist
 /.env
 /documents
+/package.zip
 
 
 .DS_Store
