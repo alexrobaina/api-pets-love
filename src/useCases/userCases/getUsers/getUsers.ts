@@ -48,8 +48,19 @@ export const getUser = async (req: Request, res: Response) => {
 
   try {
     // @ts-ignore
-    const userDB: any = await getOne(_id);
-    if (!userDB) {
+    if (_id) {
+      // @ts-ignore
+      const userDB: any = await getOne(_id);
+
+      if (!userDB) {
+        return res.status(401).json({
+          ok: false,
+          message: SOMETHING_IS_WRONG,
+        });
+      }
+    }
+
+    if (!_id) {
       return res.status(401).json({
         ok: false,
         message: SOMETHING_IS_WRONG,
