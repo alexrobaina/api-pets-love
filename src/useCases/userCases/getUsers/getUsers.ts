@@ -44,13 +44,14 @@ export const getUsers = async (req: Request, res: Response) => {
 
 export const getUser = async (req: Request, res: Response) => {
   let pets: object = {};
+  let userDB: object = {};
   const { _id } = req.query;
 
   try {
     // @ts-ignore
     if (_id) {
       // @ts-ignore
-      const userDB: any = await getOne(_id);
+      userDB: any = await getOne(_id);
 
       if (!userDB) {
         return res.status(401).json({
