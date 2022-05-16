@@ -15,21 +15,16 @@ import User from '../../../database/models/user';
 export const getDashboardData = async (req: Request, res: Response) => {
   let query: any = {};
   const userId = req.query._id;
+  let adopted: any = {};
+  let adoption: any = {};
 
   const user: any = await User.findOne({ _id: userId }, 'role');
 
   const userRole = user.role;
 
-  if (userRole === USER_SHELTER_ROLE) {
-    query = {
-      userCreator: userId,
-    };
-  }
-
   if (userRole === USER_VET_ROLE) {
-    query = {
-      vet: userId,
-    };
+    // query.userVet = userId;
+    query.userCreator = userId;
   }
 
   if (userRole === USER_ADOPTER_ROLE) {
@@ -38,11 +33,16 @@ export const getDashboardData = async (req: Request, res: Response) => {
     };
   }
 
+  if (userRole === USER_SHELTER_ROLE) {
+    query = {
+      userCreator: userId,
+    };
+
+    adopted = await Pet.find({ ...query, adopted: true }).countDocuments();
+    adoption = await Pet.find({ ...query, adopted: false }).countDocuments();
+  }
+
   try {
-    query.adopted = true;
-    const adopted = await Pet.find(query).countDocuments();
-    query.adopted = false;
-    const adoption = await Pet.find(query).countDocuments();
     query.category = 'cat';
     const cats = await Pet.find(query).countDocuments();
     query.category = 'dog';

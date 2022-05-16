@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
 import { SOMETHING_IS_WRONG, SUCCESS_RESPONSE } from '../../../constants/constants';
-import Pet from '../../../database/models/pet';
+import { USER_ADOPTER_ROLE, USER_VET_ROLE } from '../../../database/models/constants/roles';
 import { save } from '../../../repositories/petRepository';
 
 //=====================================
@@ -10,6 +10,24 @@ import { save } from '../../../repositories/petRepository';
 export const create = async (req: Request, res: Response) => {
   try {
     let images: Array<String> = [];
+    let medicalNotesFormatter: any = [];
+    const roles = [USER_ADOPTER_ROLE, USER_VET_ROLE];
+    // @ts-ignore
+    const userRole = req.user.role;
+
+    // @ts-ignore
+    if (userRole === USER_ADOPTER_ROLE) {
+      // @ts-ignore
+      req.body.userAdopted = req.user?._id;
+      req.body.adopted = true;
+    }
+    if (userRole === USER_VET_ROLE) {
+      // @ts-ignore
+      req.body.adopted = true;
+      // @ts-ignore
+      req.body.userVet = req.user?._id;
+    }
+
     // @ts-ignore
     if (req?.imageUrl) {
       // @ts-ignore
@@ -18,7 +36,6 @@ export const create = async (req: Request, res: Response) => {
       });
     }
 
-    let medicalNotesFormatter: any = [];
     // @ts-ignore
     if (typeof req?.body?.medicalNotes === 'string') {
       // @ts-ignore
