@@ -13,8 +13,10 @@ import { IPet } from '../../../database/models/constants/interface';
 //        READ LIST PETS = GET
 //=====================================
 
-export const getPetsUserDashboard = async (req: Request, res: Response) => {
-  // @ts-ignore
+export const getPetsUserDashboard = async (
+  req: Request<{ category: string; name: string }>,
+  res: Response
+) => {
   let query: any = {};
   // @ts-ignore
   const limit: any = parseInt(req.query.limit);
@@ -25,13 +27,9 @@ export const getPetsUserDashboard = async (req: Request, res: Response) => {
   // NEED REFACTOR
   // @ts-ignore
   const userId = req.query._id;
-  // @ts-ignore
   const category = req.query?.category || undefined;
-  // @ts-ignore
   const name = req.query?.name || undefined;
-  // @ts-ignore
   const adopted = req.query?.adopted || undefined;
-  // @ts-ignore
   const gender = req.query?.gender || undefined;
 
   const user: any = await User.findOne({ _id: userId }, 'role');
