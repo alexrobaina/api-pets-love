@@ -1,17 +1,7 @@
-import { create } from './createPet/createPet';
-import { getPets, getPet, getSearchFilterPets } from './getPets/getPets';
-import { update } from './updatePet/updatePet';
-import { getPetsUserDashboard } from './getPetsUserDashboard/getPetsUserDashboard';
-import { getPetsUser } from './getPetsUser/getPetsUser';
-import Delete from './deletePet/deletePet';
+import { create } from './createPet';
+import { getPets, getPet } from './getPets';
+import { update } from './updatePet';
+import { getPetsUser } from './getPetsUser';
+import Delete from './deletePet';
 
-export {
-  getPet,
-  create,
-  update,
-  Delete,
-  getPets,
-  getPetsUser,
-  getSearchFilterPets,
-  getPetsUserDashboard,
-};
+export { getPet, create, update, Delete, getPets, getPetsUser };

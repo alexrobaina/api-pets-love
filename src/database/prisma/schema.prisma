@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String      @id @default(cuid())
+  role          Role?
+  socialMedia   Json?
+  phone         String?
+  locationId    String?
+  location      Location?   @relation(fields: [locationId], references: [id])
+  image         String?
+  username      String?     @unique
+  email         String      @unique
+  updatedAt     DateTime    @updatedAt
+  createdAt     DateTime    @default(now())
+  volunteerPets PetOnUser[]
+  adoptedPets   Pet[]       @relation("AdoptedPets")
+  caredPets     Pet[]       @relation("CaredPets")
+}
+
+model Location {
+  id        String   @id @default(cuid())
+  address   String
+  city      String?
+  state     String?
+  zip       String?
+  country   String
+  lat       Float
+  lng       Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User[]
+  Pet       Pet[]
+}
+
+model Pet {
+  id         String      @id @default(cuid())
+  name       String
+  type       String
+  breed      String
+  gender     String
+  images     String[]
+  locationId String?
+  location   Location?   @relation(fields: [locationId], references: [id])
+  age        String
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  volunteers PetOnUser[]
+  adoptedBy  String? // Foreign Key for Adopter
+  adopter    User?       @relation(name: "AdoptedPets", fields: [adoptedBy], references: [id])
+  caredBy    String? // Foreign Key for Shelter
+  shelter    User?       @relation(name: "CaredPets", fields: [caredBy], references: [id])
+}
+
+// This is the relation table for the many-to-many relationship between Pet and User (for volunteers)
+model PetOnUser {
+  petId  String
+  userId String
+  pet    Pet    @relation(fields: [petId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@id([petId, userId])
+}
+
+model Product {
+  id          String    @id @default(uuid())
+  title       String
+  subTitle    String
+  description String
+  price       String
+  redirect    String
+  image       String
+  peaks       String[]
+  donationId  String?
+  Donation    Donation? @relation(fields: [donationId], references: [id])
+}
+
+model Donation {
+  id           String    @id @default(uuid())
+  email        String?
+  productId    String
+  order        Int       @default(autoincrement())
+  approved     Boolean   @default(false)
+  preferenceId String?   @unique
+  Products     Product[]
+}
+
+enum Role {
+  ADOPTER
+  VOLUNTEER
+  VET
+  SHELTER
+  ADMIN
+}
