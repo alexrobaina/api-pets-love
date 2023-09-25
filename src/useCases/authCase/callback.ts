@@ -50,9 +50,13 @@ export const googleAuth = async (req: Request, res: Response) => {
 
       const token = await createToken({ id: user.id, email: user.email });
 
-      res.cookie('token', token);
+      res.cookie('token', token, {
+        httpOnly: true,
+        sameSite: 'none',
+      });
       res.redirect(config.HOST + '/dashboard');
     }
+
     await prisma.user.update({
       where: {
         id: user.id,
@@ -65,8 +69,11 @@ export const googleAuth = async (req: Request, res: Response) => {
 
     const token = await createToken({ id: user.id, email: user.email });
 
-    res.cookie('token', token);
-    res.redirect(config.HOST + '/dashboard');
+    if (!res.headersSent) {
+      res.cookie('token', token);
+
+      res.redirect(config.HOST + '/dashboard');
+    }
   } catch (error) {
     if (error) {
       console.log(error);

@@ -2,7 +2,7 @@ import { Response, Request } from 'express';
 import jwt from 'jsonwebtoken';
 import { config } from '../config/config';
 import { MUST_AUTHENTICATED } from '../constants/constants';
-import { VETERINARIAN, ADMIN, ADOPTER, SHELTER } from '../database/constants/roles';
+import { VET, ADMIN, ADOPTER, SHELTER } from '../database/constants/roles';
 
 //=====================================
 // CONFIG token
@@ -60,7 +60,7 @@ export const verifyRole_Super = (req: any, res: Response, next: any) => {
 export const verifyRole_User = (req: any, res: Response, next: any) => {
   const user = req.user;
 
-  if (user.role === ADOPTER || user.role === VETERINARIAN) {
+  if (user.role === ADOPTER || user.role === VET) {
     next(); // Is very important for excute of the function
   } else {
     return res.status(401).json({
