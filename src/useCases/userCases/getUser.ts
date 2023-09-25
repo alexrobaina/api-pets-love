@@ -16,9 +16,13 @@ export const getUser = async (req: Request, res: Response) => {
 
     select: {
       email: true,
-      username: true,
       image: true,
       role: true,
+      username: true,
+      lastName: true,
+      location: true,
+      firstName: true,
+      locationId: true,
       socialMedia: true,
     },
   });

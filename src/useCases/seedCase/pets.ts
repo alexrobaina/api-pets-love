@@ -1,7 +1,5 @@
 import { Response, Request } from 'express';
-const { google } = require('googleapis');
 import { SOMETHING_IS_WRONG, SUCCESS_RESPONSE } from '../../constants/constants';
-import { config } from '../../config/config';
 import { prisma } from '../../database/prisma';
 
 //=====================================
