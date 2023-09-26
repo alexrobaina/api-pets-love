@@ -15,6 +15,7 @@ export const getUser = async (req: Request, res: Response) => {
     },
 
     select: {
+      id: true,
       email: true,
       image: true,
       role: true,

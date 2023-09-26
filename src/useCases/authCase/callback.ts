@@ -57,16 +57,6 @@ export const googleAuth = async (req: Request, res: Response) => {
       res.redirect(config.HOST + '/dashboard');
     }
 
-    await prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        image: newUser.data.picture,
-        username: newUser.data.name,
-      },
-    });
-
     const token = await createToken({ id: user.id, email: user.email });
 
     if (!res.headersSent) {
