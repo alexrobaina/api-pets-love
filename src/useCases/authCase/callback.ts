@@ -6,10 +6,6 @@ import { prisma } from '../../database/prisma';
 import { config } from '../../config/config';
 import { createToken } from './authModule';
 
-//=====================================
-//        LOGIN USERS = POST
-//=====================================
-
 export const googleAuth = async (req: Request, res: Response) => {
   try {
     const oauth2Client = new google.auth.OAuth2(
@@ -56,16 +52,6 @@ export const googleAuth = async (req: Request, res: Response) => {
       });
       res.redirect(config.HOST + '/dashboard');
     }
-
-    await prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        image: newUser.data.picture,
-        username: newUser.data.name,
-      },
-    });
 
     const token = await createToken({ id: user.id, email: user.email });
 

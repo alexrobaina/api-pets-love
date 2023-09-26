@@ -1,5 +1,6 @@
 import { Storage } from '@google-cloud/storage';
 import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
 import Multer from 'multer';
 
 const storage = new Storage({
@@ -11,8 +12,9 @@ const multer = Multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // Limit to 5MB
 });
 
-export const gCloudBucketFiles = (req: any, res: any, next: Function) => {
-  const bucketName = 'pets-love-398920.appspot.com';
+export const googleCloudUploader = (req: any, res: any, next: Function) => {
+  const bucketName = process.env.BUCKET_NAME as string;
+
   multer.single('images')(req, res, async err => {
     if (err) {
       console.error(err);
@@ -27,7 +29,7 @@ export const gCloudBucketFiles = (req: any, res: any, next: Function) => {
 
     try {
       const bucket = storage.bucket(bucketName);
-      const fileName = `users/1${Date.now()}`;
+      const fileName = `${bucketRoute(req.originalUrl)}/pets-love-${uuidv4()}${Date.now()}`;
       const file = bucket.file(fileName);
 
       const blobStream = file.createWriteStream({
@@ -61,4 +63,10 @@ export const gCloudBucketFiles = (req: any, res: any, next: Function) => {
       return next();
     }
   });
+};
+
+const bucketRoute = (path: string) => {
+  if (path === '/api/v1/user/') return 'users/avatar';
+  if (path === '/api/v1/pet/') return 'pets';
+  return '';
 };

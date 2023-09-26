@@ -1,78 +1,84 @@
-import e, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { SUCCESS_RESPONSE, SOMETHING_IS_WRONG } from '../../constants/constants';
 import { prisma } from '../../database/prisma';
 
-//=====================================
-//        READ LIST USERS = GET
-//=====================================
-
 export const updateUser = async (req: Request, res: Response) => {
-  let location: any;
-  if (!req.body.id) {
-    return res.status(400).json({
-      ok: false,
-      message: 'No se ha enviado el id del usuario',
-    });
-  }
-  if (req.body.locationId !== '') {
-    location = await prisma.location.update({
-      where: {
-        id: req.body.locationId,
-      },
-      data: req.body.location,
-    });
-  } else {
-    location = await prisma.location.create({
-      data: req.body.location,
-    });
-  }
+  const { id, locationId, location, socialMedia } = req.body;
 
-  const data = await removeEmptyAndLocation(req.body);
-
-  const users = await prisma.user.update({
-    where: {
-      id: req.body.id,
-    },
-    data: {
-      ...data,
-      locationId: location.id,
-    },
-  });
+  if (!id) return res.status(400).json({ ok: false, message: 'User ID is required!' });
 
   try {
-    res.status(200).json({
-      users,
-      ok: true,
-      message: SUCCESS_RESPONSE,
-    });
-  } catch (error) {
-    if (error) {
-      console.log(error);
-      return res.status(500).json({
-        ok: false,
-        message: SOMETHING_IS_WRONG,
-        error,
-      });
+    let newLocation: typeof location;
+
+    try {
+      newLocation = typeof location === 'string' ? JSON.parse(location) : location;
+    } catch (error) {
+      return res.status(400).json({ ok: false, message: 'Invalid location format!' });
     }
+
+    // Fetch the existing user with social media data from the database
+    const existingUser = await prisma.user.findUnique({
+      where: { id },
+      select: { socialMedia: true },
+    });
+
+    if (!existingUser) return res.status(404).json({ ok: false, message: 'User not found!' });
+
+    // Merge the existing socialMedia with the new one, overriding only the provided fields
+    const existingSocialMedia =
+      typeof existingUser.socialMedia === 'object' ? existingUser.socialMedia : {};
+    const updatedSocialMedia = { ...existingSocialMedia, ...JSON.parse(socialMedia) };
+
+    const updatedLocationId = await handleLocationUpdate(locationId, newLocation);
+    const cleanedData = cleanData({ ...req.body, socialMedia: JSON.stringify(updatedSocialMedia) });
+
+    if (res.locals.file) cleanedData.image = res.locals.file.url;
+
+    const user = await prisma.user.update({
+      where: { id },
+      data: { ...cleanedData, locationId: updatedLocationId },
+    });
+
+    return res.status(200).json({ user, ok: true, message: SUCCESS_RESPONSE });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ ok: false, message: SOMETHING_IS_WRONG, error });
   }
 };
 
-const removeEmptyAndLocation = (obj: Record<string, any>): Record<string, any> => {
+const handleLocationUpdate = async (locationId: string, newLocation: any) => {
+  const isValidLocationData = validateLocationData(newLocation);
+
+  if (locationId && isValidLocationData) {
+    const existingLocation = await prisma.location.findUnique({ where: { id: locationId } });
+    if (!existingLocation) throw new Error('Location not found');
+
+    if (JSON.stringify(newLocation) !== JSON.stringify(existingLocation)) {
+      const locationUpdated = await prisma.location.update({
+        where: { id: locationId },
+        data: newLocation,
+      });
+      return locationUpdated.id;
+    }
+  } else if (isValidLocationData) {
+    const locationCreated = await prisma.location.create({ data: newLocation });
+    return locationCreated.id;
+  }
+
+  return locationId;
+};
+
+const validateLocationData = (location: any) =>
+  location && Object.values(location).every(val => val !== '' && val !== 0);
+
+const cleanData = (obj: Record<string, any>): Record<string, any> => {
   const newObj: Record<string, any> = {};
 
-  for (const [key, value] of Object.entries(obj)) {
-    if (key === 'location') continue; // Si la clave es 'location', la omitimos.
+  for (let [key, value] of Object.entries(obj)) {
+    if (key === 'location' || value == null || value === '') continue;
+    if (key === 'socialMedia') value = JSON.parse(value);
 
-    if (value !== null && value !== undefined && value !== '') {
-      if (typeof value === 'object' && !Array.isArray(value)) {
-        const nestedObj = removeEmptyAndLocation(value); // Asegurándonos de que también verificamos los objetos anidados
-        if (Object.keys(nestedObj).length > 0) {
-          newObj[key] = nestedObj;
-        }
-      } else {
-        newObj[key] = value;
-      }
-    }
+    newObj[key] = typeof value === 'object' && !Array.isArray(value) ? cleanData(value) : value;
   }
 
   return newObj;
