@@ -6,10 +6,6 @@ import { prisma } from '../../database/prisma';
 import { config } from '../../config/config';
 import { createToken } from './authModule';
 
-//=====================================
-//        LOGIN USERS = POST
-//=====================================
-
 export const googleAuth = async (req: Request, res: Response) => {
   try {
     const oauth2Client = new google.auth.OAuth2(
