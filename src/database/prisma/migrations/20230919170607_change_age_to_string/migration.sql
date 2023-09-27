@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Pet" ALTER COLUMN "age" SET DATA TYPE TEXT;
