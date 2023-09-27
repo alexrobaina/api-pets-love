@@ -9,9 +9,9 @@ const router = express.Router();
 router.post('/user/', create); // CREATE USER
 
 // This route need verifyToke
-router.put('/user/', [googleCloudUploader], updateUser); // UPDATE USER
+router.put('/user/', [verifyToken, googleCloudUploader], updateUser); // UPDATE USER
 
-router.get('/users/', getUsers); // GET USERS
+router.get('/users/', [verifyToken], getUsers); // GET USERS
 
 router.get('/user/', getUser); // GET USER
 

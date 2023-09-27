@@ -1,9 +1,26 @@
 import { Request, Response } from 'express';
 import { SUCCESS_RESPONSE, SOMETHING_IS_WRONG } from '../../constants/constants';
 import { prisma } from '../../database/prisma';
+import { googleCloudDeleted } from '../../services/googleCloudDeleted';
 
 export const updateUser = async (req: Request, res: Response) => {
   const { id, locationId, location, socialMedia } = req.body;
+  const userToken: { id?: string } = req.user || '';
+
+  // Fetch the existing user with social media data from the database
+  const existingUser = await prisma.user.findUnique({
+    where: { id },
+    select: { socialMedia: true },
+  });
+
+  if (id !== userToken.id) {
+    return res.status(401).json({ ok: false, message: 'Unauthorized' });
+  }
+
+  if (!existingUser) return res.status(404).json({ ok: false, message: 'User not found!' });
+
+  if (req.body.deleteFiles) await googleCloudDeleted(req.body.deleteFiles);
+  delete req.body.deleteFiles;
 
   if (!id) return res.status(400).json({ ok: false, message: 'User ID is required!' });
 
@@ -15,14 +32,6 @@ export const updateUser = async (req: Request, res: Response) => {
     } catch (error) {
       return res.status(400).json({ ok: false, message: 'Invalid location format!' });
     }
-
-    // Fetch the existing user with social media data from the database
-    const existingUser = await prisma.user.findUnique({
-      where: { id },
-      select: { socialMedia: true },
-    });
-
-    if (!existingUser) return res.status(404).json({ ok: false, message: 'User not found!' });
 
     // Merge the existing socialMedia with the new one, overriding only the provided fields
     const existingSocialMedia =
