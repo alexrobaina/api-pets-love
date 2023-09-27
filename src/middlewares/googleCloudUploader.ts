@@ -46,8 +46,7 @@ export const googleCloudUploader = (req: any, res: any, next: Function) => {
         try {
           await file.makePublic();
 
-          const publicUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
-          res.locals.file = { url: publicUrl };
+          res.locals.file = { url: `${fileName}` };
           return next();
         } catch (err) {
           console.error(err);
