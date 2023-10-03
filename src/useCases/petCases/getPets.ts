@@ -14,6 +14,8 @@ export const getPets = async (_req: Request, res: Response) => {
           select: {
             username: true,
             image: true,
+            email: true,
+            socialMedia: true,
           },
         },
         location: true,

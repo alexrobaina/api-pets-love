@@ -19,7 +19,8 @@ export const updateUser = async (req: Request, res: Response) => {
 
   if (!existingUser) return res.status(404).json({ ok: false, message: 'User not found!' });
 
-  if (req.body.deleteFiles) await googleCloudDeleted(req.body.deleteFiles);
+  if (req.body.deleteFiles && req.body.deleteFiles.include('pets=love'))
+    await googleCloudDeleted(req.body.deleteFiles);
   delete req.body.deleteFiles;
 
   if (!id) return res.status(400).json({ ok: false, message: 'User ID is required!' });

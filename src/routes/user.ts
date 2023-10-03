@@ -1,12 +1,19 @@
 import express from 'express';
-import { create, getUser, getUsers, updateUser } from '../useCases/userCases/userController';
+import {
+  create,
+  getUser,
+  getUsers,
+  updateUser,
+  updateRole,
+} from '../useCases/userCases/userController';
 import { googleCloudUploader } from '../middlewares/googleCloudUploader';
 import { verifyToken } from '../middlewares/auth';
-// import { verifyRole_Admin, verifyToken } from '../middlewares/auth';
 
 const router = express.Router();
 
 router.post('/user/', create); // CREATE USER
+
+router.put('/user/role', [verifyToken], updateRole); // CREATE USER
 
 // This route need verifyToke
 router.put('/user/', [verifyToken, googleCloudUploader], updateUser); // UPDATE USER
