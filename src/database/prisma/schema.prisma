@@ -11,22 +11,22 @@ datasource db {
 }
 
 model User {
-  id            String      @id @default(cuid())
-  role          Role?
-  socialMedia   Json?
-  firstName     String?
-  lastName      String?
-  phone         String?
-  locationId    String?
-  location      Location?   @relation(fields: [locationId], references: [id])
-  image         String?
-  username      String?     @unique
-  email         String      @unique
-  updatedAt     DateTime    @updatedAt
-  createdAt     DateTime    @default(now())
-  volunteerPets PetOnUser[]
-  adoptedPets   Pet[]       @relation("AdoptedPets")
-  caredPets     Pet[]       @relation("CaredPets")
+  id          String                 @id @default(cuid())
+  role        Role?
+  socialMedia Json?
+  firstName   String?
+  lastName    String?
+  phone       String?
+  locationId  String?
+  location    Location?              @relation(fields: [locationId], references: [id])
+  image       String?
+  username    String?                @unique
+  email       String                 @unique
+  updatedAt   DateTime               @updatedAt
+  createdAt   DateTime               @default(now())
+  adoptedPets Pet[]                  @relation("AdoptedPets")
+  ShelterPets Pet[]                  @relation("ShelterPets")
+  PetOnUser   PetsCaredByVolunteer[]
 }
 
 model Location {
@@ -45,32 +45,80 @@ model Location {
 }
 
 model Pet {
-  id         String      @id @default(cuid())
-  name       String
-  type       String
-  breed      String
-  gender     String
-  images     String[]
-  locationId String?
-  location   Location?   @relation(fields: [locationId], references: [id])
-  age        String
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  volunteers PetOnUser[]
-  adoptedBy  String? // Foreign Key for Adopter
-  adopter    User?       @relation(name: "AdoptedPets", fields: [adoptedBy], references: [id])
-  caredBy    String? // Foreign Key for Shelter
-  shelter    User?       @relation(name: "CaredPets", fields: [caredBy], references: [id])
+  id                   String                 @id @default(cuid())
+  name                 String
+  category             String
+  weight               String?
+  breed                String?
+  size                 String // Toy / Kitten, Small, Medium, Large, extra large
+  gender               String
+  adopted              Boolean                @default(false)
+  images               String[]
+  locationId           String?
+  age                  String // Baby, Young, Adult, Senior
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  adoptedBy            String? // Foreign Key for Adopter
+  shelterId            String? // Foreign Key for Shelter
+  vaccineId            String?
+  location             Location?              @relation(fields: [locationId], references: [id])
+  Adopter              User?                  @relation(name: "AdoptedPets", fields: [adoptedBy], references: [id])
+  Shelter              User?                  @relation(name: "ShelterPets", fields: [shelterId], references: [id])
+  Vaccine              Vaccine?               @relation(fields: [vaccineId], references: [id])
+  PetsCaredByVolunteer PetsCaredByVolunteer[]
+  MedicalRecord        MedicalRecord[]
+  PetVaccine           PetVaccine[]
 }
 
 // This is the relation table for the many-to-many relationship between Pet and User (for volunteers)
-model PetOnUser {
+model PetsCaredByVolunteer {
   petId  String
   userId String
   pet    Pet    @relation(fields: [petId], references: [id])
   user   User   @relation(fields: [userId], references: [id])
 
   @@id([petId, userId])
+}
+
+model PetVaccine {
+  id        String   @id @default(cuid())
+  petId     String   @map("pet_id")
+  vaccineId String   @map("vaccine_id")
+  status    String // NOT_APPLICABLE, PENDING, DONE
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Pet     Pet     @relation(fields: [petId], references: [id])
+  Vaccine Vaccine @relation(fields: [vaccineId], references: [id])
+}
+
+model Vaccine {
+  id          String       @id @default(cuid())
+  name        String
+  description String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  PetVaccines PetVaccine[]
+  Pet         Pet[]
+}
+
+model MedicalRecord {
+  id               String    @id @default(cuid())
+  petId            String
+  Pet              Pet       @relation(fields: [petId], references: [id])
+  date             DateTime  @default(now())
+  description      String // Brief description or reason for the visit/appointment
+  diagnosis        String? // Diagnosis made by the veterinarian
+  treatment        String? // Treatment provided or prescribed
+  medications      String[] // List of medications prescribed
+  followUpRequired Boolean   @default(false)
+  followUpDate     DateTime? // Scheduled date for follow-up, if required
+  veterinarian     String? // Name of the attending veterinarian
+  clinicName       String? // Name of the clinic/hospital
+  notes            String? // Additional notes or observations
+  attachments      String[] // URLs or paths to any attached documents, X-rays, images etc.
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 }
 
 model Product {
