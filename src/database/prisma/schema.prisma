@@ -50,6 +50,7 @@ model Pet {
   category             String
   weight               String?
   breed                String?
+  description          String?
   size                 String // Toy / Kitten, Small, Medium, Large, extra large
   gender               String
   adopted              Boolean                @default(false)

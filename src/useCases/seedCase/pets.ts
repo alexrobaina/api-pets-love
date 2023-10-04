@@ -1,6 +1,6 @@
-import { Response, Request } from 'express';
-import { SOMETHING_IS_WRONG, SUCCESS_RESPONSE } from '../../constants/constants';
-import { prisma } from '../../database/prisma';
+import { Response, Request } from 'express'
+import { SOMETHING_IS_WRONG, SUCCESS_RESPONSE } from '../../constants/constants'
+import { prisma } from '../../database/prisma'
 
 //=====================================
 //        LOGIN USERS = POST
@@ -24,44 +24,45 @@ export const pets = async (_req: Request, res: Response) => {
       'https://cdn.midjourney.com/a5f51379-e138-4a60-99ee-d7b0e0494314/0_2_384_N.webp',
       'https://cdn.midjourney.com/540dfb77-b296-443f-b170-6a35cf336fd3/0_0_384_N.webp',
       'https://cdn.midjourney.com/c29f0010-73c7-4a5a-89c1-4f33cad09c29/0_0.png',
-    ];
+    ]
 
-    const petTypes = ['Dog', 'Cat', 'Bird'];
-    const petGender = ['male', 'female'];
-    const petBreeds = ['Labrador', 'Siamese', 'Parakeet'];
-    const petAge = ['Puppy', 'Young', 'Adult', 'Senior'];
+    const petTypes = ['dog', 'cat', 'bird']
+    const petGender = ['male', 'female']
+    const petBreeds = ['Labrador', 'Siamese', 'Parakeet']
+    const petAge = ['Puppy', 'Young', 'Adult', 'Senior']
 
     for (let i = 0; i < 14; i++) {
-      const randomTypeIndex = Math.floor(Math.random() * petTypes.length);
-      const randomBreedIndex = Math.floor(Math.random() * petBreeds.length);
-      const randomAgeIndex = Math.floor(Math.random() * petAge.length);
-      const randomGenderIndex = Math.floor(Math.random() * petGender.length);
+      const randomTypeIndex = Math.floor(Math.random() * petTypes.length)
+      const randomBreedIndex = Math.floor(Math.random() * petBreeds.length)
+      const randomAgeIndex = Math.floor(Math.random() * petAge.length)
+      const randomGenderIndex = Math.floor(Math.random() * petGender.length)
 
       await prisma.pet.create({
         data: {
           name: `Pet ${i + 1}`,
-          type: petTypes[randomTypeIndex],
+          category: petTypes[randomTypeIndex],
           breed: petBreeds[randomBreedIndex],
           age: petAge[randomAgeIndex],
           images: [petImages[i]], // Note: you should add 'image' field in your Prisma model
           gender: petGender[randomGenderIndex],
+          size: 'medium', // add the size property
         },
-      });
+      })
     }
     return res.status(200).json({
       status: 200,
       message: SUCCESS_RESPONSE,
-    });
+    })
   } catch (error) {
     if (error) {
-      console.log(error);
+      console.log(error)
 
       return res.status(500).json({
         code: 4,
         ok: false,
         error: Error,
         message: SOMETHING_IS_WRONG,
-      });
+      })
     }
   }
-};
+}
