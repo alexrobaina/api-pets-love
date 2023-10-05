@@ -11,22 +11,22 @@ datasource db {
 }
 
 model User {
-  id          String                 @id @default(cuid())
-  role        Role?
-  socialMedia Json?
-  firstName   String?
-  lastName    String?
-  phone       String?
-  locationId  String?
-  location    Location?              @relation(fields: [locationId], references: [id])
-  image       String?
-  username    String?                @unique
-  email       String                 @unique
-  updatedAt   DateTime               @updatedAt
-  createdAt   DateTime               @default(now())
-  adoptedPets Pet[]                  @relation("AdoptedPets")
-  ShelterPets Pet[]                  @relation("ShelterPets")
-  PetOnUser   PetsCaredByVolunteer[]
+  id                   String                 @id @default(cuid())
+  role                 Role?
+  socialMedia          Json?
+  firstName            String?
+  lastName             String?
+  phone                String?
+  locationId           String?
+  location             Location?              @relation(fields: [locationId], references: [id])
+  image                String?
+  username             String?                @unique
+  email                String                 @unique
+  updatedAt            DateTime               @updatedAt
+  createdAt            DateTime               @default(now())
+  adoptedPets          Pet[]                  @relation("AdoptedPets")
+  ShelterPets          Pet[]                  @relation("ShelterPets")
+  PetsCaredByVolunteer PetsCaredByVolunteer[]
 }
 
 model Location {
