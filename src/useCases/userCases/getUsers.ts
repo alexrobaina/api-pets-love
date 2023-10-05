@@ -14,6 +14,7 @@ export const getUsers = async (req: Request, res: Response) => {
     skip?: string
     take?: string
   }
+  console.log(filter)
 
   const skip = filter.skip ? parseInt(filter.skip, 10) : 0
   const take = filter.take ? parseInt(filter.take, 10) : 10
@@ -23,18 +24,6 @@ export const getUsers = async (req: Request, res: Response) => {
     skip, // Skip the specified number of records
     take, // Take the specified number of records
     orderBy: { createdAt: 'desc' },
-    select: {
-      id: true,
-      email: true,
-      username: true,
-      image: true,
-      role: true,
-      socialMedia: true,
-      location: true, // select related location
-      volunteerPets: true, // select related volunteerPets
-      adoptedPets: true, // select related adoptedPets
-      caredPets: true, // select related caredPets
-    },
   }
 
   if (filter.role) query.where.role = filter.role
@@ -47,6 +36,16 @@ export const getUsers = async (req: Request, res: Response) => {
   try {
     const users = await prisma.user.findMany({
       where: query.where, // Count users matching the filters
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        image: true,
+        role: true,
+        socialMedia: true,
+        location: true, // select related location
+        adoptedPets: true, // select related adoptedPets
+      },
     })
     const totalUsers = await prisma.user.count({
       where: query.where, // Count users matching the filters

@@ -1,6 +1,7 @@
-import { Request, Response } from 'express'
+import { Request, Response, query } from 'express'
 import { SUCCESS_RESPONSE, SOMETHING_IS_WRONG } from '../../constants/constants'
 import { prisma } from '../../database/prisma'
+import { parse } from 'path'
 
 //=====================================
 //        READ LIST PETS = GET
@@ -12,15 +13,25 @@ export const getPets = async (req: Request, res: Response) => {
     adopted: string
     searchByName: string
     category?: string
-    skip?: string
+    page?: string
     take?: string
+    userId: string
+    adoptedBy: string
+    shelterId?: string
   }
+
+  const itemsPerPage = 10
+  const currentPage = parseInt(filter.page || '1')
+
+  // Calculate skip and take based on currentPage
+  const skip = (currentPage - 1) * itemsPerPage
+  const take = itemsPerPage
 
   const query: any = {
     where: {},
-    skip: filter.skip ? parseInt(filter.skip, 10) : 0, // Skip the specified number of records
-    take: filter.take ? parseInt(filter.take, 10) : 10, // Take the specified number of records
     orderBy: { createdAt: 'desc' },
+    skip,
+    take,
     include: {
       Shelter: {
         select: {
@@ -34,10 +45,13 @@ export const getPets = async (req: Request, res: Response) => {
   }
 
   if (filter.category) query.where.category = filter.category
+  if (filter.shelterId) query.where.shelterId = filter.shelterId
+  if (filter.adoptedBy) query.where.adoptedBy = filter.adoptedBy
   if (filter.gender) query.where.gender = filter.gender
   if (filter.adopted) query.where.adopted = filter.adopted === 'true'
-  if (filter.searchByName)
-    query.where.name = { contains: filter.searchByName as string }
+  if (filter.searchByName) {
+    query.where.name = { contains: filter.searchByName }
+  }
 
   try {
     const pets = await prisma.pet.findMany(query)
