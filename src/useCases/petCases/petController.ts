@@ -1,7 +1,16 @@
-import { create } from './createPet';
-import { getPets, getPet } from './getPets';
-import { update } from './updatePet';
-import { getPetsUser } from './getPetsUser';
-import Delete from './deletePet';
+import { create } from './createPet'
+import { getPets, getPet } from './getPets'
+import { update } from './updatePet'
+import { getPetsUser } from './getPetsUser'
+import { getDashboardPets } from './getDashboardPets'
+import { deletePet } from './deletePet'
 
-export { getPet, create, update, Delete, getPets, getPetsUser };
+export {
+  getPet,
+  create,
+  update,
+  getPets,
+  deletePet,
+  getPetsUser,
+  getDashboardPets,
+}
