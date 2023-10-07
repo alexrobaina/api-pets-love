@@ -16,7 +16,6 @@ model User {
   socialMedia          Json?
   firstName            String?
   lastName             String?
-  phone                String?
   locationId           String?
   location             Location?              @relation(fields: [locationId], references: [id])
   image                String?
