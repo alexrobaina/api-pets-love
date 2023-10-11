@@ -52,7 +52,6 @@ export const getPets = async (req: Request, res: Response) => {
   if (filter.searchByName) {
     query.where.name = { contains: filter.searchByName }
   }
-  console.log(query)
 
   try {
     const pets = await prisma.pet.findMany(query)
@@ -82,9 +81,34 @@ export const getPets = async (req: Request, res: Response) => {
 //        READ ONE PET ID = GET
 //=====================================
 
-export const getPet = async (_req: Request, res: Response) => {
+export const getPet = async (req: Request, res: Response) => {
+  const pet = await prisma.pet.findUnique({
+    where: {
+      id: req.query.id as string,
+    },
+    include: {
+      Shelter: {
+        select: {
+          id: true,
+          username: true,
+          image: true,
+          location: true,
+        },
+      },
+      PetVaccine: {
+        select: {
+          id: true,
+          status: true,
+          Vaccine: true,
+        },
+      },
+      MedicalRecord: true,
+    },
+  })
+
   try {
     res.status(200).json({
+      pet,
       ok: true,
       message: SUCCESS_RESPONSE,
     })
