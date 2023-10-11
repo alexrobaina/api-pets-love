@@ -52,6 +52,7 @@ export const getPets = async (req: Request, res: Response) => {
   if (filter.searchByName) {
     query.where.name = { contains: filter.searchByName }
   }
+  console.log(query)
 
   try {
     const pets = await prisma.pet.findMany(query)

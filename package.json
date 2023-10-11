@@ -66,6 +66,7 @@
   },
   "homepage": "https://github.com/alexrobaina/api-clean-code#readme",
   "prisma": {
-    "schema": "src/database/prisma/schema.prisma"
+    "schema": "src/database/prisma/schema.prisma",
+    "seed": "src/database/prisma/seed.ts"
   }
 }
