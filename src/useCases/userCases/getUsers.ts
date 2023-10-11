@@ -11,13 +11,13 @@ export const getUsers = async (req: Request, res: Response) => {
     role?: 'VOLUNTEER' | 'VET' | 'SHELTER' | 'ADOPTER' | 'ADMIN' | ''
     country?: string
     city?: string
-    skip?: string
-    take?: string
+    page?: string
   }
-  console.log(filter)
+  const itemsPerPage = 10
+  const currentPage = parseInt(filter.page || '1')
 
-  const skip = filter.skip ? parseInt(filter.skip, 10) : 0
-  const take = filter.take ? parseInt(filter.take, 10) : 10
+  const skip = (currentPage - 1) * itemsPerPage
+  const take = itemsPerPage
 
   const query: any = {
     where: {},

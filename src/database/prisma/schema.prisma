@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  seed     = "node --loader ts-node/esm src/database/prisma/seed.ts "
 }
 
 datasource db {
@@ -26,6 +27,7 @@ model User {
   adoptedPets          Pet[]                  @relation("AdoptedPets")
   ShelterPets          Pet[]                  @relation("ShelterPets")
   PetsCaredByVolunteer PetsCaredByVolunteer[]
+  MedicalRecord        MedicalRecord[]
 }
 
 model Location {
@@ -60,11 +62,9 @@ model Pet {
   updatedAt            DateTime               @updatedAt
   adoptedBy            String? // Foreign Key for Adopter
   shelterId            String? // Foreign Key for Shelter
-  vaccineId            String?
   location             Location?              @relation(fields: [locationId], references: [id])
   Adopter              User?                  @relation(name: "AdoptedPets", fields: [adoptedBy], references: [id])
   Shelter              User?                  @relation(name: "ShelterPets", fields: [shelterId], references: [id])
-  Vaccine              Vaccine?               @relation(fields: [vaccineId], references: [id])
   PetsCaredByVolunteer PetsCaredByVolunteer[]
   MedicalRecord        MedicalRecord[]
   PetVaccine           PetVaccine[]
@@ -96,10 +96,10 @@ model Vaccine {
   id          String       @id @default(cuid())
   name        String
   description String
+  category    String // cat, dog, bird, etc.
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   PetVaccines PetVaccine[]
-  Pet         Pet[]
 }
 
 model MedicalRecord {
@@ -113,12 +113,13 @@ model MedicalRecord {
   medications      String[] // List of medications prescribed
   followUpRequired Boolean   @default(false)
   followUpDate     DateTime? // Scheduled date for follow-up, if required
-  veterinarian     String? // Name of the attending veterinarian
+  vetId            String? // Foreign key for the veterinarian
   clinicName       String? // Name of the clinic/hospital
   notes            String? // Additional notes or observations
   attachments      String[] // URLs or paths to any attached documents, X-rays, images etc.
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
+  Vet              User?     @relation(fields: [vetId], references: [id])
 }
 
 model Product {
