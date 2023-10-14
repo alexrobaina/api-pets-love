@@ -4,11 +4,11 @@ CREATE TYPE "Role" AS ENUM ('ADOPTER', 'VOLUNTEER', 'VET', 'SHELTER', 'ADMIN');
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
-    "role" "Role" NOT NULL DEFAULT 'ADOPTER',
+    "role" "Role",
     "socialMedia" JSONB,
-    "password" TEXT NOT NULL,
     "phone" TEXT,
-    "address" TEXT,
+    "locationId" TEXT,
+    "image" TEXT,
     "username" TEXT,
     "email" TEXT NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -18,12 +18,31 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
+CREATE TABLE "Location" (
+    "id" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
+    "city" TEXT,
+    "state" TEXT,
+    "zip" TEXT,
+    "country" TEXT NOT NULL,
+    "lat" DOUBLE PRECISION NOT NULL,
+    "lng" DOUBLE PRECISION NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Location_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Pet" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "breed" TEXT NOT NULL,
-    "age" INTEGER NOT NULL,
+    "gender" TEXT NOT NULL,
+    "images" TEXT[],
+    "locationId" TEXT,
+    "age" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "adoptedBy" TEXT,
@@ -75,6 +94,12 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Donation_preferenceId_key" ON "Donation"("preferenceId");
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_locationId_fkey" FOREIGN KEY ("locationId") REFERENCES "Location"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Pet" ADD CONSTRAINT "Pet_locationId_fkey" FOREIGN KEY ("locationId") REFERENCES "Location"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Pet" ADD CONSTRAINT "Pet_adoptedBy_fkey" FOREIGN KEY ("adoptedBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
