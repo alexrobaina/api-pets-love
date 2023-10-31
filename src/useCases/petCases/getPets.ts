@@ -115,7 +115,20 @@ export const getPet = async (req: Request, res: Response) => {
           Vaccine: true,
         },
       },
-      MedicalRecord: true,
+      MedicalRecord: {
+        select: {
+          description: true,
+          title: true,
+          date: true,
+          diagnosis: true,
+          treatment: true,
+          medications: true,
+          id: true,
+          clinicName: true,
+          createdAt: true,
+          attachments: true,
+        },
+      },
     },
   })
 
