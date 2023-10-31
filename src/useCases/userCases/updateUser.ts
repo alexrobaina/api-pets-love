@@ -20,7 +20,11 @@ export const updateUser = async (req: Request, res: Response) => {
   if (!existingUser)
     return res.status(404).json({ ok: false, message: 'User not found!' })
 
-  if (req.body.deleteFiles && req.body.deleteFiles.includes('pets-love'))
+  if (
+    req.body.deleteFiles &&
+    req.body.deleteFiles.includes('pets-love') &&
+    process.env.DEV !== 'true'
+  )
     await googleCloudDeleted(req.body.deleteFiles)
   delete req.body.deleteFiles
 
@@ -58,7 +62,7 @@ export const updateUser = async (req: Request, res: Response) => {
       socialMedia: JSON.stringify(updatedSocialMedia),
     })
 
-    if (res.locals.file) cleanedData.image = res.locals.file.url
+    if (res.locals.file) cleanedData.image = res.locals.file.images.url
     const data = { ...cleanedData }
 
     if (updatedLocationId) data.locationId = updatedLocationId

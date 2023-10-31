@@ -20,6 +20,7 @@ model User {
   locationId           String?
   location             Location?              @relation(fields: [locationId], references: [id])
   image                String?
+  description          String?
   username             String?                @unique
   email                String                 @unique
   updatedAt            DateTime               @updatedAt
@@ -60,8 +61,10 @@ model Pet {
   age                  String // Baby, Young, Adult, Senior
   createdAt            DateTime               @default(now())
   updatedAt            DateTime               @updatedAt
+  qrCode               String?
   adoptedBy            String? // Foreign Key for Adopter
   shelterId            String? // Foreign Key for Shelter
+  createdBy            String? // Foreign Key for Volunteer
   location             Location?              @relation(fields: [locationId], references: [id])
   Adopter              User?                  @relation(name: "AdoptedPets", fields: [adoptedBy], references: [id])
   Shelter              User?                  @relation(name: "ShelterPets", fields: [shelterId], references: [id])
@@ -81,12 +84,12 @@ model PetsCaredByVolunteer {
 }
 
 model PetVaccine {
-  id        String   @id @default(cuid())
-  petId     String   @map("pet_id")
-  vaccineId String   @map("vaccine_id")
-  status    String // NOT_APPLICABLE, PENDING, DONE
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String        @id @default(cuid())
+  petId     String        @map("pet_id")
+  vaccineId String        @map("vaccine_id")
+  status    VaccineStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 
   Pet     Pet     @relation(fields: [petId], references: [id])
   Vaccine Vaccine @relation(fields: [vaccineId], references: [id])
@@ -107,6 +110,7 @@ model MedicalRecord {
   petId            String
   Pet              Pet       @relation(fields: [petId], references: [id])
   date             DateTime  @default(now())
+  title            String // Title of the visit/appointment
   description      String // Brief description or reason for the visit/appointment
   diagnosis        String? // Diagnosis made by the veterinarian
   treatment        String? // Treatment provided or prescribed
@@ -151,4 +155,10 @@ enum Role {
   VET
   SHELTER
   ADMIN
+}
+
+enum VaccineStatus {
+  DONE
+  PENDING
+  NOT_APPLICABLE
 }

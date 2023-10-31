@@ -59,6 +59,18 @@ export const createPets = async () => {
 
   const petDescription = `He boasts tufted ears, a hallmark of his breed, and a long, bushy tail reminiscent of a luxurious feather duster. With a weight tipping the scale at 18 pounds, he is undeniably large but wears his size with elegance and grace. He possesses a gentle disposition, often seeking the warmth of a human lap or the soft notes of a lullaby sung by his favorite humans. Despite his calm demeanor, Whiskers has a playful side. He's particularly fond of feather toys and laser pointers, often displaying the agility and stealth of a panther when engaged in play.`
 
+  const usersShelter = await prisma.user.findMany({
+    where: {
+      role: 'SHELTER',
+    },
+  })
+
+  const usersAdopter = await prisma.user.findMany({
+    where: {
+      role: 'ADOPTER',
+    },
+  })
+
   for (let i = 0; i < 14; i++) {
     const randomTypeIndex = Math.floor(Math.random() * category.length)
     const randomBreedIndex = Math.floor(Math.random() * breed.length)
@@ -66,6 +78,12 @@ export const createPets = async () => {
     const randomGenderIndex = Math.floor(Math.random() * gender.length)
     const randomSizeIndex = Math.floor(Math.random() * size.length)
     const randomPetNamesIndex = Math.floor(Math.random() * petNames.length)
+    const randomUserAdopterIndex = Math.floor(
+      Math.random() * usersAdopter.length,
+    )
+    const randomUserShelterIndex = Math.floor(
+      Math.random() * usersShelter.length,
+    )
 
     await prisma.pet.create({
       data: {
@@ -77,6 +95,8 @@ export const createPets = async () => {
         gender: gender[randomGenderIndex],
         size: size[randomSizeIndex],
         description: petDescription,
+        adoptedBy: usersAdopter[randomUserAdopterIndex].id,
+        shelterId: usersShelter[randomUserShelterIndex].id,
       },
     })
   }

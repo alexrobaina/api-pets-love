@@ -70,12 +70,9 @@ export const filterBasedOnRole = (
 }
 
 export const addFiltersToQuery = (query: any, filters: IFilters) => {
-  const { category, shelterId, adoptedBy, gender, adopted, searchByName } =
-    filters
+  const { category, gender, adopted, searchByName } = filters
 
   if (category) query.where.category = category
-  if (shelterId) query.where.shelterId = shelterId
-  if (adoptedBy) query.where.adoptedBy = adoptedBy
   if (gender) query.where.gender = gender
   if (adopted) query.where.adopted = adopted === 'true'
   if (searchByName) query.where.name = { contains: searchByName }

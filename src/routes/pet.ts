@@ -3,32 +3,30 @@ import {
   create,
   getPet,
   getPets,
-  update,
   deletePet,
   getPetsUser,
   getDashboardPets,
 } from '../useCases/petCases/petController'
-// import uploadImage from '../middlewares/awsStorageImage';
 import { verifyToken } from '../middlewares/auth'
+import { createGoogleCloudUploader } from '../middlewares/googleCloudUploader'
+// import { googleCloudUploader } from '../middlewares/googleCloudUploader'\
+
+const googleCloudUploade = createGoogleCloudUploader('images')
+// const qrCodeGoogleCloudUploade = createGoogleCloudUploader('qrCode')
 
 const router = express.Router()
 
-// router.post('/pet', [verifyToken, uploadImage], create); // POST PET
+router.post('/pets', [verifyToken, googleCloudUploade], create) // POST PET
 
 router.get('/pets', getPets) // GET PETS
 
-router.get('/pets/dashboard', [verifyToken], getDashboardPets) // GET PETS
+router.get('/dashboard/pets', [verifyToken], getDashboardPets) // GET PETS
 
-// router.get('/pets/searchFilterPets', getSearchFilterPets); // GET PETS
-
-// router.get('/pets/petsDashboard', [verifyToken], getPetsUserDashboard); // GET PETS DASHBOARD
-
+// This route need verify and put in user file
 router.get('/pets/petsUser', getPetsUser) // GET PETS
 
-router.get('/pet', getPet) // GET PET
+router.get('/pets/:petId', getPet) // GET PET
 
-router.delete('/pet/delete', [verifyToken], deletePet) // DELETE PETS
-
-// router.put('/pet', [verifyToken, uploadImage], update); // PUT PET
+router.delete('/pets/:petId', [verifyToken], deletePet) // DELETE PETS
 
 export default router

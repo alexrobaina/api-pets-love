@@ -84,7 +84,7 @@ export const getPets = async (req: Request, res: Response) => {
 export const getPet = async (req: Request, res: Response) => {
   const pet = await prisma.pet.findUnique({
     where: {
-      id: req.query.id as string,
+      id: req.params.petId as string,
     },
     include: {
       Shelter: {
@@ -92,6 +92,19 @@ export const getPet = async (req: Request, res: Response) => {
           id: true,
           username: true,
           image: true,
+          description: true,
+          firstName: true,
+          location: true,
+          socialMedia: true,
+        },
+      },
+      Adopter: {
+        select: {
+          id: true,
+          username: true,
+          image: true,
+          firstName: true,
+          description: true,
           location: true,
         },
       },

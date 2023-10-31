@@ -1,27 +1,29 @@
-import express from 'express';
+import express from 'express'
 import {
   create,
   getUser,
   getUsers,
   updateUser,
   updateRole,
-} from '../useCases/userCases/userController';
-import { googleCloudUploader } from '../middlewares/googleCloudUploader';
-import { verifyToken } from '../middlewares/auth';
+} from '../useCases/userCases/userController'
+import { createGoogleCloudUploader } from '../middlewares/googleCloudUploader'
+import { verifyToken } from '../middlewares/auth'
 
-const router = express.Router();
+const uploadImages = createGoogleCloudUploader('images')
 
-router.post('/user/', create); // CREATE USER
+const router = express.Router()
 
-router.put('/user/role', [verifyToken], updateRole); // CREATE USER
+router.post('/user/', create) // CREATE USER
+
+router.put('/user/role', [verifyToken], updateRole) // CREATE USER
 
 // This route need verifyToke
-router.put('/user/', [verifyToken, googleCloudUploader], updateUser); // UPDATE USER
+router.put('/user/', [verifyToken, uploadImages], updateUser) // UPDATE USER
 
-router.get('/users/', [verifyToken], getUsers); // GET USERS
+router.get('/users/', [verifyToken], getUsers) // GET USERS
 
-router.get('/user/', getUser); // GET USER
+router.get('/user/', getUser) // GET USER
 
 // router.delete('/user', [verifyToken, verifyRole_Admin], Delete); // DELETE USERS
 
-export default router;
+export default router
