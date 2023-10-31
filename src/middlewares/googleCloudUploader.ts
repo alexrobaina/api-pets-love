@@ -1,71 +1,49 @@
-import { Storage } from '@google-cloud/storage';
-import path from 'path';
-import { v4 as uuidv4 } from 'uuid';
-import Multer from 'multer';
+import { Request, Response, NextFunction } from 'express'
+import Multer from 'multer'
+import { saveToLocal } from './utils/saveToLocal'
+import { saveToCloud } from './utils/saveToCloud'
+import { handleError } from './utils/handleError'
 
-const storage = new Storage({
-  keyFilename: path.join('pets-love-398920-e3d0357ac41a.json'),
-});
+// ... (other imports or code)
 
-const multer = Multer({
+const multerMemoryStorage = Multer({
   storage: Multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 }, // Limit to 5MB
-});
+})
 
-export const googleCloudUploader = (req: any, res: any, next: Function) => {
-  const bucketName = process.env.BUCKET_NAME as string;
+/**
+ * Factory function creating the middleware handling the upload based on the given field name.
+ * @param fieldName - The name of the field containing the files in the request.
+ * @returns Express middleware tailored for the specified field.
+ */
+export const createGoogleCloudUploader = (fieldName: string) => {
+  // Return the middleware function
+  return (req: Request, res: Response, next: NextFunction) => {
+    // Use multer to upload the file. 'array' is used here to signify multiple files.
+    const upload = multerMemoryStorage.array(fieldName)
 
-  multer.single('images')(req, res, async err => {
-    if (err) {
-      console.error(err);
-      res.locals.error = { status: 500, message: 'Something is wrong!', error: err };
-      return next();
-    }
+    upload(req, res, async (err) => {
+      if (err) {
+        return handleError(res, err, 'Something is wrong with the file upload!')
+      }
+      console.log(req.files)
 
-    if (!req.file) {
-      res.locals.error = { status: 400, message: 'No file provided!' };
-      return next();
-    }
+      // If no files were uploaded, continue with the next middleware
+      if (!req.files || req.files.length === 0) {
+        return next()
+      }
 
-    try {
-      const bucket = storage.bucket(bucketName);
-      const fileName = `${bucketRoute(req.originalUrl)}/pets-love-${uuidv4()}${Date.now()}`;
-      const file = bucket.file(fileName);
-
-      const blobStream = file.createWriteStream({
-        metadata: { contentType: req.file.mimetype },
-      });
-
-      blobStream.on('error', err => {
-        console.error(err);
-        res.locals.error = { status: 500, message: 'Something is wrong!', error: err };
-        return next();
-      });
-
-      blobStream.on('finish', async () => {
-        try {
-          await file.makePublic();
-
-          res.locals.file = { url: `${fileName}` };
-          return next();
-        } catch (err) {
-          console.error(err);
-          res.locals.error = { status: 500, message: 'Something is wrong!', error: err };
-          return next();
+      // Choose where to save the files based on the environment
+      try {
+        if (process.env.DEV === 'true') {
+          await saveToLocal({ req, res, fieldName })
+        } else {
+          await saveToCloud(req, res, process.env.BUCKET_NAME as string)
         }
-      });
-
-      blobStream.end(req.file.buffer);
-    } catch (error) {
-      console.error(error);
-      res.locals.error = { status: 500, message: 'Something is wrong!', error: error };
-      return next();
-    }
-  });
-};
-
-const bucketRoute = (path: string) => {
-  if (path === '/api/v1/user/') return 'users/avatar';
-  if (path === '/api/v1/pet/') return 'pets';
-  return '';
-};
+        next()
+      } catch (error: any) {
+        handleError(res, error, 'Error saving the file.')
+      }
+    })
+  }
+}

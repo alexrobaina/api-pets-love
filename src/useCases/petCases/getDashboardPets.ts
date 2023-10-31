@@ -22,6 +22,8 @@ export const getDashboardPets = async (req: Request, res: Response) => {
   query = filterBasedOnRole(query, user)
   query = addFiltersToQuery(query, filter)
 
+  query.where.createdBy = user?.id
+
   try {
     if (user?.role === ROLES.VOLUNTEER) {
       const volunteerQuery = buildVolunteerQuery(user, filter)
