@@ -15,10 +15,10 @@ export const create = async (req: Request, res: Response) => {
       ...req.body,
     })
 
-    if (res.locals.file?.images.url)
-      cleanedData.images = [res.locals.file.images.url]
-    if (res.locals.file?.images.urls)
-      cleanedData.images = res.locals.file.images.urls
+    if (res.locals.file?.newImages?.url)
+      cleanedData.images = [res.locals.file.newImages?.url]
+    if (res.locals.file?.newImages?.urls)
+      cleanedData.images = res.locals.file.newImages?.urls
 
     if (cleanedData.adoptedBy) cleanedData.adopted = true
 
@@ -52,8 +52,6 @@ export const create = async (req: Request, res: Response) => {
     const pet = await prisma.pet.create({
       data,
     })
-
-    console.log(catVaccines)
 
     if (cleanedData.category === 'dog') {
       dogVaccines.map(async (vaccine) => {
@@ -119,6 +117,8 @@ const cleanData = (obj: Record<string, any>): Record<string, any> => {
   for (let [key, value] of Object.entries(obj)) {
     if (value == null || value === '') continue
     if (key === 'qrCodeImage') continue
+    if (key === 'string') continue
+    if (key === 'newImages') continue
 
     newObj[key] =
       typeof value === 'object' && !Array.isArray(value)

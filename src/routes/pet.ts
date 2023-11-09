@@ -3,30 +3,31 @@ import {
   create,
   getPet,
   getPets,
+  update,
   deletePet,
   getPetsUser,
   getDashboardPets,
 } from '../useCases/petCases/petController'
 import { verifyToken } from '../middlewares/auth'
 import { createGoogleCloudUploader } from '../middlewares/googleCloudUploader'
-// import { googleCloudUploader } from '../middlewares/googleCloudUploader'\
 
-const googleCloudUploade = createGoogleCloudUploader('images')
-// const qrCodeGoogleCloudUploade = createGoogleCloudUploader('qrCode')
+const uploadImagesCreationPet = createGoogleCloudUploader('newImages')
+const uploadImagesUpdatePet = createGoogleCloudUploader('newImages')
 
 const router = express.Router()
 
-router.post('/pets', [verifyToken, googleCloudUploade], create) // POST PET
+router.post('/pets', [verifyToken, uploadImagesCreationPet], create) // CREATE PET
 
-router.get('/pets', getPets) // GET PETS
+router.put('/pets/:petId', [verifyToken, uploadImagesUpdatePet], update) // UPDATE PET
 
-router.get('/dashboard/pets', [verifyToken], getDashboardPets) // GET PETS
+router.get('/pets', getPets) // GET ALL PETS
 
-// This route need verify and put in user file
+router.get('/dashboard/pets', [verifyToken], getDashboardPets) // GET PETS FOR DASHBOARD
+
 router.get('/pets/petsUser', getPetsUser) // GET PETS
 
-router.get('/pets/:petId', getPet) // GET PET
+router.get('/pets/:petId', getPet) // GET PET BY ID
 
-router.delete('/pets/:petId', [verifyToken], deletePet) // DELETE PETS
+router.delete('/pets/:petId', [verifyToken], deletePet) // DELETE PETS BY ID
 
 export default router
