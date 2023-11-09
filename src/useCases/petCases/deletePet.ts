@@ -14,6 +14,10 @@ export const deletePet = async (req: Request, res: Response) => {
       where: { petId: petId as string },
     })
 
+    await prisma.medicalRecord.deleteMany({
+      where: { petId: petId as string },
+    })
+
     if (pet?.createdBy !== (req.user as any)?.id)
       return res.status(401).json({
         ok: false,

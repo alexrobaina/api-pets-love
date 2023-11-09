@@ -26,7 +26,6 @@ export const createGoogleCloudUploader = (fieldName: string) => {
       if (err) {
         return handleError(res, err, 'Something is wrong with the file upload!')
       }
-      console.log(req.files)
 
       // If no files were uploaded, continue with the next middleware
       if (!req.files || req.files.length === 0) {
