@@ -113,6 +113,7 @@ export const getPet = async (req: Request, res: Response) => {
           id: true,
           status: true,
           Vaccine: true,
+          files: true,
         },
       },
       MedicalRecord: {

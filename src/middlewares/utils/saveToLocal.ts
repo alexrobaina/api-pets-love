@@ -34,14 +34,19 @@ export const saveToLocal = async ({
 
   const urls: string[] = []
   for (const file of req.files) {
-    const uniqueName = `${Date.now()}-${file.originalname}`
+    const uniqueName = `${Date.now()}-pets-love`
     const localFilePath = path.join(uploadsDir, uniqueName)
 
     try {
       await fs.writeFile(localFilePath, file.buffer)
       urls.push(uniqueName)
     } catch (error: any) {
-      handleError(res, error, 'Failed to save the image locally.')
+      handleError({
+        res,
+        error,
+        status: 500,
+        message: 'Failed to save the image locally.',
+      })
     }
   }
 

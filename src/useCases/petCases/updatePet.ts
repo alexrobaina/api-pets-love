@@ -15,9 +15,25 @@ export const update = async (req: Request, res: Response) => {
     delete req.body.newImages
     delete req.body.units
 
-    const { deletedUrls, notDeletedUrls } = splitImagesByDeleted(
-      JSON.parse(req.body.images),
-    )
+    const imagesJson = req.body.images // Get the 'images' field from the request body
+    if (!imagesJson) {
+      return res.status(400).json({
+        ok: false,
+        message: 'The "images" field is missing in the request body.',
+      })
+    }
+
+    let images
+    try {
+      images = JSON.parse(imagesJson) // Parse the 'images' field as JSON
+    } catch (error) {
+      return res.status(400).json({
+        ok: false,
+        message: 'The "images" field is not a valid JSON string.',
+      })
+    }
+
+    const { deletedUrls, notDeletedUrls } = splitImagesByDeleted(images)
 
     if (deletedUrls.length > 0) {
       googleCloudDeleted(deletedUrls)
