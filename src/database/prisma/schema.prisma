@@ -90,6 +90,7 @@ model PetVaccine {
   status    VaccineStatus @default(PENDING)
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
+  files     String[]
 
   Pet     Pet     @relation(fields: [petId], references: [id])
   Vaccine Vaccine @relation(fields: [vaccineId], references: [id])

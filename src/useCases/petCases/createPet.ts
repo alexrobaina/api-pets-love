@@ -115,7 +115,8 @@ const cleanData = (obj: Record<string, any>): Record<string, any> => {
   const newObj: Record<string, any> = {}
 
   for (let [key, value] of Object.entries(obj)) {
-    if (value == null || value === '') continue
+    if (value === '' || value === null || value === undefined) continue
+    if (key === 'images') if (value == '{}') continue
     if (key === 'qrCodeImage') continue
     if (key === 'string') continue
     if (key === 'newImages') continue

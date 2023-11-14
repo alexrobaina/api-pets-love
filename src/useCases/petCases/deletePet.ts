@@ -1,6 +1,7 @@
 import { Response, Request } from 'express'
 import { SOMETHING_IS_WRONG, SUCCESS_RESPONSE } from '../../constants/constants'
 import { prisma } from '../../database/prisma'
+import { googleCloudDeleted } from '../../services/googleCloudDeleted'
 
 export const deletePet = async (req: Request, res: Response) => {
   try {
@@ -9,6 +10,19 @@ export const deletePet = async (req: Request, res: Response) => {
     const pet = await prisma.pet.findUnique({
       where: { id: petId as string },
     })
+
+    if (pet?.images?.length ?? 0 > 0) googleCloudDeleted(pet?.images || [])
+
+    const petVaccine = await prisma.petVaccine.findMany({
+      where: { petId: petId as string },
+    })
+
+    petVaccine?.forEach((vaccine) => {
+      if (vaccine?.files?.length ?? 0 > 0)
+        googleCloudDeleted(vaccine?.files || [])
+    })
+
+    googleCloudDeleted(pet?.qrCode as string)
 
     await prisma.petVaccine.deleteMany({
       where: { petId: petId as string },

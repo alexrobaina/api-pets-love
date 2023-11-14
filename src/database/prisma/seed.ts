@@ -1,6 +1,6 @@
 import { PrismaClient, VaccineStatus } from '@prisma/client'
 import { createPets } from './utils/createPets'
-import { createVaccines } from './utils/createVaccunes'
+import { createVaccines } from './utils/createVaccines'
 import { createUsers } from './utils/createUsers'
 
 const prisma = new PrismaClient()
