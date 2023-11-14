@@ -29,6 +29,7 @@ model User {
   ShelterPets          Pet[]                  @relation("ShelterPets")
   PetsCaredByVolunteer PetsCaredByVolunteer[]
   MedicalRecord        MedicalRecord[]
+  Pet                  Pet[]
 }
 
 model Location {
@@ -65,6 +66,8 @@ model Pet {
   adoptedBy            String? // Foreign Key for Adopter
   shelterId            String? // Foreign Key for Shelter
   createdBy            String? // Foreign Key for Volunteer
+  vetId                String? // Foreign Key for Vet
+  Vet                  User?                  @relation(fields: [vetId], references: [id])
   location             Location?              @relation(fields: [locationId], references: [id])
   Adopter              User?                  @relation(name: "AdoptedPets", fields: [adoptedBy], references: [id])
   Shelter              User?                  @relation(name: "ShelterPets", fields: [shelterId], references: [id])

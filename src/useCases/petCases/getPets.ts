@@ -116,6 +116,17 @@ export const getPet = async (req: Request, res: Response) => {
           files: true,
         },
       },
+      Vet: {
+        select: {
+          id: true,
+          username: true,
+          image: true,
+          firstName: true,
+          description: true,
+          location: true,
+          socialMedia: true,
+        },
+      },
       MedicalRecord: {
         select: {
           description: true,
