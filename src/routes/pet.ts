@@ -7,12 +7,17 @@ import {
   deletePet,
   getPetsUser,
   getDashboardPets,
+  deleteMedicalRecord,
+  updateMedicalRecord,
 } from '../useCases/petCases/petController'
 import { verifyToken } from '../middlewares/auth'
 import { createGoogleCloudUploader } from '../middlewares/googleCloudUploader'
+import { createMedicalRecord } from '../useCases/petCases/createMedicalRecord'
+import { getMedicalRecord } from '../useCases/petCases/getMedicalRecord'
 
 const uploadImagesCreationPet = createGoogleCloudUploader('newImages')
 const uploadImagesUpdatePet = createGoogleCloudUploader('newImages')
+const uploadImagesMedicalRecord = createGoogleCloudUploader('newAttachments')
 
 const router = express.Router()
 
@@ -25,6 +30,22 @@ router.get('/pets', getPets) // GET ALL PETS
 router.get('/dashboard/pets', [verifyToken], getDashboardPets) // GET PETS FOR DASHBOARD
 
 router.get('/pets/petsUser', getPetsUser) // GET PETS
+
+router.post(
+  '/pets/medicalRecord',
+  [verifyToken, uploadImagesMedicalRecord],
+  createMedicalRecord,
+) // CREATE PET MEDICAL RECORD
+
+router.get('/pets/medicalRecord/:id', getMedicalRecord) // GET MEDICAL RECORD
+
+router.put(
+  '/pets/medicalRecord/:id',
+  [verifyToken, uploadImagesMedicalRecord],
+  updateMedicalRecord,
+)
+
+router.delete('/pets/medicalRecord/:id', [verifyToken], deleteMedicalRecord)
 
 router.get('/pets/:petId', getPet) // GET PET BY ID
 

@@ -1,7 +1,10 @@
-import { Request, Response, query } from 'express'
-import { SUCCESS_RESPONSE, SOMETHING_IS_WRONG } from '../../constants/constants'
+import {
+  SOMETHING_IS_WRONG,
+  SUCCESS_RESPONSE,
+} from './../../constants/constants'
+import { Request, Response } from 'express'
+
 import { prisma } from '../../database/prisma'
-import { parse } from 'path'
 
 //=====================================
 //        READ LIST PETS = GET
@@ -109,6 +112,7 @@ export const getPet = async (req: Request, res: Response) => {
         },
       },
       PetVaccine: {
+        orderBy: { createdAt: 'desc' },
         select: {
           id: true,
           status: true,
@@ -134,7 +138,6 @@ export const getPet = async (req: Request, res: Response) => {
           date: true,
           diagnosis: true,
           treatment: true,
-          medications: true,
           id: true,
           clinicName: true,
           createdAt: true,

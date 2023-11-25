@@ -118,7 +118,6 @@ model MedicalRecord {
   description      String // Brief description or reason for the visit/appointment
   diagnosis        String? // Diagnosis made by the veterinarian
   treatment        String? // Treatment provided or prescribed
-  medications      String[] // List of medications prescribed
   followUpRequired Boolean   @default(false)
   followUpDate     DateTime? // Scheduled date for follow-up, if required
   vetId            String? // Foreign key for the veterinarian

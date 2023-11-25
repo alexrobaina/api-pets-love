@@ -25,7 +25,7 @@ export const getDashboardPets = async (req: Request, res: Response) => {
   query.where.createdBy = user?.id
 
   if (!user?.role) {
-    return res.status(401).json({
+    return res.status(403).json({
       ok: false,
       message: 'User has no role',
     })
