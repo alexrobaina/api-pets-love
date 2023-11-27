@@ -73,14 +73,13 @@ const cleanData = (obj: Record<string, any>): Record<string, any> => {
   const newObj: Record<string, any> = {}
 
   for (let [key, value] of Object.entries(obj)) {
-    if (
-      value == null ||
-      value === '' ||
-      key === 'id' ||
-      key === 'followUpRequired' ||
-      key === 'followUpDate'
-    )
+    if (key === 'id' || key === 'followUpRequired' || key === 'followUpDate')
       continue
+
+    if (key === 'vetId' && value === 'null') {
+      newObj[key] = null
+      continue
+    }
 
     newObj[key] =
       typeof value === 'object' && !Array.isArray(value)
@@ -90,6 +89,7 @@ const cleanData = (obj: Record<string, any>): Record<string, any> => {
 
   if (newObj.newAttachments) delete newObj.newAttachments
   if (newObj.deleteAttachments) delete newObj.deleteAttachments
+  console.log(1, newObj)
 
   return newObj
 }
