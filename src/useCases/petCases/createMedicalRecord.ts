@@ -8,8 +8,6 @@ import { prisma } from '../../database/prisma'
 
 export const createMedicalRecord = async (req: Request, res: Response) => {
   try {
-    console.log('req.body', req.body)
-
     const cleanedData = cleanData({
       ...req.body,
     })
@@ -45,7 +43,13 @@ const cleanData = (obj: Record<string, any>): Record<string, any> => {
   const newObj: Record<string, any> = {}
 
   for (let [key, value] of Object.entries(obj)) {
-    if (value === '' || value === null || value === undefined) continue
+    if (
+      value === '' ||
+      value === null ||
+      value === 'null' ||
+      value === undefined
+    )
+      continue
     if (key === 'attachments') continue
     if (key === 'newAttachments') continue
 
