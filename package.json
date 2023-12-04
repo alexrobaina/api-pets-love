@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "tsc-watch --onSuccess \"node dist/index.js\" "
+    "dev": "tsc-watch --onSuccess \"node dist/index.js\" ",
+    "prisma:migrate": "npx prisma migrate dev --preview-feature"
   },
   "keywords": [],
   "author": "alex-robaina",
