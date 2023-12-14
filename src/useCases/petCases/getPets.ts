@@ -12,15 +12,14 @@ import { prisma } from '../../database/prisma'
 
 export const getPets = async (req: Request, res: Response) => {
   const filter = req.query as {
-    gender: string
-    adopted: string
-    searchByName: string
-    category?: string
     page?: string
     take?: string
-    userId: string
-    adoptedBy: string
-    shelterId?: string
+    city?: string
+    gender: string
+    adopted: string
+    country?: string
+    category?: string
+    searchByName: string
   }
 
   const itemsPerPage = 10
@@ -44,16 +43,25 @@ export const getPets = async (req: Request, res: Response) => {
           location: true,
         },
       },
+      location: true,
     },
   }
 
   if (filter.category) query.where.category = filter.category
-  if (filter.shelterId) query.where.shelterId = filter.shelterId
-  if (filter.adoptedBy) query.where.adoptedBy = filter.adoptedBy
   if (filter.gender) query.where.gender = filter.gender
   if (filter.adopted) query.where.adopted = filter.adopted === 'true'
   if (filter.searchByName) {
     query.where.name = { contains: filter.searchByName }
+  }
+
+  if (filter.country || filter.city) {
+    query.where.location = {}
+    if (filter.city) {
+      query.where.location.city = filter.city
+    }
+    if (filter.country) {
+      query.where.location.country = filter.country
+    }
   }
 
   try {

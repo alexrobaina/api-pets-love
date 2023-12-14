@@ -63,7 +63,7 @@ model Pet {
   createdAt            DateTime               @default(now())
   updatedAt            DateTime               @updatedAt
   qrCode               String?
-  adoptedBy            String? // Foreign Key for Adopter
+  adoptedBy            String? // Foreign Key for A dopter
   shelterId            String? // Foreign Key for Shelter
   createdBy            String? // Foreign Key for Volunteer
   vetId                String? // Foreign Key for Vet

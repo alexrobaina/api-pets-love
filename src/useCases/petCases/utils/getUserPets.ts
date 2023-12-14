@@ -29,7 +29,9 @@ interface User {
 export const buildBaseQuery = (
   page: string,
 ): {
-  where: {}
+  where: {
+    OR: {}
+  }
   orderBy: { createdAt: string }
   skip: number
   take: number
@@ -42,9 +44,12 @@ export const buildBaseQuery = (
         location: boolean
       }
     }
+    location: boolean
   }
 } => ({
-  where: {},
+  where: {
+    OR: [],
+  },
   orderBy: { createdAt: 'desc' },
   skip: (parseInt(page || '1') - 1) * ITEMS_PER_PAGE,
   take: ITEMS_PER_PAGE,
@@ -57,15 +62,25 @@ export const buildBaseQuery = (
         location: true,
       },
     },
+    location: true,
   },
 })
 
 export const filterBasedOnRole = (
-  query: { where: { shelterId: string; adoptedBy: string } },
+  query: {
+    where: {
+      shelterId: string
+      adoptedBy: string
+      OR: any[]
+    }
+  },
   user: User | null,
 ) => {
-  if (user?.role === ROLES.SHELTER) query.where.shelterId = user.id || ''
-  if (user?.role === ROLES.ADOPTER) query.where.adoptedBy = user.id || ''
+  if (user?.role === ROLES.ADOPTER) query.where.OR.push({ adoptedBy: user.id })
+  if (user?.role === ROLES.SHELTER) query.where.OR.push({ shelterId: user.id })
+  if (user?.role === ROLES.VET) query.where.OR.push({ vetId: user.id })
+  if (user?.role) query.where.OR.push({ createdBy: user.id })
+
   return query
 }
 

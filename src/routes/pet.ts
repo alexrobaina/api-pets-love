@@ -5,8 +5,7 @@ import {
   getPets,
   update,
   deletePet,
-  getPetsUser,
-  getDashboardPets,
+  getUserPets,
   deleteMedicalRecord,
   updateMedicalRecord,
 } from '../useCases/petCases/petController'
@@ -25,11 +24,12 @@ router.post('/pets', [verifyToken, uploadImagesCreationPet], create) // CREATE P
 
 router.put('/pets/:petId', [verifyToken, uploadImagesUpdatePet], update) // UPDATE PET
 
-router.get('/pets', getPets) // GET ALL PETS
+router.get('/pets', getPets) // GET PETS
 
-router.get('/dashboard/pets', [verifyToken], getDashboardPets) // GET PETS FOR DASHBOARD
+// this route is for calculate the total of pets for the dashboard and another things
+// router.get('/dashboard/pets', [verifyToken], getDashboardPets) // GET PETS FOR DASHBOARD
 
-router.get('/pets/petsUser', getPetsUser) // GET PETS
+router.get('/pets/user', getUserPets) // GET PETS
 
 router.post(
   '/pets/medicalRecord',

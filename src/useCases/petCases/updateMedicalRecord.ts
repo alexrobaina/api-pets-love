@@ -76,6 +76,21 @@ const cleanData = (obj: Record<string, any>): Record<string, any> => {
     if (key === 'id' || key === 'followUpRequired' || key === 'followUpDate')
       continue
 
+    if (
+      value === '' ||
+      value === null ||
+      value === 'null' ||
+      value === undefined
+    ) {
+      newObj[key] = null
+      continue
+    }
+
+    if (key === 'vetId' && value === 'null') {
+      newObj[key] = null
+      continue
+    }
+
     if (key === 'vetId' && value === 'null') {
       newObj[key] = null
       continue
