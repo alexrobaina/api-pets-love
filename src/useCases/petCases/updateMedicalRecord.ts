@@ -91,6 +91,11 @@ const cleanData = (obj: Record<string, any>): Record<string, any> => {
       continue
     }
 
+    if (key === 'vetId' && value === 'null') {
+      newObj[key] = null
+      continue
+    }
+
     newObj[key] =
       typeof value === 'object' && !Array.isArray(value)
         ? cleanData(value)
