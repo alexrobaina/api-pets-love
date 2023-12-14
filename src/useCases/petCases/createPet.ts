@@ -120,6 +120,7 @@ const cleanData = (obj: Record<string, any>): Record<string, any> => {
     if (key === 'qrCodeImage') continue
     if (key === 'string') continue
     if (key === 'newImages') continue
+    if (key === 'name') value = value.toLowerCase()
 
     newObj[key] =
       typeof value === 'object' && !Array.isArray(value)

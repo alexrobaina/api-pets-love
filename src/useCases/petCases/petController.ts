@@ -1,8 +1,7 @@
 import { create } from './createPet'
 import { getPets, getPet } from './getPets'
 import { update } from './updatePet'
-import { getPetsUser } from './getPetsUser'
-import { getDashboardPets } from './getDashboardPets'
+import { getUserPets } from './getUserPets'
 import { deletePet } from './deletePet'
 import { updateMedicalRecord } from './updateMedicalRecord'
 import { deleteMedicalRecord } from './deleteMedicalRecord'
@@ -13,8 +12,7 @@ export {
   update,
   getPets,
   deletePet,
-  getPetsUser,
-  getDashboardPets,
+  getUserPets,
   deleteMedicalRecord,
   updateMedicalRecord,
 }

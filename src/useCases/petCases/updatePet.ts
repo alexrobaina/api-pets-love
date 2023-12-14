@@ -94,20 +94,31 @@ const cleanData = (obj: Record<string, any>): Record<string, any> => {
   const newObj: Record<string, any> = {}
 
   for (let [key, value] of Object.entries(obj)) {
-    if (value == null || value === '') continue
+    // Check for string 'null' in specific keys
+    if (
+      (key === 'adoptedBy' || key === 'vetId' || key === 'shelterId') &&
+      value === 'null'
+    ) {
+      value = null
+    } else if (value === '') {
+      // Skip empty string values
+      continue
+    } else if (typeof value === 'object' && !Array.isArray(value)) {
+      // Recursively clean nested objects
+      value = cleanData(value)
+    }
 
-    newObj[key] =
-      typeof value === 'object' && !Array.isArray(value)
-        ? cleanData(value)
-        : value
-
+    // Handle the images key separately if needed
     if (key === 'images') {
-      newObj[key] = []
+      newObj[key] = [] // Assuming you want to reset images to an empty array
+    } else {
+      newObj[key] = value
     }
   }
 
-  if (newObj.newImages) delete newObj.newImages
-  if (newObj.deleteFiles) delete newObj.deleteFiles
+  // Delete keys as needed
+  delete newObj.newImages
+  delete newObj.deleteFiles
 
   return newObj
 }
