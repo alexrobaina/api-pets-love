@@ -1,5 +1,5 @@
 # Build stage
-FROM node:18
+FROM node:18 as build-stage
 
 WORKDIR /usr/src/app
 
@@ -34,4 +34,4 @@ COPY --from=build-stage /usr/src/app/dist ./dist
 EXPOSE 3011
 
 # Command to run the app
-CMD [ "node", "dist/index.js" ]
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]
