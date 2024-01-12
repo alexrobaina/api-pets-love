@@ -9,11 +9,15 @@ Api documentation:
 
 - Express.js
 - Typescript
-- mongoose.
+- PostgreSQL.
 - bcrypt.
 - multer.
-- aws-sdk.
+- gcloud.
 - passport-jwt.
+
+
+## This documentation is older. We use differentes tecnologies and Docker. 
+Sorry, we are working on that right now. 
 
 ## How to run this project in you localhost?
 
