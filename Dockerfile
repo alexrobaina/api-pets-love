@@ -1,25 +1,26 @@
 # Build stage
-FROM node:18 as build-stage
+FROM node:20-buster-slim
 
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+# Copy package.json and yarn.lock
+COPY package.json yarn.lock ./
 
 # Install dependencies
 RUN yarn install
 
-# Copy Prisma schema and generate Prisma Client
-COPY src/database/prisma ./src/database/prisma
-RUN npx prisma generate
-
-# Copy the rest of your application
+# Copy the entire application
 COPY . .
+
+# Generate Prisma client
+RUN npx prisma generate
 
 # Build the application
 RUN yarn build
-COPY src/database/prisma/schema.prisma dist/database/prisma/schema.prisma
-COPY src/database/prisma/migrations dist/database/prisma/migrations
+
+# Copy Prisma schema and migrations
+COPY src/database/prisma/schema.prisma ./prisma/schema.prisma
+COPY src/database/prisma/migrations ./prisma/migrations
 
 # Production stage
 FROM node:alpine
@@ -34,4 +35,5 @@ COPY --from=build-stage /usr/src/app/dist ./dist
 EXPOSE 3011
 
 # Command to run the app
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy --schema=./prisma/schema.prisma && node dist/index.js"]
+

@@ -1,0 +1,54 @@
+# Build stage
+FROM node:18-buster-slim AS build-stage
+
+WORKDIR /usr/src/app
+
+RUN echo "Checking for libssl..." && ldconfig -p | grep libssl.so.1.1 || echo "libssl.so.1.1 not found."
+
+# Install OpenSSL if not found (replace "apt-get" with your package manager if needed)
+RUN apt-get update -y && apt-get install -y libssl1.1 libssl-dev 
+
+# Copy the entire application
+COPY . .
+
+# Update package list and install OpenSSL libraries and the openssl package
+RUN apt-get update -y \
+    && apt-get install -y libssl1.1 libssl-dev openssl \
+    && echo "Checking for libssl..." && ldconfig -p | grep libssl.so.1.1 || echo "libssl.so.1.1 not found."
+
+# Optionally, set OPENSSL_LIBRARY_PATH if required by your application
+
+# Verify openssl version to ensure the package is correctly installed
+RUN openssl version
+RUN apt list --installed | grep openssl
+RUN find / -name "libssl.so*"
+
+# Copy package.json and yarn.lock
+COPY package.json yarn.lock ./
+
+# Install dependencies
+RUN yarn cache clean && yarn install --verbose
+
+RUN yarn global add prisma@3.4.0
+
+# Generate Prisma client
+RUN npx prisma generate --schema ./src/database/prisma/schema.prisma
+
+# Build the application
+RUN yarn build
+
+# Production stage
+FROM node:18-buster-slim
+WORKDIR /usr/src/app
+
+# Copy built node modules and compiled code
+COPY --from=build-stage /usr/src/app/node_modules ./node_modules
+COPY --from=build-stage /usr/src/app/dist ./dist
+COPY --from=build-stage /usr/src/app/src/database/prisma ./src/database/prisma
+
+# Expose the port the app runs on
+EXPOSE 3011
+
+# Command to run the app
+CMD ["sh", "-c", "npx prisma migrate deploy --schema=./src/database/prisma/schema.prisma && node dist/index.js"]
+
