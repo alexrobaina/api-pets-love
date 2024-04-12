@@ -2,7 +2,6 @@ import express from 'express'
 // morgan sirve para ver las peticiones a la api cuando esta corriendo el servidor en la consola
 import morgan from 'morgan'
 import dotenv from 'dotenv'
-// sirve para comunicarnos con otros tipos de servidores de desarrollo
 import cors from 'cors'
 import passport from 'passport'
 import passportMiddleware from './middlewares/passport'
@@ -18,15 +17,17 @@ const port = config.PORT
 // settings
 app.set('port', port)
 
-// middleware
+const uploadsDir = process.env.UPLOAD_DIR || 'uploads'; 
 
 app.use(morgan('dev'))
-app.use(morgan('dev'))
-app.use(cors())
+
+app.use(cors({
+  origin: 'http://frontend' // O la URL de tu frontend
+}));
+
 app.use(express.json())
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+app.use('/uploads', express.static(path.join(__dirname, uploadsDir)))
 app.use(express.urlencoded({ extended: false }))
-// app.use(express.static(path.join(__dirname, 'uploads')));
 app.use(passport.initialize())
 passport.use(passportMiddleware)
 

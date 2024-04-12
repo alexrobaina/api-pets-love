@@ -61,8 +61,8 @@ const saveToLocalBuffer = async (
   buffer: Buffer,
   mimeType: string,
 ): Promise<string> => {
-  const uploadsDir = path.join(__dirname, '../', 'uploads')
-
+  const uploadsDir = process.env.UPLOAD_DIR || path.join(__dirname, '../..', 'uploads')
+  
   try {
     await fs.access(uploadsDir)
   } catch {

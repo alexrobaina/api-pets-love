@@ -24,7 +24,7 @@ export const saveToLocal = async ({
   res: any
   fieldName: string
 }) => {
-  const uploadsDir = path.join(__dirname, '../..', 'uploads')
+  const uploadsDir = process.env.UPLOAD_DIR || path.join(__dirname, '../..', 'uploads')
 
   try {
     await fs.access(uploadsDir)
