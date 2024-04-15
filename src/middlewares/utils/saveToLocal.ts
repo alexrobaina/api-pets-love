@@ -15,6 +15,17 @@ declare global {
   }
 }
 
+const bucketRoute = (originalUrl: string) => {
+  if (originalUrl.includes('/api/v1/pets')) {
+    return 'pets';
+  } else if (originalUrl.includes('/api/v1/user')) {
+    return 'users/avatar'; // Assuming you want to maintain this more specific path for users
+  } else if (originalUrl.includes('qrCode')) {
+    return 'qrCode';
+  }
+  return '';
+}
+
 export const saveToLocal = async ({
   req,
   res,
@@ -24,7 +35,8 @@ export const saveToLocal = async ({
   res: any
   fieldName: string
 }) => {
-  const uploadsDir = process.env.UPLOAD_DIR || path.join(__dirname, '../..', 'uploads')
+  
+  const uploadsDir = process.env.DEV === 'true' ? path.join(__dirname, '../..', `uploads/${bucketRoute(req.originalUrl)}`) : `${process.env.UPLOAD_DIR}/${bucketRoute(req.originalUrl)}` || 'uploads'
 
   try {
     await fs.access(uploadsDir)

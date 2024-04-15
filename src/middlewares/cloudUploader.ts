@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import Multer from 'multer'
-import sharp from 'sharp' // Import sharp for image resizing
 import { saveToLocal } from './utils/saveToLocal'
-import { saveToCloud } from './utils/saveToCloud'
 import { handleError } from './utils/handleError'
 
 const multerMemoryStorage = Multer({
@@ -17,7 +15,7 @@ const multerMemoryStorage = Multer({
  */
 // ... (other code)
 
-export const createGoogleCloudUploader = (fieldName: string) => {
+export const createCloudUploader = (fieldName: string) => {
   // Return the middleware function
   return (req: Request, res: Response, next: NextFunction) => {
     // Check if file size exceeds the limits
@@ -51,14 +49,9 @@ export const createGoogleCloudUploader = (fieldName: string) => {
       if (!req.files || req.files.length === 0) {
         return next()
       }
-
       // Choose where to save the files based on the environment
       try {
-        if (process.env.DEV === 'true') {
           await saveToLocal({ req, res, fieldName })
-        } else {
-          await saveToCloud(req, res, process.env.BUCKET_NAME as string)
-        }
         next()
       } catch (error: any) {
         handleError({

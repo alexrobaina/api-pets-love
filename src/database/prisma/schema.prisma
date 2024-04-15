@@ -3,7 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  seed     = "node --loader ts-node/esm src/database/prisma/seed.ts "
+  seed     = "ts-node --loader ts-node/esm src/database/prisma/seed.ts "
 }
 
 datasource db {

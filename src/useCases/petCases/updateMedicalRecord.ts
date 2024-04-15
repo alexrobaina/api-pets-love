@@ -104,7 +104,6 @@ const cleanData = (obj: Record<string, any>): Record<string, any> => {
 
   if (newObj.newAttachments) delete newObj.newAttachments
   if (newObj.deleteAttachments) delete newObj.deleteAttachments
-  console.log(1, newObj)
 
   return newObj
 }

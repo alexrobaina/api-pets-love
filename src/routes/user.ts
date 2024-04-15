@@ -6,10 +6,10 @@ import {
   updateUser,
   updateRole,
 } from '../useCases/userCases/userController'
-import { createGoogleCloudUploader } from '../middlewares/googleCloudUploader'
+import { createCloudUploader } from '../middlewares/cloudUploader'
 import { verifyToken } from '../middlewares/auth'
 
-const uploadImages = createGoogleCloudUploader('images')
+const uploadImages = createCloudUploader('images')
 
 const router = express.Router()
 

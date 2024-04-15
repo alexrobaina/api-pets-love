@@ -10,13 +10,13 @@ import {
   updateMedicalRecord,
 } from '../useCases/petCases/petController'
 import { verifyToken } from '../middlewares/auth'
-import { createGoogleCloudUploader } from '../middlewares/googleCloudUploader'
+import { createCloudUploader } from '../middlewares/cloudUploader'
 import { createMedicalRecord } from '../useCases/petCases/createMedicalRecord'
 import { getMedicalRecord } from '../useCases/petCases/getMedicalRecord'
 
-const uploadImagesCreationPet = createGoogleCloudUploader('newImages')
-const uploadImagesUpdatePet = createGoogleCloudUploader('newImages')
-const uploadImagesMedicalRecord = createGoogleCloudUploader('newAttachments')
+const uploadImagesCreationPet = createCloudUploader('newImages')
+const uploadImagesUpdatePet = createCloudUploader('newImages')
+const uploadImagesMedicalRecord = createCloudUploader('newAttachments')
 
 const router = express.Router()
 
