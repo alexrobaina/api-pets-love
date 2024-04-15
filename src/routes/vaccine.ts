@@ -1,10 +1,10 @@
 import express from 'express'
 import { getVaccine } from '../useCases/vaccineCase/vaccineController'
 import { update } from '../useCases/vaccineCase/update'
-import { createGoogleCloudUploader } from '../middlewares/googleCloudUploader'
+import { createCloudUploader } from '../middlewares/cloudUploader'
 import { deletePetVaccine } from '../useCases/vaccineCase/deletePetVaccine'
 
-const uploadImagesUpdatePetVaccine = createGoogleCloudUploader('files')
+const uploadImagesUpdatePetVaccine = createCloudUploader('files')
 
 const router = express.Router()
 

@@ -86,7 +86,7 @@ export const create = async (req: Request, res: Response) => {
       process.env.BUCKET_NAME || '',
       imageBuffer,
       'image/png',
-      '/api/v1/pets/',
+      'qrCode',
     )
 
     const petUpdated = await prisma.pet.update({

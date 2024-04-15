@@ -9,6 +9,8 @@ import routes from './routes'
 import path from 'path'
 import { config } from './config/config'
 
+const uploadsDir = process.env.DEV === 'true' ? 'uploads' : process.env.UPLOAD_DIR || 'uploads'; 
+
 // initializations
 const app = express()
 dotenv.config()
@@ -17,16 +19,16 @@ const port = config.PORT
 // settings
 app.set('port', port)
 
-const uploadsDir = process.env.UPLOAD_DIR || 'uploads'; 
-
 app.use(morgan('dev'))
 
 app.use(cors({
-  origin: 'http://frontend' // O la URL de tu frontend
+  origin: process.env.DEV === 'true' ? 'http://localhost:3000' : 'http://frontend' // O la URL de tu frontend
 }));
 
 app.use(express.json())
+
 app.use('/uploads', express.static(path.join(__dirname, uploadsDir)))
+
 app.use(express.urlencoded({ extended: false }))
 app.use(passport.initialize())
 passport.use(passportMiddleware)

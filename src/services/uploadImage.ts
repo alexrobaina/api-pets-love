@@ -12,11 +12,10 @@ export const uploadImage = async (
   mimeType: string,
   originalUrl: string,
 ): Promise<string> => {
-  if (process.env.DEV === 'true') {
-    return saveToLocalBuffer(buffer, mimeType)
-  } else {
-    return await saveToCloudBuffer(bucketName, buffer, mimeType, originalUrl)
-  }
+    return saveToLocalBuffer(buffer, originalUrl)
+
+    // Uncomment this code to save the image to the cloud
+    // return await saveToCloudBuffer(bucketName, buffer, mimeType, originalUrl)
 }
 
 const saveToCloudBuffer = async (
@@ -49,19 +48,23 @@ const saveToCloudBuffer = async (
   })
 }
 
-const bucketRoute = (path: string) => {
-  const routes: { [key: string]: string } = {
-    '/api/v1/user/': 'users/avatar',
-    '/api/v1/pets/': 'pets',
+const bucketRoute = (originalUrl: string) => {
+  if (originalUrl.includes('/api/v1/pets')) {
+    return 'pets';
+  } else if (originalUrl.includes('/api/v1/user')) {
+    return 'users/avatar'; // Assuming you want to maintain this more specific path for users
+  } else if (originalUrl.includes('qrCode')) {
+    return 'qrCode';
   }
-  return routes[path] || ''
+  return '';
 }
 
 const saveToLocalBuffer = async (
   buffer: Buffer,
-  mimeType: string,
+  originalUrl: string,
 ): Promise<string> => {
-  const uploadsDir = process.env.UPLOAD_DIR || path.join(__dirname, '../..', 'uploads')
+  
+  const uploadsDir = process.env.DEV === 'true' ? path.join(__dirname, '../', `uploads/${bucketRoute(originalUrl)}`) : `${process.env.UPLOAD_DIR}/${bucketRoute(originalUrl)}` || 'uploads'
   
   try {
     await fs.access(uploadsDir)
@@ -79,5 +82,3 @@ const saveToLocalBuffer = async (
     throw error
   }
 }
-
-// ... rest of the functions (handleError, bucketRoute) remains unchanged.
