@@ -58,6 +58,9 @@ export const update = async (req: Request, res: Response) => {
 
     newPet.images = notDeletedUrls
 
+    if (newPet.adoptedBy) newPet.adopted = true
+    if (!newPet.adoptedBy) newPet.adopted = false
+
     if (res.locals.file?.newImages?.url)
       newPet.images.push(res.locals.file.newImages.url)
     if (res.locals.file?.newImages?.urls)

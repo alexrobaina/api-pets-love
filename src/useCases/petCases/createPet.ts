@@ -33,6 +33,7 @@ export const create = async (req: Request, res: Response) => {
     }
 
     if (user?.role === ROLES.ADOPTER) {
+      cleanedData.adopted = true
       cleanedData.adoptedBy = user.id
     }
 
