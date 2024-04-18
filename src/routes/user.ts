@@ -20,7 +20,7 @@ router.put('/user/role', [verifyToken], updateRole) // CREATE USER
 // This route need verifyToke
 router.put('/user/', [verifyToken, uploadImages], updateUser) // UPDATE USER
 
-router.get('/users/', [verifyToken], getUsers) // GET USERS
+router.get('/users/', getUsers) // GET USERS
 
 router.get('/user/', getUser) // GET USER
 

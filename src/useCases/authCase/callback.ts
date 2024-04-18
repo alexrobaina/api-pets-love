@@ -50,6 +50,7 @@ export const googleAuth = async (req: Request, res: Response) => {
         httpOnly: true,
         sameSite: 'none',
       });
+      
       res.redirect(config.HOST + '/dashboard');
     }
 
