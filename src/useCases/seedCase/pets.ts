@@ -28,8 +28,7 @@ export const pets = async (_req: Request, res: Response) => {
 
     const category = ['dog', 'cat', 'bird']
     const gender = ['male', 'female']
-    const breed = ['Labrador', 'Siamese', 'Parakeet']
-    const age = ['Puppy', 'Young', 'Adult', 'Senior']
+    const age = ['puppy', 'young', 'adult', 'senior']
     const size = ['small', 'medium', 'large', 'Extra Large']
     const petNames = [
       'Bella',
@@ -68,7 +67,6 @@ export const pets = async (_req: Request, res: Response) => {
 
     for (let i = 0; i < 14; i++) {
       const randomTypeIndex = Math.floor(Math.random() * category.length)
-      const randomBreedIndex = Math.floor(Math.random() * breed.length)
       const randomAgeIndex = Math.floor(Math.random() * age.length)
       const randomGenderIndex = Math.floor(Math.random() * gender.length)
       const randomSizeIndex = Math.floor(Math.random() * size.length)
@@ -78,7 +76,6 @@ export const pets = async (_req: Request, res: Response) => {
         data: {
           name: petNames[randomPetNamesIndex],
           category: category[randomTypeIndex],
-          breed: breed[randomBreedIndex],
           age: age[randomAgeIndex],
           images: [petImages[i]], // Note: you should add 'image' field in your Prisma model
           gender: gender[randomGenderIndex],
