@@ -4,41 +4,39 @@ export const createVaccines = async () => {
   await prisma.vaccine.createMany({
     data: [
       {
-        name: 'FVRCP',
+        name: 'vaccine.cat.FVRCP.name',
         category: 'cat',
-        description:
-          'Feline Viral Rhinotracheitis, Calicivirus, and Panleukopenia',
+        description: 'vaccine.cat.FVRCP.description'  
       },
       {
-        name: 'Rabies',
+        name: 'vaccine.cat.rabies.name',
         category: 'cat',
-        description: 'Vaccine for Rabies virus',
+        description: 'vaccine.cat.rabies.description'
       },
       {
-        name: 'Feline Leukemia (FeLV)',
+        name: 'vaccine.cat.FeLV.name',
         category: 'cat',
-        description: 'Vaccine for Feline Leukemia Virus',
+        description: 'vaccine.cat.FeLV.description'
       },
       {
-        name: 'FIP',
+        name: 'vaccine.cat.FIP.name',
         category: 'cat',
-        description: 'Feline Infectious Peritonitis',
+        description: 'vaccine.cat.FIP.description'
       },
       {
-        name: 'Bordetella',
+        name: 'vaccine.cat.bordetella.name',
         category: 'cat',
-        description: 'Vaccine for Bordetella bronchiseptica',
+        description: 'vaccine.cat.bordetella.description'
       },
       {
-        name: 'Chlamydophila Felis',
+        name: 'vaccine.cat.chlamydophilaFelis.name',
         category: 'cat',
-        description:
-          'Vaccine for Chlamydophila (previously known as Chlamydia)',
+        description: 'vaccine.cat.chlamydophilaFelis.description'
       },
       {
-        name: 'FIV',
+        name: 'vaccine.cat.FIV.name',
         category: 'cat',
-        description: 'Feline Immunodeficiency Virus (not always recommended)',
+        description: 'vaccine.cat.FIV.description'
       },
     ],
   })
@@ -46,41 +44,39 @@ export const createVaccines = async () => {
   await prisma.vaccine.createMany({
     data: [
       {
-        name: 'DHPP',
+        name: 'vaccine.dog.DHPP.name',
         category: 'dog',
-        description: 'Distemper, Hepatitis, Parainfluenza, and Parvovirus',
+        description: 'vaccine.dog.DHPP.description'  
       },
       {
-        name: 'Rabies',
+        name: 'vaccine.dog.rabies.name',
         category: 'dog',
-        description: 'Vaccine for the Rabies virus',
+        description: 'vaccine.dog.rabies.description'
       },
       {
-        name: 'Leptospirosis',
+        name: 'vaccine.dog.leptospirosis.name',
         category: 'dog',
-        description: 'Vaccine for the Leptospira bacteria',
+        description: 'vaccine.dog.leptospirosis.description'
       },
       {
-        name: 'Bordetella',
+        name: 'vaccine.dog.bordetella.name',
         category: 'dog',
-        description: 'Kennel Cough or Bordetella bronchiseptica vaccine',
+        description: 'vaccine.dog.bordetella.description'
       },
       {
-        name: 'Lyme Disease',
+        name: 'vaccine.dog.lymeDisease.name',
         category: 'dog',
-        description:
-          'Vaccine for Borrelia burgdorferi, which causes Lyme disease',
+        description: 'vaccine.dog.lymeDisease.description'
       },
       {
-        name: 'Canine Influenza',
+        name: 'vaccine.dog.canineInfluenza.name',
         category: 'dog',
-        description: 'Vaccine for the dog flu',
+        description: 'vaccine.dog.canineInfluenza.description'
       },
       {
-        name: 'Coronavirus',
+        name: 'vaccine.dog.coronavirus.name',
         category: 'dog',
-        description:
-          'Vaccine for the canine coronavirus (not related to COVID-19)',
+        description: 'vaccine.dog.coronavirus.description'
       },
     ],
   })
