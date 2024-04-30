@@ -28,7 +28,7 @@
         "body-parser": "^1.19.2",
         "cors": "^2.8.5",
         "dotenv": "^8.2.0",
-        "express": "^4.17.1",
+        "express": "^4.19.2",
         "express-promise-router": "^4.0.1",
         "form-data": "^3.0.0",
         "googleapis": "^135.0.0",
