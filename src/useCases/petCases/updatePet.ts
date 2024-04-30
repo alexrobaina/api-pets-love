@@ -1,7 +1,7 @@
 import { Response, Request } from 'express'
 import { SOMETHING_IS_WRONG, SUCCESS_RESPONSE } from '../../constants/constants'
 import { prisma } from '../../database/prisma'
-import { googleCloudDeleted } from '../../services/googleCloudDeleted'
+import { deleteFiles } from '../../services/deleteFiles'
 
 //=====================================
 //       UPDATE Pet ID = PUT
@@ -36,7 +36,7 @@ export const update = async (req: Request, res: Response) => {
     const { deletedUrls, notDeletedUrls } = splitImagesByDeleted(images)
 
     if (deletedUrls.length > 0) {
-      googleCloudDeleted(deletedUrls)
+      deleteFiles(deletedUrls, req.originalUrl)
     }
 
     newPet = cleanData({
@@ -183,7 +183,7 @@ interface Image {
   isNew: boolean
 }
 
-const splitImagesByDeleted = (
+export const splitImagesByDeleted = (
   images: Image[],
 ): {
   deletedUrls: string[]

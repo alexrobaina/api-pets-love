@@ -34,6 +34,7 @@ const bucketRoute = (path: string) => {
   const routes: { [key: string]: string } = {
     '/api/v1/user/': 'users/avatar',
     '/api/v1/pets/': 'pets',
+    '/api/v1/petVaccine/': 'vaccine',
   }
   return routes[path] || ''
 }
