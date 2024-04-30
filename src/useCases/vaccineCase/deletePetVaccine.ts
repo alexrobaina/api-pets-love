@@ -1,7 +1,7 @@
 import { Response, Request } from 'express'
 import { SOMETHING_IS_WRONG, SUCCESS_RESPONSE } from '../../constants/constants'
 import { prisma } from '../../database/prisma'
-import { googleCloudDeleted } from '../../services/googleCloudDeleted'
+import { deleteFiles } from '../../services/deleteFiles'
 
 export const deletePetVaccine = async (req: Request, res: Response) => {
   const { id } = req.params
@@ -20,7 +20,7 @@ export const deletePetVaccine = async (req: Request, res: Response) => {
     }
 
     petVaccine[0]?.files.length > 0 &&
-      (await googleCloudDeleted(petVaccine[0]?.files))
+      (await deleteFiles(petVaccine[0]?.files, req.originalUrl))
 
     await prisma.petVaccine.delete({
       where: {

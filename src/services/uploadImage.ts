@@ -51,6 +51,8 @@ const saveToCloudBuffer = async (
 const bucketRoute = (originalUrl: string) => {
   if (originalUrl.includes('/api/v1/pets')) {
     return 'pets';
+  }  else if (originalUrl.includes('/api/v1/vaccines/petVaccine/')) {
+    return 'vaccines';
   } else if (originalUrl.includes('/api/v1/user')) {
     return 'users/avatar'; // Assuming you want to maintain this more specific path for users
   } else if (originalUrl.includes('qrCode')) {
@@ -58,6 +60,7 @@ const bucketRoute = (originalUrl: string) => {
   }
   return '';
 }
+
 
 const saveToLocalBuffer = async (
   buffer: Buffer,

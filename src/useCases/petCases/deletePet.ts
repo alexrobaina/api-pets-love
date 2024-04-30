@@ -1,7 +1,7 @@
 import { Response, Request } from 'express'
 import { SOMETHING_IS_WRONG, SUCCESS_RESPONSE } from '../../constants/constants'
 import { prisma } from '../../database/prisma'
-import { googleCloudDeleted } from '../../services/googleCloudDeleted'
+import { deleteFiles } from '../../services/deleteFiles'
 
 export const deletePet = async (req: Request, res: Response) => {
   try {
@@ -11,7 +11,7 @@ export const deletePet = async (req: Request, res: Response) => {
       where: { id: petId as string },
     })
 
-    if (pet?.images?.length ?? 0 > 0) googleCloudDeleted(pet?.images || [])
+    if (pet?.images?.length ?? 0 > 0) deleteFiles(pet?.images || [], req.originalUrl)
 
     const petVaccine = await prisma.petVaccine.findMany({
       where: { petId: petId as string },
@@ -19,10 +19,10 @@ export const deletePet = async (req: Request, res: Response) => {
 
     petVaccine?.forEach((vaccine) => {
       if (vaccine?.files?.length ?? 0 > 0)
-        googleCloudDeleted(vaccine?.files || [])
+        deleteFiles(vaccine?.files || [], req.originalUrl)
     })
 
-    googleCloudDeleted(pet?.qrCode as string)
+    deleteFiles(pet?.qrCode as string, 'qrCode')
 
     await prisma.petVaccine.deleteMany({
       where: { petId: petId as string },

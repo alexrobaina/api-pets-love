@@ -20,6 +20,8 @@ const bucketRoute = (originalUrl: string) => {
     return 'pets';
   } else if (originalUrl.includes('/api/v1/user')) {
     return 'users/avatar'; // Assuming you want to maintain this more specific path for users
+  } else if (originalUrl.includes('/api/v1/vaccines/petVaccine/')) {
+    return 'vaccines'; // Assuming you want to maintain this more specific path for users
   } else if (originalUrl.includes('qrCode')) {
     return 'qrCode';
   }
@@ -35,7 +37,6 @@ export const saveToLocal = async ({
   res: any
   fieldName: string
 }) => {
-  
   const uploadsDir = process.env.DEV === 'true' ? path.join(__dirname, '../..', `uploads/${bucketRoute(req.originalUrl)}`) : `${process.env.UPLOAD_DIR}/${bucketRoute(req.originalUrl)}` || 'uploads'
 
   try {

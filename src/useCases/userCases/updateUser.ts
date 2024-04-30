@@ -1,125 +1,75 @@
 import { Request, Response } from 'express'
-import { SUCCESS_RESPONSE, SOMETHING_IS_WRONG } from '../../constants/constants'
 import { prisma } from '../../database/prisma'
-import { googleCloudDeleted } from '../../services/googleCloudDeleted'
+import { deleteFiles } from '../../services/deleteFiles'
+import { SUCCESS_RESPONSE, SOMETHING_IS_WRONG } from '../../constants/constants'
 
 export const updateUser = async (req: Request, res: Response) => {
-  const { id, locationId, location, socialMedia } = req.body
-  const userToken: { id?: string } = req.user || ''
+  const { id, location, socialMedia } = req.body
 
-  // Fetch the existing user with social media data from the database
   const existingUser = await prisma.user.findUnique({
     where: { id },
-    select: { socialMedia: true },
-  })
+    include: { location: true },
+  });
 
-  if (id !== userToken.id) {
-    return res.status(401).json({ ok: false, message: 'Unauthorized' })
+  if (!existingUser) {
+    return res.status(404).json({ ok: false, message: 'User not found!' });
   }
 
-  if (!existingUser)
-    return res.status(404).json({ ok: false, message: 'User not found!' })
-
-  if (
-    req.body.deleteFiles &&
-    req.body.deleteFiles.includes('pets-love') &&
-    process.env.DEV !== 'true'
-  )
-    await googleCloudDeleted(req.body.deleteFiles)
-  delete req.body.deleteFiles
-
-  if (!id)
-    return res.status(400).json({ ok: false, message: 'User ID is required!' })
+  if (req.body.deleteFiles) {
+    await deleteFiles(req.body.deleteFiles, req.originalUrl);
+  }
 
   try {
-    let newLocation: typeof location
+    let updatedLocation: any
+    updatedLocation = JSON.parse(location);
+    if (updatedLocation.id && updatedLocation.city && updatedLocation.country) {
+      try {
+      } catch (error) {
+        return res.status(400).json({ ok: false, message: 'Invalid location format!' });
+      }
 
-    try {
-      newLocation =
-        typeof location === 'string' ? JSON.parse(location) : location
-    } catch (error) {
-      return res
-        .status(400)
-        .json({ ok: false, message: 'Invalid location format!' })
+      if (updatedLocation.id && updatedLocation.city && updatedLocation.country) {
+        await prisma.location.update({
+          where: { id: existingUser.locationId! },
+          data: updatedLocation,
+        });
+      } else {
+        const newLocation = await prisma.location.create({
+          data: updatedLocation,
+        });
+        existingUser.locationId = newLocation.id;
+      }
     }
 
-    // Merge the existing socialMedia with the new one, overriding only the provided fields
-    const existingSocialMedia =
-      typeof existingUser.socialMedia === 'object'
-        ? existingUser.socialMedia
-        : {}
-    const updatedSocialMedia = {
-      ...existingSocialMedia,
-      ...JSON.parse(socialMedia),
+
+    let userUpdateData: any = {
+      email: req.body.email || existingUser.email,
+      username: req.body.username || existingUser.username,
+      firstName: req.body.firstName || existingUser.firstName,
+      role: req.body.role || existingUser.role,
+      lastName: req.body.lastName || existingUser.lastName,
+      description: req.body.description || existingUser.description,
+      locationId: existingUser.locationId,
+      image: res.locals?.file?.images?.url ? res.locals.file.images.url : existingUser.image,
+    };
+
+    if (socialMedia) {
+      const parsedMedia = JSON.parse(socialMedia);
+      // Check if the parsed object is not an empty object
+      if (Object.keys(parsedMedia).length > 0) {
+        userUpdateData.socialMedia = parsedMedia;
+      }
     }
 
-    const updatedLocationId = await handleLocationUpdate(
-      locationId,
-      newLocation,
-    )
-    const cleanedData = cleanData({
-      ...req.body,
-      socialMedia: JSON.stringify(updatedSocialMedia),
-    })
 
-    if (res.locals.file) cleanedData.image = res.locals.file.images.url
-    const data = { ...cleanedData }
-
-    if (updatedLocationId) data.locationId = updatedLocationId
-
-    const user = await prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: { id },
-      data,
-    })
+      data: userUpdateData,
+    });
 
-    return res.status(200).json({ user, ok: true, message: SUCCESS_RESPONSE })
-  } catch (error) {
-    console.error(error)
-    return res
-      .status(500)
-      .json({ ok: false, message: SOMETHING_IS_WRONG, error })
+    return res.status(200).json({ user: updatedUser, ok: true, message: SUCCESS_RESPONSE });
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ ok: false, message: SOMETHING_IS_WRONG, error: error.message });
   }
-}
-
-const handleLocationUpdate = async (locationId: string, newLocation: any) => {
-  const isValidLocationData = validateLocationData(newLocation)
-
-  if (locationId && isValidLocationData) {
-    const existingLocation = await prisma.location.findUnique({
-      where: { id: locationId },
-    })
-    if (!existingLocation) throw new Error('Location not found')
-
-    if (JSON.stringify(newLocation) !== JSON.stringify(existingLocation)) {
-      const locationUpdated = await prisma.location.update({
-        where: { id: locationId },
-        data: newLocation,
-      })
-      return locationUpdated.id
-    }
-  } else if (isValidLocationData) {
-    const locationCreated = await prisma.location.create({ data: newLocation })
-    return locationCreated.id
-  }
-
-  return locationId
-}
-
-const validateLocationData = (location: any) =>
-  location && Object.values(location).every((val) => val !== '' && val !== 0)
-
-const cleanData = (obj: Record<string, any>): Record<string, any> => {
-  const newObj: Record<string, any> = {}
-
-  for (let [key, value] of Object.entries(obj)) {
-    if (key === 'location' || value == null || value === '') continue
-    if (key === 'socialMedia') value = JSON.parse(value)
-
-    newObj[key] =
-      typeof value === 'object' && !Array.isArray(value)
-        ? cleanData(value)
-        : value
-  }
-
-  return newObj
-}
+};

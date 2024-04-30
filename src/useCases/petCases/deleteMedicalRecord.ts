@@ -1,7 +1,7 @@
 import { Response, Request } from 'express'
 import { SOMETHING_IS_WRONG, SUCCESS_RESPONSE } from '../../constants/constants'
 import { prisma } from '../../database/prisma'
-import { googleCloudDeleted } from '../../services/googleCloudDeleted'
+import { deleteFiles } from '../../services/deleteFiles'
 
 export const deleteMedicalRecord = async (req: Request, res: Response) => {
   try {
@@ -18,7 +18,7 @@ export const deleteMedicalRecord = async (req: Request, res: Response) => {
       })
 
     if (medicalRecord?.attachments?.length ?? 0 > 0)
-      googleCloudDeleted(medicalRecord?.attachments || [])
+      deleteFiles(medicalRecord?.attachments || [], req.originalUrl)
 
     await prisma.medicalRecord.delete({
       where: { id },
