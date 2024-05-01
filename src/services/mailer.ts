@@ -1,4 +1,3 @@
-// Import nodemailer
 import * as nodemailer from 'nodemailer';
 
 // Create transporter using Gmail and your app password
