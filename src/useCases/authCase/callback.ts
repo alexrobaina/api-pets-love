@@ -43,22 +43,12 @@ export const googleAuth = async (req: Request, res: Response) => {
           image: newUser.data.picture,
         },
       });
-
-      const token = await createToken({ id: user.id, email: user.email });
-
-      res.cookie('token', token, {
-        httpOnly: true,
-        sameSite: 'none',
-      });
-      
-      res.redirect(config.HOST + '/dashboard');
     }
 
     const token = await createToken({ id: user.id, email: user.email });
 
     if (!res.headersSent) {
       res.cookie('token', token);
-
       res.redirect(config.HOST + '/dashboard');
     }
   } catch (error) {
