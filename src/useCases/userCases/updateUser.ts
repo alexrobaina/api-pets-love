@@ -22,9 +22,11 @@ export const updateUser = async (req: Request, res: Response) => {
   try {
     let updatedLocation: any
     updatedLocation = JSON.parse(location);
-    if (updatedLocation.id && updatedLocation.city && updatedLocation.country) {
+    if (updatedLocation?.id && updatedLocation.city && updatedLocation.country) {
       try {
       } catch (error) {
+        console.log(error);
+        
         return res.status(400).json({ ok: false, message: 'Invalid location format!' });
       }
 
@@ -53,14 +55,15 @@ export const updateUser = async (req: Request, res: Response) => {
       image: res.locals?.file?.images?.url ? res.locals.file.images.url : existingUser.image,
     };
 
-    if (socialMedia) {
+    console.log(1, socialMedia);
+    
+    if (socialMedia !== 'null') {
       const parsedMedia = JSON.parse(socialMedia);
       // Check if the parsed object is not an empty object
       if (Object.keys(parsedMedia).length > 0) {
         userUpdateData.socialMedia = parsedMedia;
       }
     }
-
 
     const updatedUser = await prisma.user.update({
       where: { id },
