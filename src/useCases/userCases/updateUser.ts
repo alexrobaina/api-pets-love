@@ -21,20 +21,18 @@ export const updateUser = async (req: Request, res: Response) => {
 
   try {
     let updatedLocation: any
-    updatedLocation = JSON.parse(location);
-    if (updatedLocation?.id && updatedLocation.city && updatedLocation.country) {
-      try {
-      } catch (error) {
-        console.log(error);
-        
-        return res.status(400).json({ ok: false, message: 'Invalid location format!' });
-      }
-
-      if (updatedLocation.id && updatedLocation.city && updatedLocation.country) {
-        await prisma.location.update({
-          where: { id: existingUser.locationId! },
-          data: updatedLocation,
-        });
+    if (location && typeof location === 'string') {
+      updatedLocation = JSON.parse(location);
+      if (updatedLocation?.id && updatedLocation.city && updatedLocation.country) {
+        try {
+          await prisma.location.update({
+            where: { id: existingUser.locationId! },
+            data: updatedLocation,
+          });
+        } catch (error) {
+          console.error(error);
+          return res.status(400).json({ ok: false, message: 'Invalid location format!' });
+        }
       } else {
         const newLocation = await prisma.location.create({
           data: updatedLocation,
@@ -43,23 +41,19 @@ export const updateUser = async (req: Request, res: Response) => {
       }
     }
 
-
     let userUpdateData: any = {
       email: req.body.email || existingUser.email,
-      username: req.body.username || existingUser.username,
-      firstName: req.body.firstName || existingUser.firstName,
-      role: req.body.role || existingUser.role,
-      lastName: req.body.lastName || existingUser.lastName,
-      description: req.body.description || existingUser.description,
+      username: req.body.username,
+      firstName: req.body.firstName,
+      role: req.body.role,
+      lastName: req.body.lastName,
+      description: req.body.description,
       locationId: existingUser.locationId,
       image: res.locals?.file?.images?.url ? res.locals.file.images.url : existingUser.image,
     };
 
-    console.log(1, socialMedia);
-    
     if (socialMedia !== 'null') {
       const parsedMedia = JSON.parse(socialMedia);
-      // Check if the parsed object is not an empty object
       if (Object.keys(parsedMedia).length > 0) {
         userUpdateData.socialMedia = parsedMedia;
       }

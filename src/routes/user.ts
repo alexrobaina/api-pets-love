@@ -8,6 +8,7 @@ import {
 } from '../useCases/userCases/userController'
 import { createCloudUploader } from '../middlewares/cloudUploader'
 import { verifyToken } from '../middlewares/auth'
+import { validateAndSanitizeUser } from '../middlewares/validations/validateAndSanitasing'
 
 const uploadImages = createCloudUploader('images')
 
@@ -18,7 +19,7 @@ router.post('/user/', create) // CREATE USER
 router.put('/user/role', [verifyToken], updateRole) // CREATE USER
 
 // This route need verifyToke
-router.put('/user/', [verifyToken, uploadImages], updateUser) // UPDATE USER
+router.put('/user/', verifyToken, uploadImages, updateUser) // UPDATE USER
 
 router.get('/users/', getUsers) // GET USERS
 
