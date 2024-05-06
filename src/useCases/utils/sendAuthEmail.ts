@@ -87,7 +87,7 @@ export async function sendAuthEmail(email: string, token: string, texts: {
   </html>
   `;
 
-  const subject = `${texts.subject} ${config.HOST}`;
+  const subject = `${texts.subject} Pet's Love`;
   const text = `${texts.hello}\n${texts.loginDescription}\n${loginUrl}\n${texts.warning}\n${texts.thanks}`;
 
   await mailer.send('alex@petslove.app', email, subject, text, html);
