@@ -41,6 +41,16 @@ export const buildBaseQuery = (
         id: boolean
         username: boolean
         image: boolean
+        email: boolean
+        location: boolean
+      }
+    }
+    Adopter: {
+      select: {
+        id: boolean
+        username: boolean
+        image: boolean
+        email: boolean
         location: boolean
       }
     }
@@ -58,6 +68,16 @@ export const buildBaseQuery = (
       select: {
         id: true,
         username: true,
+        image: true,
+        email: true,
+        location: true,
+      },
+    },
+    Adopter: {
+      select: {
+        id: true,
+        username: true,
+        email: true,
         image: true,
         location: true,
       },

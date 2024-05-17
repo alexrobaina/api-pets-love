@@ -8,7 +8,6 @@ import {
 } from '../useCases/userCases/userController'
 import { createCloudUploader } from '../middlewares/cloudUploader'
 import { verifyToken } from '../middlewares/auth'
-import { validateAndSanitizeUser } from '../middlewares/validations/validateAndSanitasing'
 
 const uploadImages = createCloudUploader('images')
 

@@ -30,6 +30,7 @@ model User {
   PetsCaredByVolunteer PetsCaredByVolunteer[]
   MedicalRecord        MedicalRecord[]
   Pet                  Pet[]
+  Appointment          Appointment[]
 }
 
 model Location {
@@ -74,6 +75,7 @@ model Pet {
   PetsCaredByVolunteer PetsCaredByVolunteer[]
   MedicalRecord        MedicalRecord[]
   PetVaccine           PetVaccine[]
+  Appointment          Appointment[]
 }
 
 // This is the relation table for the many-to-many relationship between Pet and User (for volunteers)
@@ -164,4 +166,27 @@ enum VaccineStatus {
   DONE
   PENDING
   NOT_APPLICABLE
+}
+
+model Appointment {
+  id             String          @id @default(cuid())
+  title          String
+  description    String?
+  endDate        DateTime
+  startDate      DateTime
+  recurring      Boolean         @default(false)
+  recurrenceType RecurrenceType? // DAILY, WEEKLY, MONTHLY, YEARLY
+  recipientId    String? // ID of the recipient of the appointment
+  ownerId        String? // ID of the owner who created the appointment
+  petId          String? // ID of the pet involved in the appointment
+  pet            Pet?            @relation(fields: [petId], references: [id])
+  createdAt      DateTime        @default(now())
+  User           User?           @relation(fields: [ownerId], references: [id])
+}
+
+enum RecurrenceType {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
 }
