@@ -6,15 +6,31 @@ import { validateAppointments } from '../middlewares/validations/validateAppoint
 
 const router = express.Router()
 
-router.post('/', verifyToken, appointmentController.createAppointment)
-router.get('/:id', verifyToken, appointmentController.getAppointmentById)
+router.post(
+  '/appointments/',
+  verifyToken,
+  appointmentController.createAppointment,
+)
+router.get(
+  '/appointments/:id',
+  verifyToken,
+  appointmentController.getAppointmentById,
+)
 router.put(
-  '/:id',
+  '/appointments/:id',
   verifyToken,
   validateAppointments,
   appointmentController.updateAppointment,
 )
-router.delete('/:id', verifyToken, appointmentController.deleteAppointment)
-router.get('/', verifyToken, appointmentController.listAppointments)
+router.delete(
+  '/appointments/:id',
+  verifyToken,
+  appointmentController.deleteAppointment,
+)
+router.get(
+  '/appointments/',
+  verifyToken,
+  appointmentController.listAppointments,
+)
 
 export default router

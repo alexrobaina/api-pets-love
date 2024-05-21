@@ -11,7 +11,14 @@ export const deletePet = async (req: Request, res: Response) => {
       where: { id: petId as string },
     })
 
-    if (pet?.images?.length ?? 0 > 0) deleteFiles(pet?.images || [], req.originalUrl)
+    if (pet?.createdBy !== (req.user as any)?.id)
+      return res.status(401).json({
+        ok: false,
+        message: 'You can not delete this pet',
+      })
+
+    if (pet?.images?.length ?? 0 > 0)
+      deleteFiles(pet?.images || [], req.originalUrl)
 
     const petVaccine = await prisma.petVaccine.findMany({
       where: { petId: petId as string },
@@ -31,12 +38,6 @@ export const deletePet = async (req: Request, res: Response) => {
     await prisma.medicalRecord.deleteMany({
       where: { petId: petId as string },
     })
-
-    if (pet?.createdBy !== (req.user as any)?.id)
-      return res.status(401).json({
-        ok: false,
-        message: 'You can not delete this pet',
-      })
 
     if (petId)
       await prisma.pet.delete({
