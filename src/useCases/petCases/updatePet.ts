@@ -3,13 +3,11 @@ import { SOMETHING_IS_WRONG, SUCCESS_RESPONSE } from '../../constants/constants'
 import { prisma } from '../../database/prisma'
 import { deleteFiles } from '../../services/deleteFiles'
 
-//=====================================
-//       UPDATE Pet ID = PUT
-//=====================================
-
 export const update = async (req: Request, res: Response) => {
   let newPet: any = {}
   const { petId: id } = req.params
+  // @ts-ignore
+  const { role } = req.user || {} // Assuming the user role is available in req.user
 
   try {
     delete req.body.newImages
@@ -47,14 +45,15 @@ export const update = async (req: Request, res: Response) => {
       where: { id },
     })
 
+    if (!existingPet) {
+      return res.status(404).json({ ok: false, message: 'Pet not found!' })
+    }
+
     setPetVaccines({
       petId: id,
       newCategory: newPet.category,
       oldCategory: existingPet?.category || '',
     })
-
-    if (!existingPet)
-      return res.status(404).json({ ok: false, message: 'Pet not found!' })
 
     newPet.images = notDeletedUrls
 
@@ -66,6 +65,13 @@ export const update = async (req: Request, res: Response) => {
     if (res.locals.file?.newImages?.urls)
       newPet.images = [...notDeletedUrls, ...res.locals.file?.newImages?.urls]
 
+    // Enforce permission checks
+    if (role !== 'ADMIN') {
+      delete newPet.shelterId
+      delete newPet.vetId
+      delete newPet.adoptedBy
+    }
+
     const pet = await prisma.pet.update({
       where: { id },
       data: {
@@ -73,10 +79,9 @@ export const update = async (req: Request, res: Response) => {
       },
     })
 
-    if (!id)
-      return res
-        .status(400)
-        .json({ ok: false, message: 'User ID is required!' })
+    if (!id) {
+      return res.status(400).json({ ok: false, message: 'Pet ID is required!' })
+    }
 
     res.status(200).json({
       pet,
@@ -87,7 +92,7 @@ export const update = async (req: Request, res: Response) => {
     console.log(error)
 
     res.status(500).json({
-      ok: true,
+      ok: false,
       message: SOMETHING_IS_WRONG,
     })
   }
@@ -158,13 +163,13 @@ const setPetVaccines = async ({
         })
       }
       if (newCategory === 'cat') {
-        const dogVaccines = await prisma.vaccine.findMany({
+        const catVaccines = await prisma.vaccine.findMany({
           where: {
             category: 'cat',
           },
         })
 
-        dogVaccines.map(async (vaccine) => {
+        catVaccines.map(async (vaccine) => {
           await prisma.petVaccine.create({
             data: {
               petId,

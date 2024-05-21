@@ -6,12 +6,20 @@ import productRoutes from './product'
 import seedRoutes from './seed'
 import vaccineRoutes from './vaccine'
 import appointmentsRoutes from './appointment'
+import teamRoutes from './team'
 
 const router = routerx()
 
-router.use('/api/v1', userRoutes, petRoutes, productRoutes, vaccineRoutes)
+router.use(
+  '/api/v1',
+  petRoutes,
+  userRoutes,
+  teamRoutes,
+  productRoutes,
+  vaccineRoutes,
+  appointmentsRoutes,
+)
 router.use('/api/auth', authRoutes)
 router.use('/api/seed', seedRoutes)
-router.use('/api/v1/appointments', appointmentsRoutes)
 
 export default router
