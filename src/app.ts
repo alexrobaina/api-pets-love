@@ -9,7 +9,8 @@ import routes from './routes'
 import path from 'path'
 import { config } from './config/config'
 
-const uploadsDir = process.env.DEV === 'true' ? 'uploads' : process.env.UPLOAD_DIR || 'uploads'; 
+const uploadsDir =
+  process.env.DEV === 'true' ? 'uploads' : process.env.UPLOAD_DIR || 'uploads'
 
 // initializations
 const app = express()
@@ -21,9 +22,21 @@ app.set('port', port)
 
 app.use(morgan('dev'))
 
-app.use(cors({
-  origin: process.env.DEV === 'true' ? 'http://localhost:3000' : 'http://frontend' // O la URL de tu frontend
-}));
+const getCors = () => {
+  if (process.env.BETA === 'true') {
+    return 'http://beta-frontend'
+  }
+  if (process.env.DEV === 'true') {
+    return 'http://localhost:3000'
+  }
+  return 'http://frontend'
+}
+
+app.use(
+  cors({
+    origin: getCors(),
+  }),
+)
 
 app.use(express.json())
 
