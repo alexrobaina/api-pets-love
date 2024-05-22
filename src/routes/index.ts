@@ -7,6 +7,7 @@ import seedRoutes from './seed'
 import vaccineRoutes from './vaccine'
 import appointmentsRoutes from './appointment'
 import teamRoutes from './team'
+import petAnalyticsRoutes from './petAnalytics'
 
 const router = routerx()
 
@@ -17,6 +18,7 @@ router.use(
   teamRoutes,
   productRoutes,
   vaccineRoutes,
+  petAnalyticsRoutes,
   appointmentsRoutes,
 )
 router.use('/api/auth', authRoutes)

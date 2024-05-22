@@ -1,5 +1,5 @@
 # Build stage
-FROM arm64v8/node:16-buster AS build-stage
+FROM arm64v8/node:18.17.0-buster AS build-stage
 
 WORKDIR /usr/src/app
 
@@ -16,9 +16,9 @@ RUN npx prisma generate --schema ./src/database/prisma/schema.prisma
 RUN yarn build
 
 # Production stage
-FROM arm64v8/node:16-buster
+FROM arm64v8/node:18.17.0-buster
 WORKDIR /usr/src/app
- 
+
 # Copy built node modules and compiled code
 COPY --from=build-stage /usr/src/app/node_modules ./node_modules
 COPY --from=build-stage /usr/src/app/dist ./dist
@@ -26,4 +26,3 @@ COPY --from=build-stage /usr/src/app/src/database/prisma ./src/database/prisma
 
 # Command to run the app
 CMD ["sh", "-c", "npx prisma migrate deploy --schema=./src/database/prisma/schema.prisma && node dist/index.js"]
-
