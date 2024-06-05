@@ -6,8 +6,6 @@ import { deleteFiles } from '../../services/deleteFiles'
 export const update = async (req: Request, res: Response) => {
   let newPet: any = {}
   const { petId: id } = req.params
-  // @ts-ignore
-  const { role } = req.user || {} // Assuming the user role is available in req.user
 
   try {
     delete req.body.newImages
@@ -58,19 +56,11 @@ export const update = async (req: Request, res: Response) => {
     newPet.images = notDeletedUrls
 
     if (newPet.adoptedBy) newPet.adopted = true
-    if (!newPet.adoptedBy) newPet.adopted = false
 
     if (res.locals.file?.newImages?.url)
       newPet.images.push(res.locals.file.newImages.url)
     if (res.locals.file?.newImages?.urls)
       newPet.images = [...notDeletedUrls, ...res.locals.file?.newImages?.urls]
-
-    // Enforce permission checks
-    if (role !== 'ADMIN') {
-      delete newPet.shelterId
-      delete newPet.vetId
-      delete newPet.adoptedBy
-    }
 
     const pet = await prisma.pet.update({
       where: { id },
@@ -102,7 +92,12 @@ const cleanData = (obj: Record<string, any>): Record<string, any> => {
   const newObj: Record<string, any> = {}
 
   for (let [key, value] of Object.entries(obj)) {
-    // Check for string 'null' in specific keys
+    if (key === 'adopted') {
+      if (value === 'true') {
+        value = true
+      } else if (value === 'false') value = false
+    }
+
     if (
       (key === 'adoptedBy' || key === 'vetId' || key === 'shelterId') &&
       value === 'null'
