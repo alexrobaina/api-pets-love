@@ -8,6 +8,7 @@ import vaccineRoutes from './vaccine'
 import appointmentsRoutes from './appointment'
 import teamRoutes from './team'
 import petAnalyticsRoutes from './petAnalytics'
+import inventoryRoutes from './inventory'
 
 const router = routerx()
 
@@ -18,6 +19,7 @@ router.use(
   teamRoutes,
   productRoutes,
   vaccineRoutes,
+  inventoryRoutes,
   petAnalyticsRoutes,
   appointmentsRoutes,
 )

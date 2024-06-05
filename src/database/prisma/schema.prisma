@@ -3,7 +3,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  seed     = "ts-node --loader ts-node/esm src/database/prisma/seed.ts "
 }
 
 datasource db {
@@ -33,6 +32,8 @@ model User {
   Appointment          Appointment[]
   Team                 Team[]
   TeamMembership       TeamMembership[]
+  Inventory            Inventory[]
+  Expense              Expense[]
 }
 
 model Location {
@@ -206,6 +207,41 @@ model TeamMembership {
   @@id([teamId, userId])
 }
 
+model Inventory {
+  id          String        @id @default(uuid())
+  name        String
+  type        InventoryType
+  description String?
+  quantity    Int
+  price       Float
+  images      String[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  Expense     Expense[]
+}
+
+model Expense {
+  id          String      @id @default(uuid())
+  amount      Float
+  date        DateTime    @default(now())
+  type        ExpenseType
+  category    String
+  description String?
+  userId      String
+  inventoryId String
+  inventory   Inventory   @relation(fields: [inventoryId], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  user        User        @relation(fields: [userId], references: [id])
+}
+
+enum ExpenseType {
+  INCOME
+  EXPENSE
+}
+
 enum TeamRole {
   MEMBER
   ADMIN
@@ -216,4 +252,18 @@ enum RecurrenceType {
   WEEKLY
   MONTHLY
   YEARLY
+}
+
+enum InventoryType {
+  MEDICINE
+  FOOD
+  TOYS
+  ACCESSORIES
+  HEALTH_WELLNESS
+  HOUSING
+  LITTER_WASTE_MANAGEMENT
+  APPAREL
+  FEEDING_SUPPLIES
+  TRAVEL_OUTDOOR
+  TRAINING_BEHAVIOR
 }

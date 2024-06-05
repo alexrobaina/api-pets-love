@@ -122,6 +122,10 @@ const cleanData = (obj: Record<string, any>): Record<string, any> => {
     if (key === 'string') continue
     if (key === 'newImages') continue
     if (key === 'name') value = value.toLowerCase()
+    if (key === 'adopted') {
+      if (value === 'true') value = true
+      else if (value === 'false') value = false
+    }
 
     newObj[key] =
       typeof value === 'object' && !Array.isArray(value)
