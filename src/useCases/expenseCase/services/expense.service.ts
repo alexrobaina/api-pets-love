@@ -22,7 +22,6 @@ export const createExpense = async (data: any, userId: string) => {
     data: {
       totalAmount,
       type,
-      title,
       category,
       description,
       userId,
@@ -98,7 +97,6 @@ export const updateExpense = async (id: string, data: any, userId: string) => {
     data: {
       totalAmount,
       type,
-      title,
       category,
       description,
       userId,

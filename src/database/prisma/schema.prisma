@@ -240,7 +240,6 @@ model Expense {
   date        DateTime      @default(now())
   type        ExpenseType
   category    String
-  title       String
   description String?
   userId      String
   user        User          @relation(fields: [userId], references: [id])
