@@ -3,21 +3,38 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const createExpense = async (data: any, userId: string) => {
-  const { items, totalAmount, type, category, description, title } = data;
+  const { items, totalAmount, type, category, description } = data;
 
-  // Check inventory stock
+  // Validate and manage inventory stock
   for (const item of items) {
     if (item.inventoryId) {
       const inventoryItem = await prisma.inventory.findUnique({
         where: { id: item.inventoryId },
       });
-      if (inventoryItem && inventoryItem.quantity < item.quantity) {
-        throw new Error(`Insufficient stock for inventory item: ${inventoryItem.name}`);
+
+      if (inventoryItem) {
+        if (inventoryItem.quantity < item.quantity) {
+          // If stock is less than the requested quantity, allow purchase but set stock to zero
+          if (inventoryItem.quantity > 0) {
+            await prisma.inventory.update({
+              where: { id: item.inventoryId },
+              data: { quantity: 0 },
+            });
+          }
+        } else {
+          // If there is enough stock, decrement the inventory
+          await prisma.inventory.update({
+            where: { id: item.inventoryId },
+            data: { quantity: { decrement: parseInt(item.quantity) } },
+          });
+        }
+      } else {
+        throw new Error(`Inventory item not found: ${item.inventoryId}`);
       }
     }
   }
 
-  // Create expense
+  // Create the expense record
   const expense = await prisma.expense.create({
     data: {
       totalAmount,
@@ -36,42 +53,17 @@ export const createExpense = async (data: any, userId: string) => {
     },
   });
 
-  // Update inventory
-  for (const item of items) {
-    if (item.inventoryId) {
-      await prisma.inventory.update({
-        where: { id: item.inventoryId },
-        data: { quantity: { decrement: parseInt(item.quantity) } },
-      });
-    }
-  }
-
   return expense;
 };
 
 export const updateExpense = async (id: string, data: any, userId: string) => {
-  const { items, totalAmount, type, category, description, title } = data;
+  const { items, totalAmount, type, category, description } = data;
 
   if (!items || !Array.isArray(items)) {
     throw new Error('Invalid or missing items format');
   }
 
-  // Check inventory stock
-  for (const item of items) {
-    if (item.inventoryId) {
-      const inventoryItem = await prisma.inventory.findUnique({
-        where: { id: item.inventoryId },
-      });
-      if (!inventoryItem) {
-        throw new Error(`Inventory item not found: ${item.inventoryId}`);
-      }
-      if (inventoryItem.quantity < item.quantity) {
-        throw new Error(`Insufficient stock for inventory item: ${inventoryItem.name}`);
-      }
-    }
-  }
-
-  // Fetch existing items to manage inventory adjustments
+  // Fetch existing items to revert inventory adjustments
   const existingItems = await prisma.expenseItem.findMany({
     where: { expenseId: id },
   });
@@ -91,7 +83,34 @@ export const updateExpense = async (id: string, data: any, userId: string) => {
     where: { expenseId: id },
   });
 
-  // Update expense
+  // Validate and manage inventory stock for new items
+  for (const item of items) {
+    if (item.inventoryId) {
+      const inventoryItem = await prisma.inventory.findUnique({
+        where: { id: item.inventoryId },
+      });
+
+      if (inventoryItem) {
+        if (inventoryItem.quantity < item.quantity) {
+          if (inventoryItem.quantity > 0) {
+            await prisma.inventory.update({
+              where: { id: item.inventoryId },
+              data: { quantity: 0 },
+            });
+          }
+        } else {
+          await prisma.inventory.update({
+            where: { id: item.inventoryId },
+            data: { quantity: { decrement: item.quantity } },
+          });
+        }
+      } else {
+        throw new Error(`Inventory item not found: ${item.inventoryId}`);
+      }
+    }
+  }
+
+  // Update the expense record
   const expense = await prisma.expense.update({
     where: { id },
     data: {
@@ -105,21 +124,11 @@ export const updateExpense = async (id: string, data: any, userId: string) => {
           title: item.title,
           quantity: parseInt(item.quantity),
           price: parseFloat(item.price),
-          inventoryId: item.inventoryId || null, // Ensure null for non-existent inventoryId
+          inventoryId: item.inventoryId || null,
         })),
       },
     },
   });
-
-  // Update inventory with new items
-  for (const item of items) {
-    if (item.inventoryId) {
-      await prisma.inventory.update({
-        where: { id: item.inventoryId },
-        data: { quantity: { decrement: parseInt(item.quantity) } },
-      });
-    }
-  }
 
   return expense;
 };

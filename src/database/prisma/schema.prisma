@@ -34,6 +34,34 @@ model User {
   TeamMembership       TeamMembership[]
   Inventory            Inventory[]
   Expense              Expense[]
+  UserMembership       UserMembership[]
+}
+
+model Membership {
+  id          String           @id @default(cuid())
+  name        String // Name of the membership plan
+  description String? // Optional description of the plan
+  price       Float // Price of the membership
+  duration    Int // Duration of membership in days (e.g., 30 for a monthly plan)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  users       UserMembership[]
+}
+
+model UserMembership {
+  id           String   @id @default(cuid())
+  userId       String // Foreign key for User
+  membershipId String // Foreign key for Membership
+  startDate    DateTime // Start date of the membership
+  endDate      DateTime // End date of the membership
+  isActive     Boolean  @default(true) // Indicates if the membership is active
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user       User       @relation(fields: [userId], references: [id])
+  membership Membership @relation(fields: [membershipId], references: [id])
+
+  @@index([userId, membershipId], name: "user_membership_idx")
 }
 
 model Location {
